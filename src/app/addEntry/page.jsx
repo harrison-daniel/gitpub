@@ -34,14 +34,14 @@ export default function AddEntry() {
   return (
     <>
       <form onSubmit={handleSubmit} className='flex flex-col '>
-        <input
+        <textarea
           onChange={(e) => setTitle(e.target.value)}
           value={title}
           className='border border-cyan-800 p-6 m-4 '
           type='text'
           placeholder='Entry Title'
         />
-        <input
+        <textarea
           onChange={(e) => setDescription(e.target.value)}
           value={description}
           className='border border-cyan-800 p-6 m-4'
@@ -51,7 +51,7 @@ export default function AddEntry() {
 
         <button
           type='submit'
-          className='bg-green-700 hover:bg-green-500 text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow'>
+          className='bg-amber-600 hover:bg-amber-500 text-white font-semibold py-2 px-6 m-4 border border-gray-400 rounded shadow'>
           Add Entry
         </button>
       </form>

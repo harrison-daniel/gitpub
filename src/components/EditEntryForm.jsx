@@ -31,22 +31,24 @@ export default function EditEntryForm({ id, title, description }) {
   return (
     <>
       <form onSubmit={handleSubmit} className='flex flex-col '>
-        <input
+        <textarea
           onChange={(e) => setNewTitle(e.target.value)}
           value={newTitle}
           className='border border-cyan-800 p-6 m-4 '
           type='text'
           placeholder='Entry Title'
+          rows={3}
         />
-        <input
+        <textarea
           onChange={(e) => setNewDescription(e.target.value)}
           value={newDescription}
           className='border border-cyan-800 p-6 m-4'
           type='text'
           placeholder='Entry Description'
+          rows={3}
         />
 
-        <button className='bg-green-700 hover:bg-green-500 text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow'>
+        <button className='bg-amber-600 hover:bg-amber-500  text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow'>
           Update Entry
         </button>
       </form>
