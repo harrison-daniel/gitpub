@@ -1,9 +1,24 @@
-import EditEntryForm from '../components/EditEntryForm';
+import EditEntryForm from '../../../components/EditEntryForm';
 
-export default function EditEntry() {
-  return (
-    <>
-      <EditEntryForm />
-    </>
-  );
+const getEntryById = async (id) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/entries/${id}`, {
+      cache: 'no-store',
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to fetch entry');
+    }
+    return res.json();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export default async function EditEntry({ params }) {
+  const { id } = params;
+  const { entry } = await getEntryById(id);
+  const { title, description } = entry;
+
+  return <EditEntryForm id={id} title={title} description={description} />;
 }

@@ -1,24 +1,49 @@
-import Link from 'next/link';
+// 'use client';
+
 import RemoveBtn from './RemoveBtn';
 // change icon??
 import { HiPencilAlt } from 'react-icons/hi';
+import Link from 'next/link';
 
-export default function EntryList() {
+const getEntries = async () => {
+  try {
+    const res = await fetch('http://localhost:3000/api/entries', {
+      cache: 'no-store',
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to fetch entries');
+    }
+
+    return res.json();
+  } catch (error) {
+    console.log('Error loading entries: ', error);
+  }
+};
+
+export default async function EntryList() {
+  const { entries } = await getEntries();
+
   return (
     <>
-      <div className='flex justify-between items-start border border-slate-900 p-4 m-4 gap-5 '>
-        <div>
-          <h1 className='text-2xl font-bold'>Entry Title</h1>
-          <div>Entry Description</div>
-        </div>
+      {entries.map((entry) => (
+        <div
+          className='flex justify-between items-start border border-slate-900 p-4 m-4 gap-5 '
+          key={entry._id}>
+          <div>
+            <h1 className='text-2xl font-bold'>{entry.title}</h1>
+            <div>{entry.description}</div>
+          </div>
 
-        <div>
-          <RemoveBtn />
-          <Link href={'/editEntry/123'}>
-            <HiPencilAlt size={24} />
-          </Link>
+          <div>
+            <RemoveBtn id={entry._id} />
+
+            <Link href={`/editEntry/${entry._id}`}>
+              <HiPencilAlt size={24} />
+            </Link>
+          </div>
         </div>
-      </div>
+      ))}
     </>
   );
 }
