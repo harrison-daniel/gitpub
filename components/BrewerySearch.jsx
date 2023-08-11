@@ -1,11 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import AddEntry from '../app/addEntry/page';
-// import BreweryModal from './BreweryModal';
 import { useRouter } from 'next/navigation';
-import { set } from 'mongoose';
-// import AddEntry from '../app/addEntry/page';
 
 export default function BrewerySearch() {
   const [city, setCity] = useState('');
@@ -21,8 +17,6 @@ export default function BrewerySearch() {
   function getBreweryInfo(brewery) {
     setTitle(brewery.name);
     setDescription(brewery.street);
-    // const title = brewery.name;
-    // const description = brewery.street;
   }
 
   const handleSubmit = async (e) => {

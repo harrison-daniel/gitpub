@@ -1,4 +1,4 @@
-import EditEntryForm from '../../../components/EditEntryForm';
+import EditEntryForm from '../../../../components/EditEntryForm';
 
 const getEntryById = async (id) => {
   try {
