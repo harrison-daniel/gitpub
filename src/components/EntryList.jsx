@@ -28,7 +28,7 @@ export default async function EntryList() {
     <>
       {entries.map((entry) => (
         <div
-          className='flex justify-between items-start border border-slate-900 p-4 m-4 gap-5 bg-amber-500 bg-opacity-25'
+          className='flex justify-between items-start border border-slate-900 p-4 m-4 gap-5 bg-amber-500 bg-opacity-80'
           key={entry._id}>
           <div>
             <h1 className='text-2xl font-bold whitespace-pre-wrap'>

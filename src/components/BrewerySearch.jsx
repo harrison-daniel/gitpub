@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import AddEntry from '../app/addEntry/page';
 // import BreweryModal from './BreweryModal';
-// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { set } from 'mongoose';
 // import AddEntry from '../app/addEntry/page';
 
 export default function BrewerySearch() {
@@ -12,36 +13,42 @@ export default function BrewerySearch() {
   const [error, setError] = useState('');
   const [breweryList, setBreweryList] = useState('');
   const [showModal, setShowModal] = useState(false);
-  // const [entry, setEntry] = useState([]);
-  // const router = useRouter();
+  const router = useRouter();
 
-  // save brewery from API Modal to EntryList
-  // const addBreweryToEntries = async (brewery) => {
-  //   const router = useRouter();
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
-  //   const handleAddBreweryClick = async (e) => {
-  //     e.preventDefault();
-  //     if (!title || !description) {
-  //       alert('Title and description are required');
-  //       return;
-  //     }
+  function getBreweryInfo(brewery) {
+    setTitle(brewery.name);
+    setDescription(brewery.street);
+    // const title = brewery.name;
+    // const description = brewery.street;
+  }
 
-  //     try {
-  //       const res = await fetch('http://localhost:3000/api/entries', {
-  //         method: 'POST',
-  //         headers: { 'Content-type': 'application/json' },
-  //         body: JSON.stringify({ title, description }),
-  //       });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  //       if (res.ok) {
-  //         router.push('/');
-  //         router.refresh();
-  //       } else {
-  //         throw new Error('Failed to create an entry');
-  //       }
-  //     } catch (error) {}
-  //   };
-  // };
+    if (!title || !description) {
+      alert('Title and description are required');
+      return;
+    }
+
+    try {
+      const res = await fetch('http://localhost:3000/api/entries', {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({ title, description }),
+      });
+
+      if (res.ok) {
+        router.push('/');
+        router.refresh();
+        setShowModal(false);
+      } else {
+        throw new Error('Failed to create an entry');
+      }
+    } catch (error) {}
+  };
 
   const handleSearch = async () => {
     setError(''); // clear previous error
@@ -66,18 +73,8 @@ export default function BrewerySearch() {
         .then((data) => {
           setBreweryList(data);
           setShowModal(true);
+          console.log(data);
         });
-
-      // try {
-      //   const response = await fetch(
-      //     `https://api.openbrewerydb.org/v1/breweries?by_city=${city}&per_page=10`
-      //   );
-      //   const data = await response.json();
-      //   console.log(data);
-      //   setBreweryList(data);
-      // } catch (err) {
-      //   console.error(err);
-      // }
     } catch (err) {
       console.error(err);
     }
@@ -175,41 +172,54 @@ export default function BrewerySearch() {
       </button>
 
       {showModal && (
-        <div className='modal'>
-          <div className='modal-content'>
-            {/* Render your data here */}
-            {breweryList.length > 0 && (
-              <div>
-                {breweryList.map((brewery) => (
-                  <div
-                    className='rounded-lg bg-white p-8 shadow-2xl brewery-modal'
-                    key={brewery.id}>
-                    <h2 className='text-lg font-bold'>
-                      Are you sure you want to do that?
-                    </h2>
+        <form onSubmit={handleSubmit}>
+          <div className='modal'>
+            <div className='modal-content'>
+              {/* Render your data here */}
+              {breweryList.length > 0 && (
+                <div>
+                  {breweryList.map((brewery) => (
+                    <div
+                      className='rounded-lg bg-white p-8 shadow-2xl brewery-modal'
+                      key={brewery.id}>
+                      <h2 className='text-lg font-bold'>{brewery.name}</h2>
 
-                    <p className='mt-2 text-sm text-gray-500'>{brewery.name}</p>
+                      <p className='mt-2 text-sm text-gray-500'>
+                        {brewery.street}
+                      </p>
 
-                    <div className='mt-4 flex gap-2'>
-                      <button
-                        type='submit'
-                        // onClick={AddEntry}
-                        className='bg-amber-600 hover:bg-amber-500 text-white font-semibold py-2 px-6 m-4 border border-gray-400 rounded shadow'>
-                        Add Brewery to Entries?
-                      </button>
-                      <button
-                        type='button'
-                        className='rounded bg-gray-50 px-4 py-2 text-sm font-medium text-gray-600'>
-                        No, go back
-                      </button>
+                      <div className='mt-4 flex gap-2'>
+                        <button
+                          type='submit'
+                          onClick={(e) => getBreweryInfo(brewery)}
+                          className='bg-amber-600 hover:bg-amber-500 text-white font-semibold py-2 px-6 m-4 border border-gray-400 rounded shadow'>
+                          Add Brewery to Entries?
+                        </button>
+                        {/* WORKING -- only adds title of brewery
+                        <button
+                          type='submit'
+                          onClick={(e) =>
+                            setTitle(brewery.name) &&
+                            setDescription(brewery.brewery_type)
+                          }
+                          value={title}
+                          className='bg-amber-600 hover:bg-amber-500 text-white font-semibold py-2 px-6 m-4 border border-gray-400 rounded shadow'>
+                          Add Brewery to Entries?
+                        </button> */}
+                        <button
+                          type='button'
+                          className='rounded bg-gray-50 px-4 py-2 text-sm font-medium text-gray-600'>
+                          No, go back
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
-            <button onClick={() => setShowModal(false)}>Close</button>
+                  ))}
+                </div>
+              )}
+              <button onClick={() => setShowModal(false)}>Close</button>
+            </div>
           </div>
-        </div>
+        </form>
       )}
     </div>
   );
