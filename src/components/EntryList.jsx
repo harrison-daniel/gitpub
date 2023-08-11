@@ -26,6 +26,7 @@ export default async function EntryList() {
 
   return (
     <>
+      <h1 className='font-mono text-3xl font-bold'>My Brewery Trips:</h1>
       {entries.map((entry) => (
         <div
           className='flex justify-between items-start border border-slate-900 p-4 m-4 gap-5 bg-amber-500 bg-opacity-80'
