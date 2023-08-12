@@ -1,7 +1,4 @@
-// 'use client';
-
 import RemoveBtn from './RemoveBtn';
-// change icon??
 import { HiPencilAlt } from 'react-icons/hi';
 import Link from 'next/link';
 
@@ -22,7 +19,7 @@ const getEntries = async () => {
 };
 
 export default async function EntryList() {
-  const entries = await getEntries();
+  const { entries = [] } = (await getEntries()) || {};
 
   return (
     <>
