@@ -10,9 +10,12 @@ export default function RemoveBtn({ id }) {
     const confirmed = confirm('Are you sure you want to delete this entry?');
 
     if (confirmed) {
-      await fetch(`http://localhost:3000/api/entries?id=${id}`, {
+      await fetch(`https://gitpub.vercel.app/api/entries?id=${id}`, {
         method: 'DELETE',
       });
+      // await fetch(`http://localhost:3000/api/entries?id=${id}`, {
+      //   method: 'DELETE',
+      // });
 
       router.refresh();
     }
