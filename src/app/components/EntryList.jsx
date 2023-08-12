@@ -22,7 +22,7 @@ const getEntries = async () => {
 };
 
 export default async function EntryList() {
-  const { entries } = await getEntries();
+  const entries = await getEntries();
 
   return (
     <>
