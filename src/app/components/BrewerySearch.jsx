@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Modal from '../components/Modal';
+// import AddEntry from '../../../src/app/addEntry/page';
 
 export default function BrewerySearch() {
   const [city, setCity] = useState('');
@@ -9,15 +11,22 @@ export default function BrewerySearch() {
   const [error, setError] = useState('');
   const [breweryList, setBreweryList] = useState('');
   const [showModal, setShowModal] = useState(false);
+  // const [searchResults, setSearchResults] = useState([]);
+
   const router = useRouter();
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
-  function getBreweryInfo(brewery) {
+  function AddBreweryInfoToEntry(brewery) {
     setTitle(brewery.name);
     setDescription(brewery.street);
   }
+
+  // const handleNoGoBack = () => {
+  //   setModalOpen(false);
+  //   router.push('/new-entry');
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,7 +37,9 @@ export default function BrewerySearch() {
     }
 
     try {
-      const res = await fetch('https://gitpub.vercel.app/api/entries', {
+      // const res = await fetch('https://gitpub.vercel.app/api/entries', {
+
+      const res = await fetch('http://localhost:3000/api/entries', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({ title, description }),
@@ -59,15 +70,17 @@ export default function BrewerySearch() {
     }
 
     console.log(`Searching for: City - ${city}, State - ${state}`);
+
     try {
       fetch(
         `https://api.openbrewerydb.org/v1/breweries?by_city=${city}&per_page=10`
       )
         .then((response) => response.json())
         .then((data) => {
+          console.log('data', data);
           setBreweryList(data);
+          console.log('breweryList', breweryList);
           setShowModal(true);
-          console.log(data);
         });
     } catch (err) {
       console.error(err);
@@ -166,53 +179,44 @@ export default function BrewerySearch() {
       </button>
 
       {showModal && (
-        <form onSubmit={handleSubmit}>
-          <div className='modal'>
-            <div className='modal-content'>
-              {/* Render your data here */}
-              {breweryList.length > 0 && (
-                <div>
-                  {breweryList.map((brewery) => (
-                    <div
-                      className='rounded-lg bg-white p-8 shadow-2xl brewery-modal'
-                      key={brewery.id}>
-                      <h2 className='text-lg font-bold'>{brewery.name}</h2>
+        <form type='submit' onSubmit={handleSubmit}>
+          {/* Need to fix error -- Modal closes but showing error "Form submission canceled because the form is not connected" */}
+          <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+            <h2 className='text-2xl font-bold mb-4'>Modal Title</h2>
+            <p className='mb-4'>
+              This is modal content. You can place here any component you want!
+            </p>
+            {breweryList.length > 0 && (
+              <div>
+                {breweryList.map((brewery) => (
+                  <div
+                    className='rounded-lg bg-white p-8 shadow-2xl brewery-modal'
+                    key={brewery.id}>
+                    <h2 className='text-lg font-bold'>{brewery.name}</h2>
 
-                      <p className='mt-2 text-sm text-gray-500'>
-                        {brewery.street}
-                      </p>
+                    <p className='mt-2 text-sm text-gray-500'>
+                      {brewery.street}
+                    </p>
 
-                      <div className='mt-4 flex gap-2'>
-                        <button
-                          type='submit'
-                          onClick={(e) => getBreweryInfo(brewery)}
-                          className='bg-amber-600 hover:bg-amber-500 text-white font-semibold py-2 px-6 m-4 border border-gray-400 rounded shadow'>
-                          Add Brewery to Entries?
-                        </button>
-                        {/* WORKING -- only adds title of brewery
-                        <button
-                          type='submit'
-                          onClick={(e) =>
-                            setTitle(brewery.name) &&
-                            setDescription(brewery.brewery_type)
-                          }
-                          value={title}
-                          className='bg-amber-600 hover:bg-amber-500 text-white font-semibold py-2 px-6 m-4 border border-gray-400 rounded shadow'>
-                          Add Brewery to Entries?
-                        </button> */}
-                        <button
-                          type='button'
-                          className='rounded bg-gray-50 px-4 py-2 text-sm font-medium text-gray-600'>
-                          No, go back
-                        </button>
-                      </div>
+                    <div className='mt-4 flex gap-2'>
+                      <button
+                        onClick={(e) => AddBreweryInfoToEntry(brewery)}
+                        className='bg-amber-600 hover:bg-amber-500 text-white font-semibold py-2 px-6 m-4 border border-gray-400 rounded shadow'>
+                        Add Brewery to Entries?
+                      </button>
+
+                      <button
+                        type='button'
+                        // onClick={(e) => AddEntry(brewery)}
+                        className='rounded bg-gray-50 px-4 py-2 text-sm font-medium text-gray-600'>
+                        No, go back
+                      </button>
                     </div>
-                  ))}
-                </div>
-              )}
-              <button onClick={() => setShowModal(false)}>Close</button>
-            </div>
-          </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </Modal>
         </form>
       )}
     </div>

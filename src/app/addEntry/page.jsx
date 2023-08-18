@@ -16,7 +16,8 @@ export default function AddEntry() {
     }
 
     try {
-      const res = await fetch('https://gitpub.vercel.app/api/entries', {
+      // const res = await fetch('https://gitpub.vercel.app/api/entries', {
+      const res = await fetch('http://localhost:3000/api/entries', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({ title, description }),
