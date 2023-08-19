@@ -12,16 +12,16 @@ export default function EditEntryForm({ id, title, description }) {
     e.preventDefault();
 
     try {
-      // const res = await fetch(`https://gitpub.vercel.app/api/entries/${id}`, {
-      //   method: 'PUT',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ newTitle, newDescription }),
-      // });
-      const res = await fetch(`http://localhost:3000/api/entries/${id}`, {
+      const res = await fetch(`https://gitpub.vercel.app/api/entries/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ newTitle, newDescription }),
       });
+      // const res = await fetch(`http://localhost:3000/api/entries/${id}`, {
+      //   method: 'PUT',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ newTitle, newDescription }),
+      // });
 
       if (!res.ok) {
         throw new Error('Failed to update entry');
