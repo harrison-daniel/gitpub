@@ -1,20 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Modal from '../components/Modal';
-// import AddEntry from '../../../src/app/addEntry/page';
 
 export default function BrewerySearch() {
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [error, setError] = useState('');
-  const [breweryList, setBreweryList] = useState('');
+  const [breweryList, setBreweryList] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  // const [searchResults, setSearchResults] = useState([]);
-
+  const [filteredBreweries, setFilteredBreweries] = useState([]);
+  const [searchStage, setSearchStage] = useState('state');
   const router = useRouter();
-
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
@@ -22,11 +20,6 @@ export default function BrewerySearch() {
     setTitle(brewery.name);
     setDescription(brewery.street);
   }
-
-  // const handleNoGoBack = () => {
-  //   setModalOpen(false);
-  //   router.push('/new-entry');
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -55,13 +48,37 @@ export default function BrewerySearch() {
     } catch (error) {}
   };
 
-  const handleSearch = async () => {
+  const handleStateSearch = async () => {
     setError(''); // clear previous error
 
-    if (city === '' || state === '') {
-      setError('Both fields are required');
+    // console.log(`Searching for: City - ${city}, State - ${state}`);
+    console.log(`Searching for: State - ${state}`);
+
+    try {
+      const response = await fetch(
+        `https://api.openbrewerydb.org/v1/breweries?by_state=${state}&per_page=200`
+      );
+
+      const data = await response.json();
+      setBreweryList(data);
+      console.log('initial data', data);
+      setSearchStage('city');
+
+      // setShowModal(true);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleCityFilter = () => {
+    if (!city.trim()) {
+      setError('Please provide a city before filtering.');
       return;
     }
+    // if (city === '' || state === '') {
+    //   setError('Both fields are required');
+    //   return;
+    // }
 
     // City should only contain alphabetical characters and spaces
     if (!/^[\p{L} ]+$/u.test(city)) {
@@ -69,45 +86,27 @@ export default function BrewerySearch() {
       return;
     }
 
-    console.log(`Searching for: City - ${city}, State - ${state}`);
-
-    try {
-      fetch(
-        `https://api.openbrewerydb.org/v1/breweries?by_city=${city}&per_page=10`
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          console.log('data', data);
-          setBreweryList(data);
-          console.log('breweryList', breweryList);
-          setShowModal(true);
-        });
-    } catch (err) {
-      console.error(err);
-    }
+    const results = breweryList.filter(
+      (brewery) => brewery.city.toLowerCase() === city.toLowerCase()
+    );
+    setFilteredBreweries(results);
+    setShowModal(true);
+    console.log(
+      'filteredBreweries on initial handlecityfilter',
+      filteredBreweries
+    );
   };
+
+  useEffect(() => {
+    console.log('Updated filteredBreweries', filteredBreweries);
+    // When breweryList updates, filter it based on the user's city input
+  }, [filteredBreweries, city.submit]);
 
   return (
     <div className='p-4'>
-      <div className='mb-3'>
-        <label
-          className='block text-gray-700 text-sm font-bold mb-2'
-          htmlFor='city'>
-          City:
-        </label>
-        <input
-          id='city'
-          type='text'
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-          placeholder='Enter city'
-          className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-        />
-      </div>
-
       <div>
         <label
-          htmlFor='SearchLocation'
+          htmlFor='SearchState'
           className='block text-lg font-bold text-black'>
           State
         </label>
@@ -118,77 +117,104 @@ export default function BrewerySearch() {
           value={state}
           onChange={(e) => setState(e.target.value)}
           className='mt-1.5 w-full rounded-lg border-gray-300 text-gray-700 sm:text-sm'>
-          <option value='AL'>Alabama</option>
-          <option value='AK'>Alaska</option>
-          <option value='AZ'>Arizona</option>
-          <option value='AR'>Arkansas</option>
-          <option value='CA'>California</option>
-          <option value='CO'>Colorado</option>
-          <option value='CT'>Connecticut</option>
-          <option value='DE'>Delaware</option>
-          <option value='DC'>District Of Columbia</option>
-          <option value='FL'>Florida</option>
-          <option value='GA'>Georgia</option>
-          <option value='HI'>Hawaii</option>
-          <option value='ID'>Idaho</option>
-          <option value='IL'>Illinois</option>
-          <option value='IN'>Indiana</option>
-          <option value='IA'>Iowa</option>
-          <option value='KS'>Kansas</option>
-          <option value='KY'>Kentucky</option>
-          <option value='LA'>Louisiana</option>
-          <option value='ME'>Maine</option>
-          <option value='MD'>Maryland</option>
-          <option value='MA'>Massachusetts</option>
-          <option value='MI'>Michigan</option>
-          <option value='MN'>Minnesota</option>
-          <option value='MS'>Mississippi</option>
-          <option value='MO'>Missouri</option>
-          <option value='MT'>Montana</option>
-          <option value='NE'>Nebraska</option>
-          <option value='NV'>Nevada</option>
-          <option value='NH'>New Hampshire</option>
-          <option value='NJ'>New Jersey</option>
-          <option value='NM'>New Mexico</option>
-          <option value='NY'>New York</option>
-          <option value='NC'>North Carolina</option>
-          <option value='ND'>North Dakota</option>
-          <option value='OH'>Ohio</option>
-          <option value='OK'>Oklahoma</option>
-          <option value='OR'>Oregon</option>
-          <option value='PA'>Pennsylvania</option>
-          <option value='RI'>Rhode Island</option>
-          <option value='SC'>South Carolina</option>
-          <option value='SD'>South Dakota</option>
-          <option value='TN'>Tennessee</option>
-          <option value='TX'>Texas</option>
-          <option value='UT'>Utah</option>
-          <option value='VT'>Vermont</option>
-          <option value='VA'>Virginia</option>
-          <option value='WA'>Washington</option>
-          <option value='WV'>West Virginia</option>
-          <option value='WI'>Wisconsin</option>
-          <option value='WY'>Wyoming</option>
+          <option value='alabama'>Alabama</option>
+          <option value='alaska'>Alaska</option>
+          <option value='arizona'>Arizona</option>
+          <option value='arkansas'>Arkansas</option>
+          <option value='california'>California</option>
+          <option value='colorado'>Colorado</option>
+          <option value='connecticut'>Connecticut</option>
+          <option value='delaware'>Delaware</option>
+          <option value='district_of_columbia'>District Of Columbia</option>
+          <option value='florida'>Florida</option>
+          <option value='georgia'>Georgia</option>
+          <option value='hawaii'>Hawaii</option>
+          <option value='idaho'>Idaho</option>
+          <option value='illinois'>Illinois</option>
+          <option value='indiana'>Indiana</option>
+          <option value='iowa'>Iowa</option>
+          <option value='kansas'>Kansas</option>
+          <option value='kentucky'>Kentucky</option>
+          <option value='louisiana'>Louisiana</option>
+          <option value='maine'>Maine</option>
+          <option value='maryland'>Maryland</option>
+          <option value='massachusetts'>Massachusetts</option>
+          <option value='michigan'>Michigan</option>
+          <option value='minnesota'>Minnesota</option>
+          <option value='mississippi'>Mississippi</option>
+          <option value='missouri'>Missouri</option>
+          <option value='montana'>Montana</option>
+          <option value='nebraska'>Nebraska</option>
+          <option value='nevada'>Nevada</option>
+          <option value='new_hampshire'>New Hampshire</option>
+          <option value='new_jersey'>New Jersey</option>
+          <option value='new_mexico'>New Mexico</option>
+          <option value='new_york'>New York</option>
+          <option value='north_carolina'>North Carolina</option>
+          <option value='north_dakota'>North Dakota</option>
+          <option value='ohio'>Ohio</option>
+          <option value='oklahoma'>Oklahoma</option>
+          <option value='oregon'>Oregon</option>
+          <option value='pennsylvania'>Pennsylvania</option>
+          <option value='rhode_island'>Rhode Island</option>
+          <option value='south_carolina'>South Carolina</option>
+          <option value='south_dakota'>South Dakota</option>
+          <option value='tennessee'>Tennessee</option>
+          <option value='texas'>Texas</option>
+          <option value='utah'>Utah</option>
+          <option value='vermont'>Vermont</option>
+          <option value='virginia'>Virginia</option>
+          <option value='washington'>Washington</option>
+          <option value='west_virginia'>West Virginia</option>
+          <option value='wisconsin'>Wisconsin</option>
+          <option value='wyoming'>Wyoming</option>
         </select>
       </div>
+
       {error && <p className='text-red-500 text-xs italic'>{error}</p>}
-      <button
-        onClick={handleSearch}
-        className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'>
-        Search
-      </button>
+
+      {searchStage === 'state' ? (
+        <button
+          onClick={handleStateSearch}
+          className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'>
+          Search By State
+        </button>
+      ) : null}
+      {searchStage === 'city' && (
+        <>
+          <div className='mb-3'>
+            <label
+              htmlFor='city'
+              className='block text-gray-700 text-sm font-bold mb-2'>
+              City:
+            </label>
+            <input
+              id='city'
+              type='text'
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              placeholder='Enter city'
+              className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+            />
+          </div>
+          <button
+            onClick={handleCityFilter}
+            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'>
+            Filter By City
+          </button>
+        </>
+      )}
 
       {showModal && (
         <form type='submit' onSubmit={handleSubmit}>
-          {/* Need to fix error -- Modal closes but showing error "Form submission canceled because the form is not connected" */}
           <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
             <h2 className='text-2xl font-bold mb-4'>Modal Title</h2>
             <p className='mb-4'>
               This is modal content. You can place here any component you want!
             </p>
-            {breweryList.length > 0 && (
+            {filteredBreweries.length > 0 && (
               <div>
-                {breweryList.map((brewery) => (
+                {filteredBreweries.map((brewery) => (
                   <div
                     className='rounded-lg bg-white p-8 shadow-2xl brewery-modal'
                     key={brewery.id}>

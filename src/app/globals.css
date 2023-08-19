@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 body {
-  /* bg-slate-100 */
   background-image: url(../../public/assets/images/mug.png);
   background-repeat: no-repeat;
   background-size: cover;
@@ -11,3 +10,7 @@ body {
   max-height: 100vh;
   max-width: 100vw;
 }
+
+/* .bg-main {
+  background-image: url(../../public/assets/images/mug.png);
+} */
