@@ -16,7 +16,7 @@ export default function EditEntryForm({ id, title, address, description }) {
       const res = await fetch(`https://gitpub.vercel.app/api/entries/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ newTitle, newDescription }),
+        body: JSON.stringify({ newTitle, newAddress, newDescription }),
       });
       // const res = await fetch(`http://localhost:3000/api/entries/${id}`, {
       //   method: "PUT",
