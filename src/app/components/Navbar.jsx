@@ -1,23 +1,25 @@
-import Link from 'next/link';
+import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <nav className='flex justify-between items-center p-6 '>
-      {/* adjust background for nav / header */}
-      <Link href={'/'} className=''>
-        <button className='bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow'>
-          Home
-        </button>
-      </Link>
-      <Link href={'/'} className='text-8xl font-serif font-extrabold'>
+    <nav className=" flex flex-col items-center justify-between p-6  ">
+      <Link href={"/"} className="mb-2 font-serif text-8xl font-extrabold">
         GitPub
       </Link>
 
-      <Link href={'/addEntry'} className=''>
-        <button className='bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow'>
-          Add Entry
-        </button>
-      </Link>
+      <div className="flex w-full justify-between px-12 pt-4">
+        <Link href={"/"}>
+          <button className="rounded border border-gray-400 bg-white px-4 py-2 font-semibold text-gray-800 shadow hover:bg-gray-100">
+            Home
+          </button>
+        </Link>
+
+        <Link href={"/addEntry"} className="">
+          <button className="rounded border border-gray-400 bg-white px-4 py-2 font-semibold text-gray-800 shadow hover:bg-gray-100">
+            Add Entry
+          </button>
+        </Link>
+      </div>
     </nav>
   );
 }
