@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <nav className=" flex flex-col items-center justify-between p-6  ">
+    <nav className=" flex flex-col items-center justify-between p-6 pb-0  ">
       <Link href={"/"} className="mb-2 font-serif text-8xl font-extrabold">
         GitPub
       </Link>

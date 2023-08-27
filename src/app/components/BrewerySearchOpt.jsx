@@ -6,7 +6,7 @@ import Modal from "../components/Modal";
 import { VscDebugRestart } from "react-icons/vsc";
 import { FaWindowClose } from "react-icons/fa";
 
-export default function BrewerySearch() {
+export default function BrewerySearchOpt() {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [error, setError] = useState("");
@@ -332,15 +332,15 @@ export default function BrewerySearch() {
                   ))}
                 </select>
               </div>
-              <div className="flex w-auto justify-center gap-12 pb-4 pt-2 ">
-                <div className="flex  align-middle ">
+              <div className="flex justify-center pb-4 pt-2 ">
+                <div className="flex px-10 pt-2 align-middle ">
                   <button
                     onClick={handleCityFilter}
                     className="focus:shadow-outline rounded bg-blue-500 px-2 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none">
                     Search By City
                   </button>
                 </div>
-                <div className="flex  align-middle">
+                <div className="flex px-10 pt-2 align-middle">
                   <button onClick={resetUseStates}>
                     <VscDebugRestart
                       size={33}
@@ -356,7 +356,7 @@ export default function BrewerySearch() {
             <form type="submit" onSubmit={handleSearchSubmit}>
               <Modal isOpen={showModal} onClose={closeModal}>
                 <div className="flex justify-evenly gap-6">
-                  <h2 className="mb-4 pt-4 text-2xl font-bold">
+                  <h2 className="mb-4  text-2xl font-bold">
                     Breweries in {city},{" "}
                     {capitalizeState(state.replace(/_/g, " "))}
                   </h2>
