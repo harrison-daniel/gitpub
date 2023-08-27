@@ -15,7 +15,8 @@ export default function RemoveBtn({ id }) {
   const removeEntry = async () => {
     console.log("Attempting to delete entry");
     try {
-      await fetch(`http://localhost:3000/api/entries?id=${id}`, {
+      await fetch(`https://gitpub.vercel.app/api/entries?id=${id}`, {
+        // await fetch(`http://localhost:3000/api/entries?id=${id}`, {
         method: "DELETE",
       });
       router.refresh();
