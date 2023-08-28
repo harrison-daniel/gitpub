@@ -13,7 +13,7 @@ export default function RemoveBtn({ id }) {
   };
 
   const removeEntry = async () => {
-    console.log("Attempting to delete entry");
+    console.log("Deleting entry");
     try {
       await fetch(`https://gitpub.vercel.app/api/entries?id=${id}`, {
         // await fetch(`http://localhost:3000/api/entries?id=${id}`, {

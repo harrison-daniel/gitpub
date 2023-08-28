@@ -32,7 +32,7 @@ export default async function EntryList() {
         </h1>
         {entries.map((entry) => (
           <div
-            className="m-4 flex items-start justify-between gap-5 border border-slate-900 bg-amber-500 bg-opacity-80 p-4"
+            className=" m-4 flex items-start justify-between gap-5 border border-slate-900 bg-amber-500 bg-opacity-80 p-4"
             key={entry._id}>
             <div>
               <h1 className="whitespace-pre-wrap text-2xl font-bold">
@@ -45,7 +45,8 @@ export default async function EntryList() {
             </div>
 
             <div className="flex flex-col gap-3">
-              <RemoveBtn id={entry._id} className="" />
+              <RemoveBtn id={entry._id} className="delete" />
+              <span aria-hidden="true"></span>
 
               <Link href={`/editEntry/${entry._id}`}>
                 <HiPencilAlt size={28} />
