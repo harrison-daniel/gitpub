@@ -258,7 +258,7 @@ export default function BrewerySearch() {
                 onSubmit={handleModalSubmit}
                 className="modal ">
                 <Modal isOpen={showModal} onClose={closeModal}>
-                  <div className=" sticky top-0 flex  items-center  justify-between gap-2  border-b-4 border-b-zinc-950 bg-amber-600 p-2 px-4 py-5">
+                  <div className=" sticky top-0 flex  items-center  justify-between gap-2  bg-white  px-4 py-4 shadow-xl">
                     <h2 className="sm:text-md text-2xl font-bold">
                       Breweries in {city},{" "}
                       {capitalizeState(state.replace(/_/g, " "))}
@@ -268,7 +268,7 @@ export default function BrewerySearch() {
                       size={34}
                       onClick={closeModal}
                       aria-label="Close Modal"
-                      className="flex-none rounded-lg bg-red-600 hover:bg-red-700 active:bg-red-600 "
+                      className="flex-none rounded-lg  hover:bg-red-700 active:bg-red-600 "
                     />
                   </div>
                   <div className="">
