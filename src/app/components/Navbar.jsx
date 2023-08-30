@@ -11,13 +11,13 @@ export default function Navbar() {
 
       <div className="flex w-full justify-between px-12 pt-4">
         <Link href={"/"}>
-          <button className="rounded border border-gray-400 bg-white px-4 py-2 font-semibold text-gray-800 shadow hover:bg-gray-100">
+          <button className="hover: rounded border border-gray-400 bg-white px-4 py-2 font-semibold text-gray-800 shadow hover:bg-gray-100  active:bg-white">
             Home
           </button>
         </Link>
 
         <Link href={"/addEntry"} className="">
-          <button className="rounded border border-gray-400 bg-white px-4 py-2 font-semibold text-gray-800 shadow hover:bg-gray-100">
+          <button className="rounded border border-gray-400 bg-white px-4 py-2 font-semibold text-gray-800 shadow hover:bg-gray-100 active:bg-white">
             Add Entry
           </button>
         </Link>

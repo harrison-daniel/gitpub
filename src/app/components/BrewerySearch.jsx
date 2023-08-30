@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Modal from "../components/Modal";
-import { VscDebugRestart } from "react-icons/vsc";
-import { FaWindowClose } from "react-icons/fa";
+// import { VscDebugRestart } from "react-icons/vsc";
+import { CgCloseR } from "react-icons/cg";
 
 export default function BrewerySearch() {
   const router = useRouter();
@@ -181,13 +181,8 @@ export default function BrewerySearch() {
     setCities([]);
     setFilteredBreweries([]);
     setBreweries([]);
-
     // setError("");
   };
-
-  // const loadMoreButton = () => {
-  //   console.log("load more button clicked");
-  // };
 
   return (
     <>
@@ -200,9 +195,15 @@ export default function BrewerySearch() {
               </p>
             )} */}
 
-            <label className="block  text-lg font-bold text-black">State</label>
+            <label
+              className="block  text-lg font-bold text-black"
+              htmlFor="state">
+              State
+            </label>
             <select
               className="mt-1.5 w-full rounded-lg border-gray-300 p-0.5 text-gray-700"
+              name="state"
+              id="state"
               value={state}
               onChange={(e) => setState(e.target.value)}>
               <option value="">Select a state</option>
@@ -216,13 +217,18 @@ export default function BrewerySearch() {
               ))}
             </select>
 
+            {/* show city dropdown after state is selected */}
             {state && (
               <div className="pt-2">
-                <label className="block  text-lg font-bold text-black">
+                <label
+                  className="block text-lg font-bold text-black"
+                  htmlFor="city">
                   City
                 </label>
                 <select
-                  className="mt-1.5 w-full rounded-lg border-gray-300 p-0.5 text-gray-700 "
+                  className="mt-1.5 w-full rounded-lg border-gray-300 p-0.5 text-gray-700"
+                  name="city"
+                  id="city"
                   onChange={(e) => setCity(e.target.value)}>
                   <option value="">Select a City</option>
                   {cities.sort().map((cityName) => (
@@ -231,57 +237,69 @@ export default function BrewerySearch() {
                     </option>
                   ))}
                 </select>
-                <div className=" flex pt-2 align-middle ">
-                  <button
-                    onClick={handleCityFilter}
-                    className="focus:shadow-outline rounded bg-blue-500 px-2 py-2  font-bold text-white hover:bg-blue-700 focus:outline-none">
-                    Search By City
-                  </button>
-                </div>
+                <div className=" flex pt-2 align-middle "></div>
+              </div>
+            )}
+
+            {/* show button after city is selected */}
+            {city && (
+              <div className="pt-2">
+                <button
+                  onClick={handleCityFilter}
+                  className="rounded border border-gray-400 bg-amber-600 px-6 py-2 font-semibold text-white shadow hover:bg-amber-500 active:bg-amber-600">
+                  Search By City
+                </button>
               </div>
             )}
 
             {showModal && (
-              <form type="submit" onSubmit={handleModalSubmit}>
+              <form
+                type="submit"
+                onSubmit={handleModalSubmit}
+                className="modal ">
                 <Modal isOpen={showModal} onClose={closeModal}>
-                  <div className="flex justify-evenly gap-6">
-                    <h2 className="mb-4 pt-4 text-2xl font-bold">
+                  <div className=" sticky top-0 flex  items-center  justify-between gap-2  border-b-4 border-b-zinc-950 bg-amber-600 p-2 px-4 py-5">
+                    <h2 className="sm:text-md text-2xl font-bold">
                       Breweries in {city},{" "}
                       {capitalizeState(state.replace(/_/g, " "))}
                     </h2>
 
-                    <FaWindowClose
+                    <CgCloseR
                       size={34}
                       onClick={closeModal}
                       aria-label="Close Modal"
-                      className="modal-exit-icon "
+                      className="flex-none rounded-lg bg-red-600 hover:bg-red-700 active:bg-red-600 "
                     />
                   </div>
-                  {filteredBreweries.length > 0 && (
-                    <div>
-                      {filteredBreweries.map((brewery) => (
-                        <div
-                          className="brewery-modal rounded-lg bg-white p-8  shadow-2xl"
-                          key={brewery.id}>
-                          <h1 className="text-lg font-bold">{brewery.name}</h1>
-                          <div>
-                            {`${brewery.address_1},
+                  <div className="">
+                    {filteredBreweries.length > 0 && (
+                      <div className="">
+                        {filteredBreweries.map((brewery) => (
+                          <div
+                            className="brewery-modal  rounded-lg bg-white p-8  shadow-2xl"
+                            key={brewery.id}>
+                            <h1 className="text-lg font-bold">
+                              {brewery.name}
+                            </h1>
+                            <div>
+                              {`${brewery.address_1},
                       ${brewery.city},
                       ${brewery.state}
                       ${brewery.postal_code.substring(0, 5)}`}
-                          </div>
+                            </div>
 
-                          <div className="mt-4 ">
-                            <button
-                              onClick={(e) => AddBreweryInfoToEntry(brewery)}
-                              className="m-4   rounded border border-gray-400 bg-amber-600 px-6 py-2 font-semibold text-white shadow hover:bg-amber-500">
-                              Add Brewery to Entries
-                            </button>
+                            <div className="mt-4 ">
+                              <button
+                                onClick={(e) => AddBreweryInfoToEntry(brewery)}
+                                className="m-4   rounded border border-gray-400 bg-amber-600 px-6 py-2 font-semibold text-white shadow hover:bg-amber-500 active:bg-amber-600">
+                                Add Brewery to Entries
+                              </button>
+                            </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </Modal>
               </form>
             )}
@@ -290,16 +308,4 @@ export default function BrewerySearch() {
       </div>
     </>
   );
-}
-
-{
-  /* Load More Button
-                <div className="mt-4 flex justify-center">
-                  <button
-                    type="button"
-                    onClick={loadMoreButton}
-                    className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none">
-                    Load More
-                  </button>
-                </div> */
 }

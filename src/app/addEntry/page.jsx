@@ -60,7 +60,7 @@ export default function AddEntry() {
 
         <button
           type="submit"
-          className="m-4 rounded border border-gray-400 bg-amber-600 px-6 py-2 font-semibold text-white shadow hover:bg-amber-500">
+          className="m-4 rounded border border-gray-400 bg-amber-600 px-6 py-2 font-semibold text-white shadow hover:bg-amber-500 active:bg-amber-600">
           Add Entry
         </button>
       </form>

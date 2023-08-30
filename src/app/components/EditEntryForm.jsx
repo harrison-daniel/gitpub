@@ -62,7 +62,7 @@ export default function EditEntryForm({ id, title, address, description }) {
           rows={3}
         />
 
-        <button className="rounded border  border-gray-400 bg-amber-600 px-4 py-2 font-semibold text-white shadow hover:bg-amber-500">
+        <button className="rounded border  border-gray-400 bg-amber-600 px-4 py-2 font-semibold text-white shadow hover:bg-amber-500 active:bg-amber-600">
           Update Entry
         </button>
       </form>

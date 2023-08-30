@@ -2,7 +2,8 @@
 
 import { HiOutlineTrash } from "react-icons/hi";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useRef } from "react";
+// import { CSSTransition } from "react-transition-group";
 
 export default function RemoveBtn({ id }) {
   const router = useRouter();
@@ -29,7 +30,9 @@ export default function RemoveBtn({ id }) {
 
   return (
     <>
-      <button onClick={toggleModal} className="text-red-700 hover:text-red-500">
+      <button
+        onClick={toggleModal}
+        className="text-red-700 hover:text-red-500 active:text-red-700">
         <HiOutlineTrash size={28} />
       </button>
 
@@ -43,12 +46,12 @@ export default function RemoveBtn({ id }) {
             <div className="flex justify-center gap-8">
               <button
                 onClick={removeEntry}
-                className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700">
+                className="m-4   rounded border border-gray-400 bg-red-500 px-6 py-2 font-semibold text-white shadow hover:bg-red-600 active:bg-red-500">
                 Yes
               </button>
               <button
                 onClick={toggleModal}
-                className="rounded bg-gray-300 px-4 py-2 hover:bg-gray-400">
+                className="m-4 rounded border border-gray-400  bg-white px-6 py-2 font-semibold text-gray-800 shadow hover:bg-gray-100 active:bg-white">
                 No
               </button>
             </div>

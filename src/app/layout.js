@@ -16,24 +16,24 @@ export default function RootLayout({ children }) {
     <html lang="en">
       {/* <body className={inter.className}> */}
       <body>
-        <div>
-          <Image
-            alt="beermug with foam"
-            src={backgroundBeerMug}
-            // placeholder="blur"
-            quality={100}
-            fill
-            sizes="100vh"
-            priority
-            style={{
-              objectFit: "contain",
-              // objectPosition: "center",
-              zIndex: "-10",
-              opacity: "0.85",
-              top: "3.2rem",
-            }}
-          />
-        </div>
+        <Image
+          alt="beermug with foam"
+          src={backgroundBeerMug}
+          // placeholder="blur"
+          quality={100}
+          sizes="100vh"
+          priority
+          style={{
+            objectFit: "fill",
+            position: "absolute",
+            objectPosition: "center",
+            width: "100%",
+            zIndex: "-10",
+            opacity: "0.85",
+            top: "6rem",
+          }}
+        />
+
         <div className=" ">
           <div className="mx-auto max-w-3xl ">
             <Navbar />
