@@ -13,7 +13,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className="overflow-scroll p-0">
       {/* <body className={inter.className}> */}
       <body>
         <Image
@@ -21,10 +21,10 @@ export default function RootLayout({ children }) {
           src={backgroundBeerMug}
           // placeholder="blur"
           quality={100}
-          sizes="100vh"
+          // sizes="100vh"
           priority
           style={{
-            objectFit: "fill",
+            // objectFit: "fill",
             position: "absolute",
             objectPosition: "center",
             width: "100%",
@@ -33,12 +33,9 @@ export default function RootLayout({ children }) {
             top: "6rem",
           }}
         />
-
-        <div className=" ">
-          <div className="mx-auto max-w-3xl ">
-            <Navbar />
-            <div className="mt-8">{children}</div>
-          </div>
+        <div className="mx-auto max-w-3xl ">
+          <Navbar />
+          <div className="mt-8">{children}</div>
         </div>
       </body>
     </html>

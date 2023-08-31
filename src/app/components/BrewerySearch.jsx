@@ -1,22 +1,21 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, Fragment } from "react";
+import { Dialog, Transition } from "@headlessui/react";
 import { useRouter } from "next/navigation";
-import Modal from "../components/Modal";
-// import { VscDebugRestart } from "react-icons/vsc";
 import { CgCloseR } from "react-icons/cg";
 
-export default function BrewerySearch() {
+export default function BrewerySearchOpt() {
   const router = useRouter();
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
   const [breweries, setBreweries] = useState([]);
   const [cities, setCities] = useState([]);
   const [filteredBreweries, setFilteredBreweries] = useState([]);
-  const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState("");
   const [address, setAddress] = useState("");
   const [description, setDescription] = useState("");
+  let [isOpen, setIsOpen] = useState(false);
 
   const states = [
     // { value: "", label: "Choose a State" },
@@ -115,7 +114,7 @@ export default function BrewerySearch() {
       (brewery) => brewery.city.toLowerCase() === city.toLowerCase(),
     );
     setFilteredBreweries(matchingUniqueCities);
-    setShowModal(true);
+    openModal();
   };
 
   const capitalizeState = (stateStr) =>
@@ -158,8 +157,8 @@ export default function BrewerySearch() {
 
       if (res.ok) {
         router.refresh();
-        setShowModal(false);
-        resetFields();
+        closeModal();
+        // resetFields();
         router.push("/");
       } else {
         throw new Error("Failed to create an entry");
@@ -169,114 +168,142 @@ export default function BrewerySearch() {
     }
   };
 
-  const closeModal = () => {
-    setShowModal(false);
-    resetFields();
-  };
+  // const closeModalOg = () => {
+  //   setShowModal(false);
+  //   resetFields();
+  // };
+
+  function closeModal() {
+    setIsOpen(false);
+    // setTimeout(() => {
+    //   resetFields();
+    // }, 300);
+    // 300ms delay to match the modal close animation duration
+  }
+
+  function openModal() {
+    setIsOpen(true);
+  }
 
   const resetFields = () => {
-    setCity("");
-    setState("");
-    setBreweries([]);
-    setCities([]);
-    setFilteredBreweries([]);
-    setBreweries([]);
+    // setCity("");
+    // setState("");
+    // setBreweries([]);
+    // setCities([]);
+    // setFilteredBreweries([]);
     // setError("");
   };
 
   return (
     <>
-      <div className="">
-        <div className=" bg-slate-200 bg-opacity-10 px-4">
-          <div className="">
-            {/* {error && (
+      <div className=" bg-slate-200 bg-opacity-10 px-4">
+        <div className="">
+          {/* {error && (
               <p className="text-md flex justify-center font-semibold italic text-red-500">
                 {error}
               </p>
             )} */}
 
-            <label
-              className="block  text-lg font-bold text-black"
-              htmlFor="state">
-              State
-            </label>
-            <select
-              className="mt-1.5 w-full rounded-lg border-gray-300 p-0.5 text-gray-700"
-              name="state"
-              id="state"
-              value={state}
-              onChange={(e) => setState(e.target.value)}>
-              <option value="">Select a state</option>
-              {states.map((state) => (
-                <option
-                  key={state.value}
-                  value={state.value}
-                  disabled={state.value === ""}>
-                  {state.label}
-                </option>
-              ))}
-            </select>
+          <label
+            className="block  text-lg font-bold text-black"
+            htmlFor="state">
+            State
+          </label>
+          <select
+            className="mt-1.5 w-full rounded-lg border-gray-300 p-0.5 text-gray-700"
+            name="state"
+            id="state"
+            value={state}
+            onChange={(e) => setState(e.target.value)}>
+            <option value="">Select a state</option>
+            {states.map((state) => (
+              <option
+                key={state.value}
+                value={state.value}
+                disabled={state.value === ""}>
+                {state.label}
+              </option>
+            ))}
+          </select>
 
-            {/* show city dropdown after state is selected */}
-            {state && (
-              <div className="pt-2">
-                <label
-                  className="block text-lg font-bold text-black"
-                  htmlFor="city">
-                  City
-                </label>
-                <select
-                  className="mt-1.5 w-full rounded-lg border-gray-300 p-0.5 text-gray-700"
-                  name="city"
-                  id="city"
-                  onChange={(e) => setCity(e.target.value)}>
-                  <option value="">Select a City</option>
-                  {cities.sort().map((cityName) => (
-                    <option key={cityName} value={cityName}>
-                      {cityName}
-                    </option>
-                  ))}
-                </select>
-                <div className=" flex pt-2 align-middle "></div>
-              </div>
-            )}
+          {/* show city dropdown after state is selected */}
+          {state && (
+            <div className="pt-2">
+              <label
+                className="block text-lg font-bold text-black"
+                htmlFor="city">
+                City
+              </label>
+              <select
+                className="mt-1.5 w-full rounded-lg border-gray-300 p-0.5 text-gray-700"
+                name="city"
+                id="city"
+                onChange={(e) => setCity(e.target.value)}>
+                <option value="">Select a City</option>
+                {cities.sort().map((cityName) => (
+                  <option key={cityName} value={cityName}>
+                    {cityName}
+                  </option>
+                ))}
+              </select>
+              <div className=" flex pt-2 align-middle "></div>
+            </div>
+          )}
 
-            {/* show button after city is selected */}
-            {city && (
-              <div className="pt-2">
-                <button
-                  onClick={handleCityFilter}
-                  className="rounded border border-gray-400 bg-amber-600 px-6 py-2 font-semibold text-white shadow hover:bg-amber-500 active:bg-amber-600">
-                  Search By City
-                </button>
-              </div>
-            )}
+          {/* show button after city is selected */}
+          {city && (
+            <div className="pt-2">
+              <button
+                onClick={handleCityFilter}
+                className="rounded border border-gray-400 bg-amber-600 px-6 py-2 font-semibold text-white shadow hover:bg-amber-500 active:bg-amber-600">
+                Search By City
+              </button>
+            </div>
+          )}
 
-            {showModal && (
-              <form
-                type="submit"
-                onSubmit={handleModalSubmit}
-                className="modal ">
-                <Modal isOpen={showModal} onClose={closeModal}>
-                  <div className=" sticky top-0 flex  items-center  justify-between gap-2  bg-white  px-4 py-4 shadow-xl">
-                    <h2 className="sm:text-md text-2xl font-bold">
-                      Breweries in {city},{" "}
-                      {capitalizeState(state.replace(/_/g, " "))}
-                    </h2>
+          <Transition appear show={isOpen} as={Fragment}>
+            <Dialog as="div" className="relative z-10" onClose={closeModal}>
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0">
+                <div className="fixed inset-0 bg-black bg-opacity-40" />
+              </Transition.Child>
 
-                    <CgCloseR
-                      size={34}
-                      onClick={closeModal}
-                      aria-label="Close Modal"
-                      className="flex-none rounded-lg  hover:bg-red-700 active:bg-red-600 "
-                    />
-                  </div>
-                  <div className="">
-                    {filteredBreweries.length > 0 && (
-                      <div className="">
+              <div className="fixed inset-0  overflow-y-auto">
+                <div className="flex min-h-full items-center justify-center p-4 ">
+                  <Transition.Child
+                    as={Fragment}
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0 scale-95"
+                    enterTo="opacity-100 scale-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100 scale-100"
+                    leaveTo="opacity-0 scale-95">
+                    <Dialog.Panel className=" w-full max-w-md transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                      <Dialog.Title
+                        as="h3"
+                        className="sticky flex items-center justify-center gap-2 px-4 py-4 text-lg font-medium leading-6 text-gray-900 shadow-xl">
+                        Breweries in {city},{" "}
+                        {capitalizeState(state.replace(/_/g, " "))}
+                        <CgCloseR
+                          size={34}
+                          onClick={closeModal}
+                          aria-label="Close Modal"
+                          className="flex-none rounded-lg  hover:bg-red-700 active:bg-red-600 "
+                        />
+                      </Dialog.Title>
+                      <form
+                        type="submit"
+                        onSubmit={handleModalSubmit}
+                        className="modal ">
                         {filteredBreweries.map((brewery) => (
                           <div
-                            className="brewery-modal  rounded-lg bg-white p-8  shadow-2xl"
+                            className=" rounded-lg bg-white p-8  shadow-2xl"
                             key={brewery.id}>
                             <h1 className="text-lg font-bold">
                               {brewery.name}
@@ -297,13 +324,13 @@ export default function BrewerySearch() {
                             </div>
                           </div>
                         ))}
-                      </div>
-                    )}
-                  </div>
-                </Modal>
-              </form>
-            )}
-          </div>
+                      </form>
+                    </Dialog.Panel>
+                  </Transition.Child>
+                </div>
+              </div>
+            </Dialog>
+          </Transition>
         </div>
       </div>
     </>
