@@ -1,12 +1,28 @@
-import mongoose from 'mongoose';
+import { MongoClient } from 'mongodb';
 
-const connectMongoDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log('MongoDB connected');
-  } catch (error) {
-    console.log(error);
+if (!process.env.MONGODB_URI) {
+  throw new Error('Invalid/Missing environment variable: "MONGODB_URI"');
+}
+
+const uri = process.env.MONGODB_URI;
+const options = {};
+
+let client;
+let clientPromise;
+
+if (process.env.NODE_ENV === 'development') {
+  // In development mode, use a global variable to preserve the value
+  // across module reloads caused by HMR (Hot Module Replacement).
+  if (!global._mongoClientPromise) {
+    client = new MongoClient(uri, options);
+    global._mongoClientPromise = client.connect();
   }
-};
+  clientPromise = global._mongoClientPromise;
+} else {
+  // In production mode, avoid using a global variable.
+  client = new MongoClient(uri, options);
+  clientPromise = client.connect();
+}
 
-export default connectMongoDB;
+// Export a module-scoped MongoClient promise. This allows the client to be shared across functions.
+export default clientPromise;

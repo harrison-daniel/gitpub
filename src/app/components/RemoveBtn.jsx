@@ -29,7 +29,7 @@ export default function RemoveBtn({ id }) {
     } catch (error) {
       console.error('Failed to delete entry:', error);
     } finally {
-      setIsModalOpen(false);
+      setIsOpen(false);
     }
   };
 

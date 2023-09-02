@@ -287,12 +287,12 @@ export default function BrewerySearchOpt() {
                     <Dialog.Panel className=' w-full max-w-md transform rounded-2xl   bg-white p-1 text-center shadow-xl transition-all'>
                       <Dialog.Title
                         as='h3'
-                        className='sticky top-0 flex items-center  justify-center rounded-2xl bg-white  py-4 text-lg font-medium leading-6 text-gray-900 shadow-xl'>
-                        <div className='flex '>
+                        className='sticky top-0 flex items-center justify-between rounded-2xl bg-white py-4 text-lg font-medium leading-6 text-gray-900 shadow-xl'>
+                        <div className='flex-grow text-center '>
                           Breweries in <br />
                           {city}, {capitalizeState(state.replace(/_/g, ' '))}
                         </div>
-                        <div className='fixed right-6 top-4  '>
+                        <div className='ml-auto pr-4'>
                           <CgCloseR
                             size={34}
                             onClick={closeModal}
