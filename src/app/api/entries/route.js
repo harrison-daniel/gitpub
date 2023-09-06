@@ -1,24 +1,23 @@
-import connectMongoDB from "../../libs/mongodb";
-import Entry from "../../models/entry";
-
-import { NextResponse } from "next/server";
+import connectToDatabase from '../../libs/mongodb';
+import Entry from '../../models/entry';
+import { NextResponse } from 'next/server';
 
 export async function POST(request) {
   const { title, address, description } = await request.json();
-  await connectMongoDB();
+  await connectToDatabase();
   await Entry.create({ title, address, description });
-  return NextResponse.json({ message: "Entry created" }, { status: 201 });
+  return NextResponse.json({ message: 'Entry created' }, { status: 201 });
 }
 
 export async function GET() {
-  await connectMongoDB();
+  await connectToDatabase();
   const entries = await Entry.find();
   return NextResponse.json({ entries });
 }
 
 export async function DELETE(request) {
-  const id = request.nextUrl.searchParams.get("id");
-  await connectMongoDB();
+  const id = request.nextUrl.searchParams.get('id');
+  await connectToDatabase();
   await Entry.findByIdAndDelete(id);
-  return NextResponse.json({ message: "Entry deleted" }, { status: 200 });
+  return NextResponse.json({ message: 'Entry deleted' }, { status: 200 });
 }

@@ -144,16 +144,16 @@ export default function BrewerySearchOpt() {
     }
 
     try {
-      const res = await fetch('https://gitpub.vercel.app/api/entries', {
+      // const res = await fetch('https://gitpub.vercel.app/api/entries', {
+      //   method: 'POST',
+      //   headers: { 'Content-type': 'application/json' },
+      //   body: JSON.stringify({ title, address, description }),
+      // });
+      const res = await fetch('http://localhost:3000/api/entries', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({ title, address, description }),
       });
-      // const res = await fetch("http://localhost:3000/api/entries", {
-      //   method: "POST",
-      //   headers: { "Content-type": "application/json" },
-      //   body: JSON.stringify({ title, address, description }),
-      // });
 
       if (res.ok) {
         router.refresh();
@@ -184,15 +184,6 @@ export default function BrewerySearchOpt() {
   function openModal() {
     setIsOpen(true);
   }
-
-  const resetFields = () => {
-    // setCity("");
-    // setState("");
-    // setBreweries([]);
-    // setCities([]);
-    // setFilteredBreweries([]);
-    // setError("");
-  };
 
   return (
     <>

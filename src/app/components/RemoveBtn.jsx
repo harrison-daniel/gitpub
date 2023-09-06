@@ -21,8 +21,8 @@ export default function RemoveBtn({ id }) {
   const removeEntry = async () => {
     console.log('Deleting entry');
     try {
-      await fetch(`https://gitpub.vercel.app/api/entries?id=${id}`, {
-        // await fetch(`http://localhost:3000/api/entries?id=${id}`, {
+      // await fetch(`https://gitpub.vercel.app/api/entries?id=${id}`, {
+      await fetch(`http://localhost:3000/api/entries?id=${id}`, {
         method: 'DELETE',
       });
       router.refresh();
@@ -72,20 +72,18 @@ export default function RemoveBtn({ id }) {
                       Are you sure you want to delete this entry?
                     </Dialog.Title>
 
-                    <div className='mt-4'>
-                      <button
-                        type='button'
-                        className='m-4 rounded border border-gray-400 bg-red-600 px-6 py-2 font-semibold text-white shadow hover:bg-red-500 active:bg-red-600'
-                        onClick={removeEntry}>
-                        Yes
-                      </button>
-                      <button
-                        type='button'
-                        className='m-4 rounded border border-gray-400 bg-white px-6 py-2 font-semibold text-gray-800 shadow hover:bg-gray-100  active:bg-white'
-                        onClick={closeModal}>
-                        No
-                      </button>
-                    </div>
+                    <button
+                      type='button'
+                      className='m-4 rounded border border-gray-400 bg-red-600 px-6 py-2 font-semibold text-white shadow hover:bg-red-500 active:bg-red-600'
+                      onClick={removeEntry}>
+                      Yes
+                    </button>
+                    <button
+                      type='button'
+                      className='m-4 overflow-hidden rounded border border-gray-400 bg-white px-6 py-2 font-semibold text-gray-800 shadow  hover:bg-gray-100 active:bg-white'
+                      onClick={closeModal}>
+                      No
+                    </button>
                   </Dialog.Panel>
                 </Transition.Child>
               </div>
