@@ -5,12 +5,12 @@ import Link from 'next/link';
 const getEntries = async () => {
   'use server';
   try {
-    // const res = await fetch('https://gitpub.vercel.app/api/entries', {
-    //   cache: 'no-store',
-    // });
-    const res = await fetch('http://localhost:3000/api/entries', {
+    const res = await fetch('https://gitpub.vercel.app/api/entries', {
       cache: 'no-store',
     });
+    // const res = await fetch('http://localhost:3000/api/entries', {
+    //   cache: 'no-store',
+    // });
 
     if (!res.ok) {
       throw new Error('Failed to fetch entries');
