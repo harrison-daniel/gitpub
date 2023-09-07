@@ -1,6 +1,7 @@
 'use client';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Textarea, Button } from '@nextui-org/react';
 
 export default function EditEntryForm({ id, title, address, description }) {
   const [newTitle, setNewTitle] = useState(title);
@@ -36,35 +37,40 @@ export default function EditEntryForm({ id, title, address, description }) {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className='flex flex-col '>
-        <textarea
+      <form onSubmit={handleSubmit} className='flex flex-col items-center p-6'>
+        <Textarea
+          isRequired
+          label='Entry Name'
+          labelPlacement='outside'
+          placeholder='Enter your description'
+          className='max-w-2xl'
           onChange={(e) => setNewTitle(e.target.value)}
           value={newTitle}
-          className='m-4 border border-cyan-800 p-6 '
-          type='text'
-          placeholder='Entry Title'
           rows={3}
         />
-        <textarea
+        <Textarea
+          isRequired
+          label='Location'
+          labelPlacement='outside'
+          placeholder='Enter your location'
+          className='max-w-2xl'
           onChange={(e) => setNewAddress(e.target.value)}
           value={newAddress}
-          className='m-4 border border-cyan-800 p-6'
-          type='text'
-          placeholder='Entry Description'
           rows={3}
         />
-        <textarea
+        <Textarea
+          isRequired
+          label='Notes'
+          labelPlacement='outside'
+          placeholder='Enter your notes'
+          className='max-w-2xl'
           onChange={(e) => setNewDescription(e.target.value)}
           value={newDescription}
-          className='m-4 border border-cyan-800 p-6'
-          type='text'
-          placeholder='Entry Description'
           rows={3}
         />
-
-        <button className='rounded border  border-gray-400 bg-amber-600 px-4 py-2 font-semibold text-white shadow hover:bg-amber-500 active:bg-amber-600'>
+        <Button color='' type='submit' className='bg-amber-500'>
           Update Entry
-        </button>
+        </Button>
       </form>
     </>
   );

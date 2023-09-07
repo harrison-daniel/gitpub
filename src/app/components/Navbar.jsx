@@ -1,26 +1,27 @@
-"use client";
-
-import Link from "next/link";
+'use client';
+import React from 'react';
+import { Button } from '@nextui-org/react';
+import Link from 'next/link';
 
 export default function Navbar() {
   return (
     <>
-      <nav className="mx-auto flex  max-w-3xl flex-col items-center justify-between p-6 pb-0  ">
-        <Link href={"/"} className="mb-2 font-serif text-8xl font-extrabold">
+      <nav className='mx-auto flex  max-w-3xl flex-col items-center justify-between p-6 pb-0  '>
+        <Link href={'/'} className='mb-2 font-serif text-8xl font-extrabold'>
           GitPub
         </Link>
 
-        <div className="flex w-full justify-between px-12 pt-4">
-          <Link href={"/"}>
-            <button className="hover: rounded border border-gray-400 bg-white px-4 py-2 font-semibold text-gray-800 shadow hover:bg-gray-100  active:bg-white">
+        <div className='flex w-full justify-between px-12 pt-4'>
+          <Link href={'/'}>
+            <Button color='' className='bg-white'>
               Home
-            </button>
+            </Button>
           </Link>
 
-          <Link href={"/addEntry"} className="">
-            <button className="rounded border border-gray-400 bg-white px-4 py-2 font-semibold text-gray-800 shadow hover:bg-gray-100 active:bg-white">
+          <Link href={'/addEntry'} className=''>
+            <Button color='' className='bg-white'>
               Add Entry
-            </button>
+            </Button>
           </Link>
         </div>
       </nav>

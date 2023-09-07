@@ -26,8 +26,7 @@ export default async function EntryList() {
   const { entries = [] } = (await getEntries()) || {};
 
   return (
-    <>
-      {/* <div className=""> */}
+    <div className='mx-auto max-w-3xl'>
       <h1 className='cards px-4 pt-4 font-mono text-3xl font-bold'>
         My Brewery Trips:
       </h1>
@@ -55,7 +54,6 @@ export default async function EntryList() {
           </div>
         </div>
       ))}
-      {/* </div> */}
-    </>
+    </div>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Textarea, Button } from '@nextui-org/react';
 
 export default function AddEntry() {
   const [title, setTitle] = useState('');
@@ -35,34 +36,40 @@ export default function AddEntry() {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className='flex flex-col '>
-        <textarea
+      <form onSubmit={handleSubmit} className='flex flex-col items-center p-6'>
+        <Textarea
+          isRequired
+          label='Entry Name'
+          labelPlacement='outside'
+          placeholder='Enter your description'
+          className='max-w-2xl'
           onChange={(e) => setTitle(e.target.value)}
           value={title}
-          className='m-4 border border-cyan-800 p-6 '
-          type='text'
-          placeholder='Entry Title'
+          rows={3}
         />
-        <textarea
+        <Textarea
+          isRequired
+          label='Location'
+          labelPlacement='outside'
+          placeholder='Enter your location'
+          className='max-w-2xl'
           onChange={(e) => setAddress(e.target.value)}
           value={address}
-          className='m-4 border border-cyan-800 p-6'
-          type='text'
-          placeholder='Address or Location'
+          rows={3}
         />
-        <textarea
+        <Textarea
+          isRequired
+          label='Notes'
+          labelPlacement='outside'
+          placeholder='Enter your notes'
+          className='max-w-2xl'
           onChange={(e) => setDescription(e.target.value)}
           value={description}
-          className='m-4 border border-cyan-800 p-6'
-          type='text'
-          placeholder='Entry Description'
+          rows={3}
         />
-
-        <button
-          type='submit'
-          className='m-4 rounded border border-gray-400 bg-amber-600 px-6 py-2 font-semibold text-white shadow hover:bg-amber-500 active:bg-amber-600'>
+        <Button color='' type='submit' className='bg-amber-500'>
           Add Entry
-        </button>
+        </Button>
       </form>
     </>
   );

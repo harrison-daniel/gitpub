@@ -2,41 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CSS COLORS */
-/* .valid-css-color-function-colors {
-  --srgb: color(srgb 1 1 1);
-  --srgb-linear: color(srgb-linear 100% 100% 100% / 50%);
-  --display-p3: color(display-p3 1 1 1);
-  --rec2020: color(rec2020 0 0 0);
-  --a98-rgb: color(a98-rgb 1 1 1 / 25%);
-  --prophoto: color(prophoto-rgb 0% 0% 0%);
-  --xyz: color(xyz 1 1 1);
-} */
-/* .valid-css-rec2020-colors {
-  --percents: color(rec2020 34% 58% 73%);
-  --decimals: color(rec2020 0.34 0.58 0.73);
-
-  --percent-opacity: color(rec2020 34% 58% 73% / 50%);
-  --decimal-opacity: color(rec2020 0.34 0.58 0.73 / 0.5);
-
-  chromaless and hueless 
-   --empty-channels-black: color(rec2020 none none none);
-  --empty-channels-black2: color(rec2020);
-} */
-
 body {
+  height: 100%;
+  width: 100%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+html {
+  /* padding-right: 0px !important;
+  overflow-y: scroll !important;
+  overflow-x: scroll !important; */
   background: rgb(255, 212, 19);
   background: radial-gradient(
     circle,
     rgba(255, 212, 19, 1) 31%,
     rgba(255, 186, 2, 1) 73%
   );
-}
-
-/* overflow-y: scroll !important;
-padding: 0px !important; */
-html {
-  padding-right: 0px !important;
-  overflow-y: scroll !important;
-  overflow-x: scroll !important;
 }

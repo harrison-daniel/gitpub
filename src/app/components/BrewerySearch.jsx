@@ -1,11 +1,18 @@
 'use client';
-
-import { useState, useEffect, Fragment } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  useDisclosure,
+} from '@nextui-org/react';
 import { CgCloseR } from 'react-icons/cg';
+import { useRouter } from 'next/navigation';
 
-export default function BrewerySearchOpt() {
+export default function BrewerySearch() {
   const router = useRouter();
   const [state, setState] = useState('');
   const [city, setCity] = useState('');
@@ -15,7 +22,8 @@ export default function BrewerySearchOpt() {
   const [title, setTitle] = useState('');
   const [address, setAddress] = useState('');
   const [description, setDescription] = useState('');
-  let [isOpen, setIsOpen] = useState(false);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [scrollBehavior, setScrollBehavior] = React.useState('outside');
 
   const states = [
     // { value: "", label: "Choose a State" },
@@ -89,7 +97,6 @@ export default function BrewerySearchOpt() {
           `https://api.openbrewerydb.org/breweries?by_state=${state}&page=${page}&per_page=200`,
         );
         const data = await response.json();
-        // console.log("USEEFFECT data", data);
 
         if (data.length === 0) break;
 
@@ -114,7 +121,7 @@ export default function BrewerySearchOpt() {
       (brewery) => brewery.city.toLowerCase() === city.toLowerCase(),
     );
     setFilteredBreweries(matchingUniqueCities);
-    openModal();
+    onOpen();
   };
 
   const capitalizeState = (stateStr) =>
@@ -123,8 +130,8 @@ export default function BrewerySearchOpt() {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
 
-  // OLD ADD BREWERYINFOTOENTRY
-  function AddBreweryInfoToEntry(brewery) {
+  function addBreweryInfoToEntry(brewery) {
+    console.log('addBreweryInfoToEntry clicked');
     const truncatedPostalCode = brewery.postal_code.substring(0, 5);
     const breweryListAddress = `${brewery.address_1}
     ${brewery.city}, ${brewery.state} ${truncatedPostalCode}`;
@@ -134,7 +141,6 @@ export default function BrewerySearchOpt() {
     setDescription('Edit entry to add notes');
   }
 
-  // OLD HANDLE SEARCH SUBMIT
   const handleModalSubmit = async (e) => {
     e.preventDefault();
 
@@ -157,8 +163,7 @@ export default function BrewerySearchOpt() {
 
       if (res.ok) {
         router.refresh();
-        closeModal();
-        // resetFields();
+        onOpenChange(false);
         router.push('/');
       } else {
         throw new Error('Failed to create an entry');
@@ -168,26 +173,9 @@ export default function BrewerySearchOpt() {
     }
   };
 
-  // const closeModalOg = () => {
-  //   setShowModal(false);
-  //   resetFields();
-  // };
-
-  function closeModal() {
-    setIsOpen(false);
-    // setTimeout(() => {
-    //   resetFields();
-    // }, 300);
-    // 300ms delay to match the modal close animation duration
-  }
-
-  function openModal() {
-    setIsOpen(true);
-  }
-
   return (
     <>
-      <div className=' bg-slate-200 bg-opacity-10 px-4'>
+      <div className=' mx-auto max-w-3xl bg-slate-200 bg-opacity-10 px-4'>
         <div className=''>
           {/* {error && (
               <p className="text-md flex justify-center font-semibold italic text-red-500">
@@ -252,33 +240,16 @@ export default function BrewerySearchOpt() {
             </div>
           )}
 
-          <Transition appear show={isOpen} as={Fragment}>
-            <Dialog as='div' className='relative z-10' onClose={closeModal}>
-              <Transition.Child
-                as={Fragment}
-                enter='ease-out duration-300'
-                enterFrom='opacity-0'
-                enterTo='opacity-100'
-                leave='ease-in duration-200'
-                leaveFrom='opacity-100'
-                leaveTo='opacity-0'>
-                <div className='fixed inset-0 bg-black bg-opacity-40' />
-              </Transition.Child>
-
-              <div className='fixed inset-0  overflow-y-auto'>
-                <div className='flex min-h-full items-center justify-center p-4 '>
-                  <Transition.Child
-                    as={Fragment}
-                    enter='ease-out duration-300'
-                    enterFrom='opacity-0 scale-95'
-                    enterTo='opacity-100 scale-100'
-                    leave='ease-in duration-200'
-                    leaveFrom='opacity-100 scale-100'
-                    leaveTo='opacity-0 scale-95'>
-                    <Dialog.Panel className=' w-full max-w-md transform rounded-2xl   bg-white p-1 text-center shadow-xl transition-all'>
-                      <Dialog.Title
-                        as='h3'
-                        className='sticky top-0 flex items-center justify-between rounded-2xl bg-white py-4 text-lg font-medium leading-6 text-gray-900 shadow-xl'>
+          <div className='flex flex-col gap-2'>
+            <Modal
+              isOpen={isOpen}
+              onOpenChange={onOpenChange}
+              scrollBehavior={scrollBehavior}>
+              <form type='submit' onSubmit={handleModalSubmit}>
+                <ModalContent>
+                  {(onClose) => (
+                    <>
+                      <ModalHeader className='sticky top-0 flex items-center justify-between rounded-2xl bg-white py-4 text-lg font-medium leading-6 text-gray-900 shadow-xl'>
                         <div className='flex-grow text-center '>
                           Breweries in <br />
                           {city}, {capitalizeState(state.replace(/_/g, ' '))}
@@ -286,46 +257,57 @@ export default function BrewerySearchOpt() {
                         <div className='ml-auto pr-4'>
                           <CgCloseR
                             size={34}
-                            onClick={closeModal}
+                            onClick={onOpenChange}
                             aria-label='Close Modal'
                             className=' rounded-lg hover:bg-red-700 active:bg-red-600 '
                           />
                         </div>
-                      </Dialog.Title>
-                      <form
-                        type='submit'
-                        onSubmit={handleModalSubmit}
-                        className='modal '>
-                        {filteredBreweries.map((brewery) => (
-                          <div
-                            className=' rounded-lg bg-white p-8  shadow-2xl'
-                            key={brewery.id}>
-                            <h1 className='text-lg font-bold'>
-                              {brewery.name}
-                            </h1>
-                            <div>
-                              {`${brewery.address_1},
-                      ${brewery.city},
-                      ${brewery.state}
-                      ${brewery.postal_code.substring(0, 5)}`}
-                            </div>
+                      </ModalHeader>
 
-                            <div className='mt-4 '>
-                              <button
-                                onClick={(e) => AddBreweryInfoToEntry(brewery)}
-                                className='m-4   rounded border border-gray-400 bg-amber-600 px-6 py-2 font-semibold text-white shadow hover:bg-amber-500 active:bg-amber-600'>
-                                Add Brewery to Entries
-                              </button>
+                      <ModalBody>
+                        <div className='text-center'>
+                          {filteredBreweries.map((brewery) => (
+                            <div
+                              className=' rounded-lg bg-white p-8  shadow-2xl'
+                              key={brewery.id}>
+                              <h1 className='text-lg font-bold'>
+                                {brewery.name}
+                              </h1>
+                              <div>
+                                {`${brewery.address_1},
+                              ${brewery.city},
+                              ${brewery.state}
+                              ${brewery.postal_code.substring(0, 5)}`}
+                              </div>
+
+                              <div className='mt-4 '>
+                                <button
+                                  color='primary'
+                                  className='m-4 rounded border border-gray-400 bg-amber-600 px-6 py-2 font-semibold text-white shadow hover:bg-amber-500 active:bg-amber-600'
+                                  onClick={(e) => {
+                                    addBreweryInfoToEntry(brewery);
+                                  }}>
+                                  Add Brewery to Entries
+                                </button>
+                              </div>
                             </div>
-                          </div>
-                        ))}
-                      </form>
-                    </Dialog.Panel>
-                  </Transition.Child>
-                </div>
-              </div>
-            </Dialog>
-          </Transition>
+                          ))}
+                        </div>
+                      </ModalBody>
+                      <ModalFooter>
+                        <Button
+                          color='danger'
+                          variant='light'
+                          onPress={onClose}>
+                          Close
+                        </Button>
+                      </ModalFooter>
+                    </>
+                  )}
+                </ModalContent>
+              </form>
+            </Modal>
+          </div>
         </div>
       </div>
     </>
