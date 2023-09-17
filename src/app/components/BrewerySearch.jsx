@@ -8,11 +8,13 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
+  Select,
+  SelectItem,
 } from '@nextui-org/react';
 import { CgCloseR } from 'react-icons/cg';
 import { useRouter } from 'next/navigation';
 
-export default function BrewerySearch() {
+export default function BrewerySearchOpt() {
   const router = useRouter();
   const [state, setState] = useState('');
   const [city, setCity] = useState('');
@@ -175,68 +177,54 @@ export default function BrewerySearch() {
 
   return (
     <>
-      <div className=' mx-auto max-w-3xl bg-slate-200 bg-opacity-10 px-4'>
-        <div className=''>
+      <div className=' mx-auto max-w-3xl  px-4'>
+        <div className='pt-4'>
           {/* {error && (
               <p className="text-md flex justify-center font-semibold italic text-red-500">
                 {error}
               </p>
             )} */}
 
-          <label
-            className='block  text-lg font-bold text-black'
-            htmlFor='state'>
-            State
-          </label>
-          <select
-            className='mt-1.5 w-full rounded-lg border-gray-300 p-0.5 text-gray-700'
-            name='state'
-            id='state'
-            value={state}
-            onChange={(e) => setState(e.target.value)}>
-            <option value=''>Select a state</option>
-            {states.map((state) => (
-              <option
-                key={state.value}
-                value={state.value}
-                disabled={state.value === ''}>
-                {state.label}
-              </option>
-            ))}
-          </select>
+          <h1 className='pb-2 text-center text-3xl font-bold'>
+            Search for a Brewery below
+          </h1>
+          <div className='pb-4'>
+            <Select
+              label='Select a State'
+              className='max-w-3xl  '
+              onChange={(e) => setState(e.target.value)}>
+              {states.map((state) => (
+                <SelectItem key={state.value} value={state.value}>
+                  {state.label}
+                </SelectItem>
+              ))}
+            </Select>
+          </div>
 
-          {/* show city dropdown after state is selected */}
           {state && (
-            <div className='pt-2'>
-              <label
-                className='block text-lg font-bold text-black'
-                htmlFor='city'>
-                City
-              </label>
-              <select
-                className='mt-1.5 w-full rounded-lg border-gray-300 p-0.5 text-gray-700'
-                name='city'
-                id='city'
+            <div className='pb-4'>
+              <Select
+                label='Select a City'
+                className='max-w-3xl'
                 onChange={(e) => setCity(e.target.value)}>
-                <option value=''>Select a City</option>
                 {cities.sort().map((cityName) => (
-                  <option key={cityName} value={cityName}>
+                  <SelectItem key={cityName} value={cityName}>
                     {cityName}
-                  </option>
+                  </SelectItem>
                 ))}
-              </select>
-              <div className=' flex pt-2 align-middle '></div>
+              </Select>
             </div>
           )}
 
           {/* show button after city is selected */}
           {city && (
             <div className='pt-2'>
-              <button
-                onClick={handleCityFilter}
-                className='rounded border border-gray-400 bg-amber-600 px-6 py-2 font-semibold text-white shadow hover:bg-amber-500 active:bg-amber-600'>
-                Search By City
-              </button>
+              <Button
+                color=''
+                className='bg-amber-600 font-semibold text-white hover:bg-amber-500 active:bg-amber-600'
+                onClick={handleCityFilter}>
+                Search by City
+              </Button>
             </div>
           )}
 
@@ -281,9 +269,17 @@ export default function BrewerySearch() {
                               </div>
 
                               <div className='mt-4 '>
+                                {/* <Button
+                                  color=''
+                                  className='bg-amber-600 font-semibold text-white hover:bg-amber-500 active:bg-amber-600'
+                                  onClick={(e) => {
+                                    addBreweryInfoToEntry(brewery);
+                                  }}>
+                                  Add Brewery to Entries
+                                </Button> */}
                                 <button
                                   color='primary'
-                                  className='m-4 rounded border border-gray-400 bg-amber-600 px-6 py-2 font-semibold text-white shadow hover:bg-amber-500 active:bg-amber-600'
+                                  className='m-4 rounded-xl border bg-amber-600 px-6 py-2 font-semibold font-semibold text-white text-white shadow hover:bg-amber-500 active:bg-amber-600 '
                                   onClick={(e) => {
                                     addBreweryInfoToEntry(brewery);
                                   }}>

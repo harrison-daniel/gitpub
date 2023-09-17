@@ -26,13 +26,13 @@ export default async function EntryList() {
   const { entries = [] } = (await getEntries()) || {};
 
   return (
-    <div className='mx-auto max-w-3xl'>
+    <div className='mx-auto max-w-3xl '>
       <h1 className='cards px-4 pt-4 font-mono text-3xl font-bold'>
         My Brewery Trips:
       </h1>
       {entries.map((entry) => (
         <div
-          className='card m-4 flex  items-start justify-between gap-5 border border-slate-900  bg-amber-500  bg-opacity-80 p-4 '
+          className='card m-4 flex  items-start justify-between gap-5 rounded-lg border  border-slate-900  bg-amber-500 bg-opacity-80 p-4'
           key={entry._id}>
           <div>
             <h1 className='whitespace-pre-wrap text-2xl font-bold'>

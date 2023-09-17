@@ -53,11 +53,11 @@ export default function RemoveBtn({ id }) {
               </ModalHeader>
               <ModalBody></ModalBody>
               <ModalFooter>
-                <Button color='danger' variant='light' onPress={removeEntry}>
-                  Delete Entry
-                </Button>
-                <Button color='primary' onPress={onClose}>
+                <Button color='primary' variant='light' onPress={onClose}>
                   No, Go Back
+                </Button>
+                <Button color='danger' onPress={removeEntry}>
+                  Delete Entry
                 </Button>
               </ModalFooter>
             </>

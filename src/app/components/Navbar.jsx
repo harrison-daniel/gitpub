@@ -11,15 +11,19 @@ export default function Navbar() {
           GitPub
         </Link>
 
-        <div className='flex w-full justify-between px-12 pt-4'>
-          <Link href={'/'}>
-            <Button color='' className='bg-white'>
+        <div className='flex w-full justify-between px-12 pt-4 '>
+          <Link href={'/'} className=''>
+            <Button
+              color=''
+              className='bg-slate-100 font-semibold hover:bg-zinc-300 active:bg-zinc-300'>
               Home
             </Button>
           </Link>
 
           <Link href={'/addEntry'} className=''>
-            <Button color='' className='bg-white'>
+            <Button
+              color=''
+              className='bg-slate-100 font-semibold hover:bg-zinc-300 active:bg-zinc-300'>
               Add Entry
             </Button>
           </Link>
