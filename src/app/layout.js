@@ -1,6 +1,7 @@
 import { Providers } from './providers';
 import Navbar from './components/Navbar';
 import './globals.css';
+
 export const metadata = {
   title: 'gitpub',
   description: 'Brewery Locator and Journal',

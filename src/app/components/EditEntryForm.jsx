@@ -49,17 +49,17 @@ export default function EditEntryForm({
         // Only add newDate if it's set
         bodyData.newDate = newDate;
       }
-      const res = await fetch(`https://gitpub.vercel.app/api/entries/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ newTitle, newAddress, newDescription, newDate }),
-      });
-
-      // const res = await fetch(`http://localhost:3000/api/entries/${id}`, {
+      // const res = await fetch(`https://gitpub.vercel.app/api/entries/${id}`, {
       //   method: 'PUT',
       //   headers: { 'Content-Type': 'application/json' },
       //   body: JSON.stringify({ newTitle, newAddress, newDescription, newDate }),
       // });
+
+      const res = await fetch(`http://localhost:3000/api/entries/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ newTitle, newAddress, newDescription, newDate }),
+      });
 
       if (!res.ok) {
         throw new Error('Failed to update entry');
@@ -83,6 +83,7 @@ export default function EditEntryForm({
           onChange={(e) => setNewTitle(e.target.value)}
           value={newTitle}
           rows={3}
+          fullWidth='false'
         />
         <Textarea
           isRequired
@@ -93,6 +94,7 @@ export default function EditEntryForm({
           onChange={(e) => setNewAddress(e.target.value)}
           value={newAddress}
           rows={3}
+          fullWidth='false'
         />
         <Textarea
           isRequired
@@ -103,15 +105,16 @@ export default function EditEntryForm({
           onChange={(e) => setNewDescription(e.target.value)}
           value={newDescription}
           rows={3}
+          fullWidth='false'
         />
         {/* DATE PICKER  */}
-        <div className='flex  pt-4'>
+        <div className='flex pt-6'>
           <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
             <PopoverTrigger asChild className='rounded-xl'>
               <ButtonShad
                 variant={'outline'}
                 className={cn(
-                  'w-[280px] justify-start text-left font-normal',
+                  'w-[200px] justify-start text-left font-normal',
                   !newDate && 'text-muted-foreground',
                 )}>
                 <CalendarIcon className='mr-2 h-4 w-4 ' />
@@ -127,16 +130,14 @@ export default function EditEntryForm({
               />
             </PopoverContent>
           </Popover>
-          {newDate && ( // Only show the clear button if there's a date set ✖️
-            <div className='flex items-center gap-1 text-center align-middle'>
-              <button
-                onClick={() => setNewDate(null)}
-                title='Clear date'
-                className='pl-4  text-lg font-semibold text-red-600'>
-                Clear Date
-              </button>
-              <HiOutlineX className=' text-2xl text-red-600' />
-            </div>
+          {newDate && (
+            <Button
+              endContent={<HiOutlineX className='text-xl' />}
+              onClick={() => setNewDate(null)}
+              title='Clear date'
+              className='bg-transparent  text-base font-semibold text-red-600 '>
+              Clear Date
+            </Button>
           )}
         </div>
         <div className='pt-6'>

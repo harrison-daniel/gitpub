@@ -1,15 +1,13 @@
 'use client';
 import React from 'react';
-
 import { Button } from '@nextui-org/react';
+import { Spinner } from '@nextui-org/react';
 
 export default function Loading() {
   // Or a custom loading skeleton component
   return (
-    <div className='  flex flex-row items-center justify-center'>
-      <Button color='primary' isLoading>
-        Loading
-      </Button>
+    <div className='mx-auto gap-4 text-center'>
+      <Spinner label='Loading...' size='lg' className='top-40' />
     </div>
   );
 }

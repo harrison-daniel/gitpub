@@ -2,14 +2,17 @@
 import React from 'react';
 import { Button } from '@nextui-org/react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
+  const router = useRouter(); // Initialize router
   return (
     <>
       <nav className='mx-auto flex  max-w-3xl flex-col items-center justify-between p-6 pb-0  '>
-        <Link href={'/'} className='mb-2 font-serif text-8xl font-extrabold'>
+        {/* <Link href={'/'} className='mb-2 font-serif text-8xl font-extrabold'>
           GitPub
-        </Link>
+        </Link> */}
+        <h1 className='mb-2 font-serif text-8xl font-extrabold'>GitPub</h1>
 
         <div className='flex w-full justify-between px-12 pt-4 '>
           <Link href={'/'} className=''>

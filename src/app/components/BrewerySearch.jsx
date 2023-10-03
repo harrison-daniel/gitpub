@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Modal,
   ModalContent,
@@ -13,8 +14,8 @@ import {
   SelectItem,
 } from '@nextui-org/react';
 import { CgCloseR } from 'react-icons/cg';
-import { useRouter } from 'next/navigation';
-import states from '../data/stateList';
+import StateComboBox from './StateComboBox';
+import CityComboBox from '../components/CityComboBox';
 
 export default function BrewerySearch() {
   const router = useRouter();
@@ -29,6 +30,9 @@ export default function BrewerySearch() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [scrollBehavior, setScrollBehavior] = React.useState('outside');
   const [date, setDate] = useState(new Date());
+
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState('');
 
   useEffect(() => {
     if (!state) {
@@ -105,16 +109,16 @@ export default function BrewerySearch() {
     // getAllEntries();
 
     try {
-      const res = await fetch('https://gitpub.vercel.app/api/entries', {
-        method: 'POST',
-        headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify({ title, address, description, date }),
-      });
-      // const res = await fetch('http://localhost:3000/api/entries', {
+      // const res = await fetch('https://gitpub.vercel.app/api/entries', {
       //   method: 'POST',
       //   headers: { 'Content-type': 'application/json' },
       //   body: JSON.stringify({ title, address, description, date }),
       // });
+      const res = await fetch('http://localhost:3000/api/entries', {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({ title, address, description, date }),
+      });
 
       if (res.ok) {
         router.refresh();
@@ -143,19 +147,19 @@ export default function BrewerySearch() {
             Search for a Brewery below
           </h1>
           <div className='pb-4'>
-            <Select
-              label='Select a State'
-              className='max-w-3xl  '
-              onChange={(e) => setState(e.target.value)}>
-              {states.map((state) => (
-                <SelectItem key={state.value} value={state.value}>
-                  {state.label}
-                </SelectItem>
-              ))}
-            </Select>
+            <StateComboBox
+              onStateSelect={(selectedState) => setState(selectedState)}
+            />
           </div>
 
           {state && (
+            <CityComboBox
+              cities={cities}
+              onCitySelect={(selectedCity) => setCity(selectedCity)}
+            />
+          )}
+
+          {/* {state && (
             <div className='pb-4'>
               <Select
                 label='Select a City'
@@ -168,16 +172,16 @@ export default function BrewerySearch() {
                 ))}
               </Select>
             </div>
-          )}
+          )} */}
 
           {/* show button after city is selected */}
           {city && (
-            <div className='pt-2'>
+            <div className='px-4 pt-4'>
               <Button
                 color=''
                 className='bg-amber-600 font-semibold text-white hover:bg-amber-500 active:bg-amber-600'
                 onClick={handleCityFilter}>
-                Search by City
+                Search
               </Button>
             </div>
           )}
