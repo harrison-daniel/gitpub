@@ -139,21 +139,3 @@ export default function AddEntry() {
     </>
   );
 }
-
-// async function createEntry(formData) {
-//   'use server';
-
-//   console.log('FormData');
-// }
-
-// export default function Page() {
-//   return (
-//     <>
-//       <form action={createEntry} className='flex flex-col items-center p-6'>
-//         <input type='text' name='title' />
-//       </form>
-//       <button type='submit'>Create</button>
-//       <Link href='..'> Cancel </Link>
-//     </>
-//   );
-// }

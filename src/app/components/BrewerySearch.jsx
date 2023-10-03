@@ -108,7 +108,7 @@ export default function BrewerySearch() {
       const res = await fetch('https://gitpub.vercel.app/api/entries', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify({ title, address, description }),
+        body: JSON.stringify({ title, address, description, date }),
       });
       // const res = await fetch('http://localhost:3000/api/entries', {
       //   method: 'POST',

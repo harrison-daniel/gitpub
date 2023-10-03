@@ -1,16 +1,9 @@
 'use client';
 
-// import React from 'react';
-// import RemoveBtn from './RemoveBtn';
-// import { HiPencilAlt } from 'react-icons/hi';
-// import Link from 'next/link';
-// import { format } from 'date-fns';
 import { Button } from '@nextui-org/react';
 import EntryListItem from './EntryListItem';
 import React, { useState } from 'react';
 import { HiOutlineSelector } from 'react-icons/hi';
-import { Suspense } from 'react';
-// import { IconName } from "react-icons/hi";
 
 export default function EntryList({ entries }) {
   const [sortOption, setSortOption] = useState('date'); // default sorting
