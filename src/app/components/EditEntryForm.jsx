@@ -49,17 +49,17 @@ export default function EditEntryForm({
         // Only add newDate if it's set
         bodyData.newDate = newDate;
       }
-      // const res = await fetch(`https://gitpub.vercel.app/api/entries/${id}`, {
-      //   method: 'PUT',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ newTitle, newAddress, newDescription, newDate }),
-      // });
-
-      const res = await fetch(`http://localhost:3000/api/entries/${id}`, {
+      const res = await fetch(`https://gitpub.vercel.app/api/entries/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ newTitle, newAddress, newDescription, newDate }),
       });
+
+      // const res = await fetch(`http://localhost:3000/api/entries/${id}`, {
+      //   method: 'PUT',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ newTitle, newAddress, newDescription, newDate }),
+      // });
 
       if (!res.ok) {
         throw new Error('Failed to update entry');

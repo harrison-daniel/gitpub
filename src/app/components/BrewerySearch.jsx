@@ -109,16 +109,16 @@ export default function BrewerySearch() {
     // getAllEntries();
 
     try {
-      // const res = await fetch('https://gitpub.vercel.app/api/entries', {
-      //   method: 'POST',
-      //   headers: { 'Content-type': 'application/json' },
-      //   body: JSON.stringify({ title, address, description, date }),
-      // });
-      const res = await fetch('http://localhost:3000/api/entries', {
+      const res = await fetch('https://gitpub.vercel.app/api/entries', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({ title, address, description, date }),
       });
+      // const res = await fetch('http://localhost:3000/api/entries', {
+      //   method: 'POST',
+      //   headers: { 'Content-type': 'application/json' },
+      //   body: JSON.stringify({ title, address, description, date }),
+      // });
 
       if (res.ok) {
         router.refresh();
@@ -158,21 +158,6 @@ export default function BrewerySearch() {
               onCitySelect={(selectedCity) => setCity(selectedCity)}
             />
           )}
-
-          {/* {state && (
-            <div className='pb-4'>
-              <Select
-                label='Select a City'
-                className='max-w-3xl'
-                onChange={(e) => setCity(e.target.value)}>
-                {cities.sort().map((cityName) => (
-                  <SelectItem key={cityName} value={cityName}>
-                    {cityName}
-                  </SelectItem>
-                ))}
-              </Select>
-            </div>
-          )} */}
 
           {/* show button after city is selected */}
           {city && (
