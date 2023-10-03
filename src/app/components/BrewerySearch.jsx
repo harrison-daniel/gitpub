@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState, useEffect } from 'react';
 import {
   Modal,
@@ -13,8 +14,9 @@ import {
 } from '@nextui-org/react';
 import { CgCloseR } from 'react-icons/cg';
 import { useRouter } from 'next/navigation';
+import states from '../data/stateList';
 
-export default function BrewerySearchOpt() {
+export default function BrewerySearch() {
   const router = useRouter();
   const [state, setState] = useState('');
   const [city, setCity] = useState('');
@@ -26,63 +28,8 @@ export default function BrewerySearchOpt() {
   const [description, setDescription] = useState('');
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [scrollBehavior, setScrollBehavior] = React.useState('outside');
+  const [date, setDate] = useState(new Date());
 
-  const states = [
-    // { value: "", label: "Choose a State" },
-    { value: 'alabama', label: 'Alabama' },
-    { value: 'alaska', label: 'Alaska' },
-    { value: 'arizona', label: 'Arizona' },
-    { value: 'arkansas', label: 'Arkansas' },
-    { value: 'california', label: 'California' },
-    { value: 'colorado', label: 'Colorado' },
-    { value: 'connecticut', label: 'Connecticut' },
-    { value: 'delaware', label: 'Delaware' },
-    { value: 'district_of_columbia', label: 'District Of Columbia' },
-    { value: 'florida', label: 'Florida' },
-    { value: 'georgia', label: 'Georgia' },
-    { value: 'hawaii', label: 'Hawaii' },
-    { value: 'idaho', label: 'Idaho' },
-    { value: 'illinois', label: 'Illinois' },
-    { value: 'indiana', label: 'Indiana' },
-    { value: 'iowa', label: 'Iowa' },
-    { value: 'kansas', label: 'Kansas' },
-    { value: 'kentucky', label: 'Kentucky' },
-    { value: 'louisiana', label: 'Louisiana' },
-    { value: 'maine', label: 'Maine' },
-    { value: 'maryland', label: 'Maryland' },
-    { value: 'massachusetts', label: 'Massachusetts' },
-    { value: 'michigan', label: 'Michigan' },
-    { value: 'minnesota', label: 'Minnesota' },
-    { value: 'mississippi', label: 'Mississippi' },
-    { value: 'missouri', label: 'Missouri' },
-    { value: 'montana', label: 'Montana' },
-    { value: 'nebraska', label: 'Nebraska' },
-    { value: 'nevada', label: 'Nevada' },
-    { value: 'new_hampshire', label: 'New Hampshire' },
-    { value: 'new_jersey', label: 'New Jersey' },
-    { value: 'new_mexico', label: 'New Mexico' },
-    { value: 'new_york', label: 'New York' },
-    { value: 'north_carolina', label: 'North Carolina' },
-    { value: 'north_dakota', label: 'North Dakota' },
-    { value: 'ohio', label: 'Ohio' },
-    { value: 'oklahoma', label: 'Oklahoma' },
-    { value: 'oregon', label: 'Oregon' },
-    { value: 'pennsylvania', label: 'Pennsylvania' },
-    { value: 'rhode_island', label: 'Rhode Island' },
-    { value: 'south_carolina', label: 'South Carolina' },
-    { value: 'south_dakota', label: 'South Dakota' },
-    { value: 'tennessee', label: 'Tennessee' },
-    { value: 'texas', label: 'Texas' },
-    { value: 'utah', label: 'Utah' },
-    { value: 'vermont', label: 'Vermont' },
-    { value: 'virginia', label: 'Virginia' },
-    { value: 'washington', label: 'Washington' },
-    { value: 'west_virginia', label: 'West Virginia' },
-    { value: 'wisconsin', label: 'Wisconsin' },
-    { value: 'wyoming', label: 'Wyoming' },
-  ];
-
-  // new useEffect
   useEffect(() => {
     if (!state) {
       setCities([]);
@@ -141,15 +88,21 @@ export default function BrewerySearchOpt() {
     setTitle(brewery.name);
     setAddress(breweryListAddress);
     setDescription('Edit entry to add notes');
+    setDate(new Date());
+    router.refresh();
+
+    // onOpenChange(false);
   }
 
   const handleModalSubmit = async (e) => {
     e.preventDefault();
 
-    if (!title || !address || !description) {
-      alert('Title and description are required');
-      return;
-    }
+    // if (!title || !address || !description) {
+    //   alert('Title and description are required');
+    //   return;
+    // }
+
+    // getAllEntries();
 
     try {
       const res = await fetch('https://gitpub.vercel.app/api/entries', {
@@ -160,13 +113,14 @@ export default function BrewerySearchOpt() {
       // const res = await fetch('http://localhost:3000/api/entries', {
       //   method: 'POST',
       //   headers: { 'Content-type': 'application/json' },
-      //   body: JSON.stringify({ title, address, description }),
+      //   body: JSON.stringify({ title, address, description, date }),
       // });
 
       if (res.ok) {
         router.refresh();
+
         onOpenChange(false);
-        router.push('/');
+        // router.push('/');
       } else {
         throw new Error('Failed to create an entry');
       }
@@ -185,7 +139,7 @@ export default function BrewerySearchOpt() {
               </p>
             )} */}
 
-          <h1 className='pb-2 text-center text-3xl font-bold'>
+          <h1 className='flex justify-center pb-4 text-center text-3xl font-bold'>
             Search for a Brewery below
           </h1>
           <div className='pb-4'>
@@ -279,7 +233,7 @@ export default function BrewerySearchOpt() {
                                 </Button> */}
                                 <button
                                   color='primary'
-                                  className='m-4 rounded-xl border bg-amber-600 px-6 py-2 font-semibold font-semibold text-white text-white shadow hover:bg-amber-500 active:bg-amber-600 '
+                                  className='m-4 rounded-xl border bg-amber-600 px-6 py-2  font-semibold text-white  shadow hover:bg-amber-500 active:bg-amber-600 '
                                   onClick={(e) => {
                                     addBreweryInfoToEntry(brewery);
                                   }}>

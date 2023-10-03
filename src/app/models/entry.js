@@ -5,6 +5,7 @@ const entrySchema = new Schema(
     title: String,
     address: String,
     description: String,
+    date: Date,
   },
   {
     timestamps: true,

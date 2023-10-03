@@ -22,7 +22,7 @@ const getEntryById = async (id) => {
 export default async function EditEntry({ params }) {
   const { id } = params;
   const { entry } = await getEntryById(id);
-  const { title, address, description } = entry;
+  const { title, address, description, date } = entry;
 
   return (
     <EditEntryForm
@@ -30,6 +30,7 @@ export default async function EditEntry({ params }) {
       title={title}
       address={address}
       description={description}
+      date={date}
     />
   );
 }

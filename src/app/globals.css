@@ -2,19 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  height: 100%;
-  width: 100%;
-}
-
 html {
-  /* padding-right: 0px !important;
-  overflow-y: scroll !important;
-  overflow-x: scroll !important; */
   background: rgb(255, 212, 19);
   background: radial-gradient(
     circle,
     rgba(255, 212, 19, 1) 31%,
     rgba(255, 186, 2, 1) 73%
   );
+  /* padding-right: 0px !important; */
+  overflow-y: scroll !important;
+  overflow-x: scroll !important;
 }

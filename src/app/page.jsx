@@ -1,15 +1,20 @@
-import EntryList from './components/EntryList';
 import BrewerySearch from './components/BrewerySearch';
 import Background from './components/Background';
+import EntryList from './components/EntryList';
 import { Analytics } from '@vercel/analytics/react';
+import './loading';
 
-export default function Home() {
+import getAllEntries from './lib/getAllEntries';
+
+export default async function Home() {
+  const { entries = [] } = (await getAllEntries()) || {};
+
   return (
-    <div>
+    <>
       <Background />
       <BrewerySearch />
-      <EntryList />
+      <EntryList entries={entries} />
       <Analytics />
-    </div>
+    </>
   );
 }

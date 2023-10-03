@@ -13,7 +13,7 @@ import {
   useDisclosure,
 } from '@nextui-org/react';
 
-export default function RemoveBtn({ id }) {
+export default function RemoveBtn({ id, onRemove }) {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [modalPlacement, setModalPlacement] = React.useState('auto');
@@ -25,6 +25,7 @@ export default function RemoveBtn({ id }) {
         // await fetch(`http://localhost:3000/api/entries?id=${id}`, {
         method: 'DELETE',
       });
+      if (onRemove) onRemove();
       router.refresh();
     } catch (error) {
       console.error('Failed to delete entry:', error);
@@ -53,10 +54,12 @@ export default function RemoveBtn({ id }) {
               </ModalHeader>
               <ModalBody></ModalBody>
               <ModalFooter>
-                <Button color='primary' variant='light' onPress={onClose}>
+                <Button color='primary ' variant='light' onPress={onClose}>
                   No, Go Back
                 </Button>
-                <Button color='danger' onPress={removeEntry}>
+                <Button
+                  className='bg-red-600 text-white hover:bg-red-500'
+                  onPress={removeEntry}>
                   Delete Entry
                 </Button>
               </ModalFooter>

@@ -6,7 +6,7 @@ export default function Background() {
     <Image
       alt='Frosted Beer Mug'
       src={backgroundBeerMugLight}
-      placeholder='none'
+      placeholder='empty'
       quality={75}
       priority
       fill

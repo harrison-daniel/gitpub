@@ -1,59 +1,88 @@
-import RemoveBtn from './RemoveBtn';
-import { HiPencilAlt } from 'react-icons/hi';
-import Link from 'next/link';
+'use client';
 
-const getEntries = async () => {
-  'use server';
-  try {
-    const res = await fetch('https://gitpub.vercel.app/api/entries', {
-      cache: 'no-store',
-    });
-    // const res = await fetch('http://localhost:3000/api/entries', {
-    //   cache: 'no-store',
-    // });
+// import React from 'react';
+// import RemoveBtn from './RemoveBtn';
+// import { HiPencilAlt } from 'react-icons/hi';
+// import Link from 'next/link';
+// import { format } from 'date-fns';
+import { Button } from '@nextui-org/react';
+import EntryListItem from './EntryListItem';
+import React, { useState } from 'react';
+import { HiOutlineSelector } from 'react-icons/hi';
+import { Suspense } from 'react';
+// import { IconName } from "react-icons/hi";
 
-    if (!res.ok) {
-      throw new Error('Failed to fetch entries');
+export default function EntryList({ entries }) {
+  const [sortOption, setSortOption] = useState('date'); // default sorting
+  const [sortDirection, setSortDirection] = useState('desc'); // default to descending
+  const sortedEntries = [...entries].sort((a, b) => {
+    if (sortOption === 'date') {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return sortDirection === 'desc' ? dateB - dateA : dateA - dateB;
+    } else if (sortOption === 'title') {
+      return sortDirection === 'desc'
+        ? b.title.localeCompare(a.title)
+        : a.title.localeCompare(b.title);
+    } else {
+      return sortDirection === 'desc'
+        ? b.address.localeCompare(a.address)
+        : a.address.localeCompare(b.address);
     }
+  });
 
-    return res.json();
-  } catch (error) {
-    console.log('Error loading entries: ', error);
-  }
-};
-
-export default async function EntryList() {
-  const { entries = [] } = (await getEntries()) || {};
+  const handleSort = (option) => {
+    if (sortOption === option) {
+      // If the current sort option is clicked again, toggle the sort direction
+      setSortDirection((prevDirection) =>
+        prevDirection === 'desc' ? 'asc' : 'desc',
+      );
+    } else {
+      // If a different sort option is clicked, set to that and default to descending
+      setSortOption(option);
+      setSortDirection('desc');
+    }
+  };
 
   return (
     <div className='mx-auto max-w-3xl '>
-      <h1 className='cards px-4 pt-4 font-mono text-3xl font-bold'>
+      <h1 className='flex justify-center pb-4 text-center text-3xl font-bold'>
         My Brewery Trips:
       </h1>
-      {entries.map((entry) => (
-        <div
-          className='card m-4 flex  items-start justify-between gap-5 rounded-lg border  border-slate-900  bg-amber-500 bg-opacity-80 p-4'
-          key={entry._id}>
-          <div>
-            <h1 className='whitespace-pre-wrap text-2xl font-bold'>
-              {entry.title}
-            </h1>
-            <h2 className=' italic'>{entry.address}</h2>
-            <div className='text-md whitespace-pre-wrap'>
-              {entry.description}
-            </div>
-          </div>
+      <div className='sorting-options flex justify-center gap-8  pb-4 '>
+        <Button
+          className='bg-amber-600 font-semibold text-white hover:bg-amber-500'
+          onClick={() => handleSort('date')}>
+          Sort by Date{' '}
+          {sortOption === 'date' && <HiOutlineSelector className='text-2xl' />}
+        </Button>
+        <Button
+          className='bg-amber-600 font-semibold text-white hover:bg-amber-500'
+          onClick={() => handleSort('title')}>
+          Sort by Brewery Name{' '}
+          {sortOption === 'title' && <HiOutlineSelector className='text-2xl' />}
+        </Button>
 
-          <div className='delete-btn flex flex-col gap-3'>
-            <span className='sr-only'>Delete</span>
-            <RemoveBtn id={entry._id} className='' />
+        <Button
+          className='bg-amber-600 font-semibold text-white hover:bg-amber-500'
+          onClick={() => handleSort('address')}>
+          Sort by Location{' '}
+          {sortOption === 'address' && (
+            <HiOutlineSelector className='text-2xl' />
+          )}
+        </Button>
+      </div>
 
-            <Link href={`/editEntry/${entry._id}`}>
-              <HiPencilAlt size={28} className=' hover:text-stone-700' />
-            </Link>
-          </div>
-        </div>
+      {entries && entries.length === 0 ? (
+        <div> No Entries, Search or Click Add to start your list!</div>
+      ) : null}
+      {/* <Suspense fallback={<div>Loading...</div>}> */}
+
+      {sortedEntries.map((entry) => (
+        <EntryListItem key={entry._id} entry={entry} />
       ))}
+
+      {/* </Suspense> */}
     </div>
   );
 }
