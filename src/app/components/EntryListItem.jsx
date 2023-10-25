@@ -6,7 +6,7 @@ import { format } from 'date-fns';
 export default function EntryListItem({ entry }) {
   return (
     <>
-      <div className='card m-2 flex   justify-between  rounded-lg border  border-slate-900  bg-amber-500 bg-opacity-80 p-4'>
+      <div className='card mb-2 flex   justify-between  rounded-lg border  border-slate-900  bg-amber-500 bg-opacity-80 p-4'>
         <div>
           <h1 className='whitespace-pre-wrap text-2xl font-bold'>
             {entry.title}
@@ -21,13 +21,11 @@ export default function EntryListItem({ entry }) {
         </div>
 
         <div className=' flex flex-col  justify-center gap-3 '>
-          {/* <div className='flex flex-col'> */}
           <RemoveBtn id={entry._id} />
 
           <Link href={`/editEntry/${entry._id}`}>
             <HiPencilAlt size={28} className='  hover:text-stone-600' />
           </Link>
-          {/* </div> */}
         </div>
       </div>
     </>

@@ -1,19 +1,19 @@
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Textarea, Button } from '@nextui-org/react';
+import { Textarea } from '@nextui-org/react';
 
+import { X } from 'lucide-react';
 import { format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { cn } from '../lib/utils';
-import { ButtonShad } from '../components/ui/button';
+import { Button } from '../components/ui/button';
 import { Calendar } from '../components/ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '../components/ui/popover';
-import { HiOutlineX } from 'react-icons/hi';
 
 export default function AddEntry() {
   const [title, setTitle] = useState('');
@@ -40,12 +40,15 @@ export default function AddEntry() {
     }
 
     try {
-      const res = await fetch('https://gitpub.vercel.app/api/entries', {
-        // const res = await fetch('http://localhost:3000/api/entries', {
-        method: 'POST',
-        headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify({ title, address, description, date }),
-      });
+      // const res = await fetch('https://gitpub.vercel.app/api/entries', {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/entries`,
+        {
+          method: 'POST',
+          headers: { 'Content-type': 'application/json' },
+          body: JSON.stringify({ title, address, description, date }),
+        },
+      );
 
       if (res.ok) {
         router.push('/');
@@ -58,93 +61,95 @@ export default function AddEntry() {
 
   return (
     <>
-      <div>
-        <div className='p-6'>
-          <form
-            onSubmit={handleSubmit}
-            className='flex flex-col items-center  '>
-            <Textarea
-              isRequired
-              label='Entry Name'
-              labelPlacement='outside'
-              placeholder='Enter your description'
-              className='max-w-2xl '
-              onChange={(e) => setTitle(e.target.value)}
-              value={title}
-              rows={3}
-              fullWidth='false'
-            />
-            <Textarea
-              isRequired
-              label='Location'
-              labelPlacement='outside'
-              placeholder='Enter your location'
-              className='max-w-2xl'
-              onChange={(e) => setAddress(e.target.value)}
-              value={address}
-              rows={3}
-              fullWidth='false'
-            />
-            <Textarea
-              isRequired
-              label='Notes'
-              labelPlacement='outside'
-              placeholder='Enter your notes'
-              className='max-w-2xl'
-              onChange={(e) => setDescription(e.target.value)}
-              value={description}
-              rows={3}
-              fullWidth='false'
-            />
-
-            {/* DATE PICKER  */}
-            <div className=' flex  pt-6'>
-              <div>
-                <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-                  <PopoverTrigger asChild className='rounded-xl '>
-                    <ButtonShad
-                      variant={'outline'}
-                      className={cn(
-                        'w-[200px] justify-start text-left font-normal',
-                        !date && 'text-muted-foreground',
-                      )}>
-                      <CalendarIcon className='mr-2 h-4 w-4' />
-                      {date ? format(date, 'PPP') : <span>Pick a date</span>}
-                    </ButtonShad>
-                  </PopoverTrigger>
-                  <PopoverContent className='w-auto rounded-xl p-0'>
-                    <Calendar
-                      mode='single'
-                      selected={date}
-                      onSelect={handleDateSelection}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
-
-              <div>
-                {date && (
-                  <Button
-                    endContent={<HiOutlineX className='text-xl' />}
-                    onClick={() => setDate(null)}
-                    title='Clear date'
-                    className='bg-transparent  text-base font-semibold text-red-600 '>
-                    Clear Date
-                  </Button>
-                )}
-              </div>
-            </div>
-            <div className='pt-6'>
-              <Button
-                type='submit'
-                className='bg-amber-600 font-semibold text-white hover:bg-amber-500'>
-                Add Entry
-              </Button>
-            </div>
-          </form>
+      <form onSubmit={handleSubmit} className='mx-auto flex flex-col  '>
+        <div className='flex flex-col items-center p-6 '>
+          <Textarea
+            size='lg'
+            radius='sm'
+            isRequired
+            label='Entry Name'
+            labelPlacement='outside'
+            placeholder='Enter your description'
+            className='max-w-2xl'
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
+            rows={3}
+            fullWidth='false'
+          />
+          <Textarea
+            size='lg'
+            radius='sm'
+            isRequired
+            label='Location'
+            labelPlacement='outside'
+            placeholder='Enter your location'
+            className='max-w-2xl'
+            onChange={(e) => setAddress(e.target.value)}
+            value={address}
+            rows={3}
+            fullWidth='false'
+          />
+          <Textarea
+            size='lg'
+            radius='sm'
+            isRequired
+            label='Notes'
+            labelPlacement='outside'
+            placeholder='Enter your notes'
+            className='max-w-2xl'
+            onChange={(e) => setDescription(e.target.value)}
+            value={description}
+            rows={3}
+            fullWidth='false'
+          />
         </div>
-      </div>
+
+        <div className='mx-auto flex flex-row'>
+          {/* DATE PICKER  */}
+          <div className=' '>
+            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+              <PopoverTrigger asChild className='rounded-md'>
+                <Button
+                  variant={'outline'}
+                  className={cn(
+                    'w-[200px] justify-start text-left font-normal',
+                    !date && 'text-muted-foreground',
+                  )}>
+                  <CalendarIcon className='mr-2 h-4 w-4 ' />
+                  {date ? format(date, 'PPP') : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className='w-auto rounded-xl p-0'>
+                <Calendar
+                  mode='single'
+                  selected={date}
+                  onSelect={handleDateSelection}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+          <div className='flex '>
+            {date && (
+              <Button
+                onClick={() => setDate(null)}
+                title='Clear Date'
+                className='  bg-transparent text-base font-semibold text-red-600 hover:bg-transparent hover:text-red-500'>
+                Clear Date
+                <X />
+              </Button>
+            )}
+          </div>
+        </div>
+
+        <div className='flex justify-center pt-4'>
+          <Button
+            type='submit'
+            className='bg-amber-700  text-white hover:bg-amber-600'>
+            Add Entry
+          </Button>
+        </div>
+      </form>
     </>
   );
 }

@@ -12,7 +12,6 @@ export default function Navbar() {
         {/* <Link href={'/'} className='mb-2 font-serif text-8xl font-extrabold'>
           GitPub
         </Link> */}
-        <h1 className='mb-2 font-serif text-8xl font-extrabold'>GitPub</h1>
 
         <div className='flex w-full justify-between px-12 pt-4 '>
           <Link href={'/'} className=''>

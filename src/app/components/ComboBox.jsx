@@ -1,10 +1,10 @@
 'use client';
 
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Check, ChevronsUpDown } from 'lucide-react';
 
 import { cn } from '../lib/utils';
-import { ButtonShad } from '../components/ui/button';
+import { Button } from '../components/ui/button';
 import {
   Command,
   CommandEmpty,
@@ -20,56 +20,59 @@ import {
 
 import { ScrollArea } from '../components/ui/scroll-area';
 
-export default function ComboBox({ dataList, onSelect, placeholder }) {
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState('');
+export default function ComboBox({ dataList, onSelect, placeholder, value }) {
+  const [open, setOpen] = useState(false);
+  // const [value, setValue] = useState('');
+  const [localValue, setLocalValue] = useState(value || '');
 
   const handleSelect = (currentValue) => {
-    setValue(currentValue === value ? '' : currentValue);
+    setLocalValue(currentValue === localValue ? '' : currentValue);
     setOpen(false);
     onSelect(currentValue);
   };
 
-  return (
-    <div className='flex justify-center '>
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <ButtonShad
-            variant='outline'
-            role='combobox'
-            aria-expanded={open}
-            className='w-[700px] justify-between rounded-xl'>
-            {value
-              ? dataList.find((dataItem) => dataItem.value === value)?.label
-              : placeholder}
+  useEffect(() => {
+    setLocalValue(value || '');
+  }, [value]);
 
-            <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
-          </ButtonShad>
-        </PopoverTrigger>
-        <PopoverContent className='w-[700px]  rounded-xl p-0'>
-          <Command className='rounded-xl'>
-            <CommandInput placeholder={`Search or ${placeholder}`} />
-            <ScrollArea className='h-96 '>
-              <CommandEmpty>No State found.</CommandEmpty>
-              <CommandGroup>
-                {dataList.map((dataItem) => (
-                  <CommandItem
-                    key={dataItem.value}
-                    onSelect={() => handleSelect(dataItem.value)}>
-                    <Check
-                      className={cn(
-                        'mr-2 h-4 w-4 ',
-                        value === dataItem.value ? 'opacity-100' : 'opacity-0',
-                      )}
-                    />
-                    {dataItem.label}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </ScrollArea>
-          </Command>
-        </PopoverContent>
-      </Popover>
-    </div>
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant='outline'
+          role='combobox'
+          aria-expanded={open}
+          className='w-[300px] justify-between  '>
+          {value
+            ? dataList.find((dataItem) => dataItem.value === localValue)?.label
+            : placeholder}
+
+          <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className='h-[300px] w-[350px] p-0'>
+        <Command>
+          <CommandInput placeholder={`Search or ${placeholder}`} />
+          <ScrollArea className='h-96 '>
+            <CommandEmpty>No State found.</CommandEmpty>
+            <CommandGroup>
+              {dataList.map((dataItem) => (
+                <CommandItem
+                  key={dataItem.value}
+                  onSelect={() => handleSelect(dataItem.value)}>
+                  <Check
+                    className={cn(
+                      'mr-2 h-4 w-4 ',
+                      value === dataItem.value ? 'opacity-100' : 'opacity-0',
+                    )}
+                  />
+                  {dataItem.label}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </ScrollArea>
+        </Command>
+      </PopoverContent>
+    </Popover>
   );
 }

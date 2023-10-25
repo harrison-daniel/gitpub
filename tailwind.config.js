@@ -1,6 +1,7 @@
+/** @type {import('tailwindcss').Config} */
+
 const { nextui } = require('@nextui-org/react');
 
-/** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ['class'],
   content: [
@@ -24,18 +25,6 @@ module.exports = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       colors: {
-        // red: {
-        //   50: '#e6f1fe',
-        //   100: '#cce3fd',
-        //   200: '#99c7fb',
-        //   300: '#66aaf9',
-        //   400: '#338ef7',
-        //   500: '#006FEE',
-        //   600: '#005bc4',
-        //   700: '#004493',
-        //   800: '#002e62',
-        //   900: '#001731',
-        // },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -70,11 +59,11 @@ module.exports = {
           foreground: 'hsl(var(--card-foreground))',
         },
       },
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
-      },
+      // borderRadius: {
+      //   lg: 'var(--radius)',
+      //   md: 'calc(var(--radius) - 2px)',
+      //   sm: 'calc(var(--radius) - 4px)',
+      // },
       keyframes: {
         'accordion-down': {
           from: { height: 0 },
@@ -121,13 +110,7 @@ module.exports = {
         mytheme: {
           // custom theme
           extend: 'dark',
-          colors: {
-            // primary: {
-            //   DEFAULT: '#BEF264',
-            //   foreground: '#000000',
-            // },
-            // focus: '#BEF264',
-          },
+          colors: {},
         },
       },
     }),

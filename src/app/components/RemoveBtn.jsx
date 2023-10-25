@@ -1,5 +1,6 @@
 'use client';
 
+import { useToast } from '../components/ui/use-toast';
 import { HiOutlineTrash } from 'react-icons/hi';
 import { useRouter } from 'next/navigation';
 import React from 'react';
@@ -9,28 +10,42 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Button,
   useDisclosure,
 } from '@nextui-org/react';
+import { Button } from '../components/ui/button';
 
 export default function RemoveBtn({ id, onRemove }) {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [modalPlacement, setModalPlacement] = React.useState('auto');
+  const { toast } = useToast();
 
   const removeEntry = async () => {
     console.log('Deleting entry');
     try {
-      await fetch(`https://gitpub.vercel.app/api/entries?id=${id}`, {
-        // await fetch(`http://localhost:3000/api/entries?id=${id}`, {
+      // await fetch(`https://gitpub.vercel.app/api/entries?id=${id}`, {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/entries?id=${id}`, {
         method: 'DELETE',
       });
+
       if (onRemove) onRemove();
       router.refresh();
     } catch (error) {
       console.error('Failed to delete entry:', error);
     } finally {
       onOpenChange(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await removeEntry(); // Wait for entry removal to complete
+      toast({ description: 'Entry Deleted' }); // Show toast after removal
+    } catch (error) {
+      // Handle error (e.g., show an error toast or log to an error reporting service)
+      toast({ description: 'Error deleting entry', status: 'error' });
+    } finally {
+      onOpenChange(false); // Ensure modal is closed in both success and failure cases
     }
   };
 
@@ -54,12 +69,12 @@ export default function RemoveBtn({ id, onRemove }) {
               </ModalHeader>
               <ModalBody></ModalBody>
               <ModalFooter>
-                <Button color='primary ' variant='light' onPress={onClose}>
+                <Button variant='outline' onClick={onClose}>
                   No, Go Back
                 </Button>
                 <Button
                   className='bg-red-600 text-white hover:bg-red-500'
-                  onPress={removeEntry}>
+                  onClick={handleDelete}>
                   Delete Entry
                 </Button>
               </ModalFooter>

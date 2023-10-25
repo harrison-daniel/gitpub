@@ -3,8 +3,8 @@ import Background from './components/Background';
 import EntryList from './components/EntryList';
 import { Analytics } from '@vercel/analytics/react';
 import './loading';
-
 import getAllEntries from './lib/getAllEntries';
+// import MobileNav from './components/MobileNav';
 
 export default async function Home() {
   const { entries = [] } = (await getAllEntries()) || {};

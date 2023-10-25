@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@nextui-org/react';
+import { Button } from '../components/ui/button';
 import EntryListItem from './EntryListItem';
 import React, { useState } from 'react';
 import { HiOutlineSelector } from 'react-icons/hi';
@@ -38,28 +38,33 @@ export default function EntryList({ entries }) {
   };
 
   return (
-    <div className='mx-auto max-w-3xl '>
-      <h1 className='flex justify-center pb-4 text-center text-3xl font-bold'>
-        My Brewery Trips:
+    <div className='mx-auto max-w-3xl px-8 '>
+      <h1 className='mt-4 flex justify-center pb-4 text-center text-2xl font-bold '>
+        My Trips:
       </h1>
-      <div className='flex justify-center gap-4   pb-4 '>
+      <div className=' mb-4 flex justify-center gap-4 '>
         <Button
-          size='sm'
-          className='bg-amber-600 font-semibold text-white hover:bg-amber-500'
+          // size='md'
+          className='bg-amber-700  text-white hover:bg-amber-600'
           onClick={() => handleSort('date')}>
-          Sort by Date {sortOption === 'date' && <HiOutlineSelector />}
+          Sort by Date{' '}
+          {sortOption === 'date' && <HiOutlineSelector className=' h-5 w-5' />}
         </Button>
         <Button
-          size='sm'
-          className='bg-amber-600 font-semibold text-white hover:bg-amber-500'
+          // size='md'
+          className='bg-amber-700  text-white hover:bg-amber-600'
           onClick={() => handleSort('title')}>
-          Sort by Name {sortOption === 'title' && <HiOutlineSelector />}
+          Sort by Name{' '}
+          {sortOption === 'title' && <HiOutlineSelector className=' h-5 w-5' />}
         </Button>
         <Button
-          size='sm'
-          className='bg-amber-600 font-semibold text-white hover:bg-amber-500'
+          // size='md'
+          className='bg-amber-700  text-white hover:bg-amber-600'
           onClick={() => handleSort('address')}>
-          Sort by Location {sortOption === 'address' && <HiOutlineSelector />}
+          Sort by Location{' '}
+          {sortOption === 'address' && (
+            <HiOutlineSelector className=' h-5 w-5' />
+          )}
         </Button>
       </div>
       {entries && entries.length === 0 ? (

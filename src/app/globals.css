@@ -3,6 +3,8 @@
 @tailwind utilities;
 
 html {
+  /* background: oklch(84.12% 0.1675 89.2); */
+
   background: rgb(255, 212, 19);
   background: radial-gradient(
     circle,
@@ -10,6 +12,36 @@ html {
     rgba(255, 186, 2, 1) 73%
   );
 
-  overflow-y: scroll !important;
-  overflow-x: scroll !important;
+  /* overflow-y: scroll !important;
+  overflow-x: scroll !important; */
 }
+
+.menu {
+  filter: drop-shadow(1px 1px 1px #5116a9);
+
+  /* width: 300px; */
+}
+
+/* @media (color-gamut: srgb) {
+   safe to use srgb colors 
+}
+
+@media (color-gamut: p3) {
+  safe to use p3 colors 
+}
+
+@media (color-gamut: rec2020) {
+   safe to use rec2020 colors 
+}
+
+@supports (background: rgb(0 0 0)) {
+   rgb color space supported 
+}
+
+@supports (background: color(display-p3 0 0 0)) {
+   display-p3 color space supported 
+}
+
+@supports (background: oklch(0 0 0)) {
+   oklch color space supported 
+} */

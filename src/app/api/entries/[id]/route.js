@@ -1,5 +1,5 @@
 import Entry from '../../../models/entry';
-import dbConnect from '../../../db/mongodb';
+import dbConnect from '../../../db/dbConnect';
 import { NextResponse } from 'next/server';
 
 export async function PUT(request, { params }) {
