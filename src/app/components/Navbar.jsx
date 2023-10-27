@@ -69,20 +69,20 @@ export default function Navbar() {
       </AnimatePresence>
 
       {/* mobile nav */}
-      <div className='fixed bottom-32 right-1 z-40  md:hidden'>
+      <div className='fixed bottom-6 right-3 z-40  md:hidden'>
         <motion.div
           className='menu-container'
           initial={false}
           animate={isOpen ? 'open' : 'closed'}>
           <motion.ul
-            className={`absolute bottom-12 right-1 w-28 text-center ${
+            className={`absolute bottom-16 right-1 mb-2 w-32  text-center ${
               isOpen ? 'pointer-events-auto' : 'pointer-events-none'
             }`}>
             <motion.li variants={menuItemVariants}>
               <Link
                 href='/addEntry'
                 passHref
-                className=' block rounded  bg-amber-700  py-2 text-white hover:bg-amber-600'
+                className=' block rounded  bg-amber-700  py-3 text-white hover:bg-amber-600'
                 onClick={() => setIsOpen(false)}>
                 Add Entry
               </Link>
@@ -91,7 +91,7 @@ export default function Navbar() {
               <Link
                 href='/'
                 passHref
-                className='mt-2 block  rounded bg-amber-700  py-2 text-white hover:bg-amber-600'
+                className='mt-3 block  rounded bg-amber-700  py-3 text-white hover:bg-amber-600'
                 onClick={() => setIsOpen(false)}>
                 Home
               </Link>
@@ -100,12 +100,12 @@ export default function Navbar() {
 
           <motion.button
             onClick={() => setIsOpen(!isOpen)}
-            className='flex items-center justify-center  rounded-full bg-white p-2'>
+            className='flex items-center justify-center  rounded-full bg-white p-5'>
             <svg width='24' height='24' viewBox='0 0 24 24' fill='none'>
               <motion.path
                 fill='none'
                 strokeWidth='3'
-                strokeLinecap='round'
+                strokeLinecap='square'
                 stroke='currentColor'
                 initial={{ d: 'M 3 4 L 21 4' }} // initial state
                 variants={topBarVariants}
@@ -113,7 +113,7 @@ export default function Navbar() {
               <motion.path
                 fill='none'
                 strokeWidth='3'
-                strokeLinecap='round'
+                strokeLinecap='square'
                 stroke='currentColor'
                 initial={{ d: 'M 3 12 L 21 12' }} // initial state with opacity
                 variants={middleBarVariants}
@@ -121,9 +121,9 @@ export default function Navbar() {
               <motion.path
                 fill='none'
                 strokeWidth='3'
-                strokeLinecap='round'
+                strokeLinecap='square'
                 stroke='currentColor'
-                initial={{ d: 'M 3 20 L 21 20' }} // initial state
+                initial={{ d: 'M 3 30 L 21 20' }} // initial state
                 variants={bottomBarVariants}
               />
             </svg>
