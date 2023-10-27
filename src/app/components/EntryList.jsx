@@ -38,8 +38,8 @@ export default function EntryList({ entries }) {
   };
 
   return (
-    <div className='mx-auto max-w-3xl px-8 '>
-      <h1 className='mt-4 flex justify-center pb-4 text-center text-2xl font-bold '>
+    <div className='mx-auto max-w-3xl px-9 '>
+      <h1 className='mt-16 flex justify-center pb-4 text-center text-2xl font-bold '>
         My Trips:
       </h1>
       <div className=' mb-4 flex justify-center gap-4 '>

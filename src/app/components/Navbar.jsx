@@ -2,31 +2,9 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  MoreVertical,
-  Menu,
-  PlusSquare,
-  PlusCircle,
-  MenuSquare,
-} from 'lucide-react';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-
-  // Handle outside click
-  useEffect(() => {
-    if (!isOpen) return; // Only add the listener if the menu is open
-
-    const handleOutsideClick = (event) => {
-      if (!event.target.closest('.menu-container')) {
-        setIsOpen(false);
-      }
-    };
-
-    window.addEventListener('click', handleOutsideClick);
-
-    return () => window.removeEventListener('click', handleOutsideClick); // Clean up the event listener on unmount
-  }, [isOpen]);
 
   // Simplified variants for animations
   const menuItemVariants = {
@@ -39,27 +17,42 @@ export default function Navbar() {
     visible: { opacity: 0.75 },
   };
 
-  // const buttonVariants = {
-  //   open: { rotate: 90 },
-  //   closed: { rotate: 0 },
-  // };
-
   const topBarVariants = {
-    closed: { d: 'M 2 2.5 L 20 2.5' },
-    open: { d: 'M 3 16.5 L 17 2.5' },
+    closed: { d: 'M 3 4 L 21 4' },
+    open: { d: 'M 3 4 L 21 20' },
   };
+
   const middleBarVariants = {
-    // d: 'M 2 9.423 L 20 9.423',
     closed: { opacity: 1 },
     open: { opacity: 0 },
   };
+
   const bottomBarVariants = {
-    closed: { d: 'M 2 16.346 L 20 16.346' },
-    open: { d: 'M 3 2.5 L 17 16.346' },
+    closed: { d: 'M 3 20 L 21 20' },
+    open: { d: 'M 21 4 L 3 20' },
   };
 
   return (
-    <div>
+    <>
+      {/* Desktop Navigation */}
+      <div className='flex  '>
+        <div className='hidden md:mx-auto md:flex md:max-w-3xl md:flex-row md:items-center md:justify-center'>
+          <div className='flex items-center gap-8 px-12 pt-2 align-middle'>
+            <Link
+              href={'/'}
+              className=' rounded border border-zinc-950 px-4 py-1 font-extrabold text-black hover:bg-zinc-950 hover:text-white'>
+              Home
+            </Link>
+
+            <Link
+              href={'/addEntry'}
+              className='  rounded border border-zinc-950 px-4 py-1 font-extrabold text-black hover:bg-zinc-950 hover:text-white'>
+              Add Entry
+            </Link>
+          </div>
+        </div>
+      </div>
+
       {/* Overlay */}
       <AnimatePresence>
         {isOpen && (
@@ -69,23 +62,27 @@ export default function Navbar() {
             exit='hidden'
             variants={overlayVariants}
             transition={{ ease: 'easeOut', duration: 0.2 }}
-            className='fixed inset-0 z-40 bg-black'
+            className='fixed inset-0 z-40  bg-black'
             onClick={() => setIsOpen(false)}
           />
         )}
       </AnimatePresence>
 
-      <div className='fixed bottom-32 right-0 z-50 md:hidden'>
+      {/* mobile nav */}
+      <div className='fixed bottom-32 right-1 z-40  md:hidden'>
         <motion.div
           className='menu-container'
           initial={false}
           animate={isOpen ? 'open' : 'closed'}>
-          <motion.ul className='absolute bottom-10 right-2 w-32  text-center'>
+          <motion.ul
+            className={`absolute bottom-12 right-1 w-28 text-center ${
+              isOpen ? 'pointer-events-auto' : 'pointer-events-none'
+            }`}>
             <motion.li variants={menuItemVariants}>
               <Link
                 href='/addEntry'
                 passHref
-                className=' block rounded  bg-amber-700 px-4 py-2 text-white hover:bg-amber-600'
+                className=' block rounded  bg-amber-700  py-2 text-white hover:bg-amber-600'
                 onClick={() => setIsOpen(false)}>
                 Add Entry
               </Link>
@@ -94,46 +91,45 @@ export default function Navbar() {
               <Link
                 href='/'
                 passHref
-                className='mt-2 block  rounded bg-amber-700 px-4 py-2 text-white hover:bg-amber-600'
+                className='mt-2 block  rounded bg-amber-700  py-2 text-white hover:bg-amber-600'
                 onClick={() => setIsOpen(false)}>
                 Home
               </Link>
             </motion.li>
           </motion.ul>
+
           <motion.button
-            className='relative h-6 w-6 focus:outline-none'
-            onClick={() => setIsOpen(!isOpen)}>
-            <div className=' '>
-              <svg width='23' height='23' viewBox='0 0 23 23' fill='none'>
-                <motion.path
-                  fill='none'
-                  strokeWidth='3'
-                  strokeLinecap='round'
-                  stroke='currentColor'
-                  initial={{ d: 'M 2 2.5 L 20 2.5' }} // initial state
-                  variants={topBarVariants}
-                />
-                <motion.path
-                  fill='none'
-                  strokeWidth='3'
-                  strokeLinecap='round'
-                  stroke='currentColor'
-                  initial={{ d: 'M 2 9.423 L 20 9.423', opacity: 1 }} // initial state with opacity
-                  variants={middleBarVariants}
-                />
-                <motion.path
-                  fill='none'
-                  strokeWidth='3'
-                  strokeLinecap='round'
-                  stroke='currentColor'
-                  initial={{ d: 'M 2 16.346 L 20 16.346' }} // initial state
-                  variants={bottomBarVariants}
-                />
-              </svg>
-            </div>
+            onClick={() => setIsOpen(!isOpen)}
+            className='flex items-center justify-center  rounded-full bg-white p-2'>
+            <svg width='24' height='24' viewBox='0 0 24 24' fill='none'>
+              <motion.path
+                fill='none'
+                strokeWidth='3'
+                strokeLinecap='round'
+                stroke='currentColor'
+                initial={{ d: 'M 3 4 L 21 4' }} // initial state
+                variants={topBarVariants}
+              />
+              <motion.path
+                fill='none'
+                strokeWidth='3'
+                strokeLinecap='round'
+                stroke='currentColor'
+                initial={{ d: 'M 3 12 L 21 12' }} // initial state with opacity
+                variants={middleBarVariants}
+              />
+              <motion.path
+                fill='none'
+                strokeWidth='3'
+                strokeLinecap='round'
+                stroke='currentColor'
+                initial={{ d: 'M 3 20 L 21 20' }} // initial state
+                variants={bottomBarVariants}
+              />
+            </svg>
           </motion.button>
         </motion.div>
       </div>
-    </div>
+    </>
   );
 }

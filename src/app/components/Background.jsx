@@ -10,10 +10,11 @@ export default function Background() {
       quality={75}
       priority
       fill
-      className='rotated'
       style={{
         objectFit: 'contain ',
+        objectPosition: 'top',
         zIndex: '-10',
+        top: '8%',
       }}
     />
   );

@@ -49,11 +49,6 @@ export default function EditEntryForm({
         // Only add newDate if it's set
         bodyData.newDate = newDate;
       }
-      // const res = await fetch(`https://gitpub.vercel.app/api/entries/${id}`, {
-      //   method: 'PUT',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ newTitle, newAddress, newDescription, newDate }),
-      // });
 
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/entries/${id}`,

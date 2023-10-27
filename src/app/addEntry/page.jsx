@@ -40,7 +40,6 @@ export default function AddEntry() {
     }
 
     try {
-      // const res = await fetch('https://gitpub.vercel.app/api/entries', {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/entries`,
         {
@@ -61,8 +60,8 @@ export default function AddEntry() {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className='mx-auto flex flex-col  '>
-        <div className='flex flex-col items-center p-6 '>
+      <form onSubmit={handleSubmit} className='mx-auto flex flex-col  px-8'>
+        <div className='flex flex-col items-center  '>
           <Textarea
             size='lg'
             radius='sm'
@@ -104,22 +103,22 @@ export default function AddEntry() {
           />
         </div>
 
-        <div className='mx-auto flex flex-row'>
+        <div className='mx-auto mt-4 flex flex-row'>
           {/* DATE PICKER  */}
           <div className=' '>
             <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-              <PopoverTrigger asChild className='rounded-md'>
+              <PopoverTrigger asChild className='rounded-md '>
                 <Button
                   variant={'outline'}
                   className={cn(
-                    'w-[200px] justify-start text-left font-normal',
+                    'w-[140px] gap-3 text-center font-normal ',
                     !date && 'text-muted-foreground',
                   )}>
-                  <CalendarIcon className='mr-2 h-4 w-4 ' />
+                  <CalendarIcon className=' h-5 w-5 ' />
                   {date ? format(date, 'PPP') : <span>Pick a date</span>}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className='w-auto rounded-xl p-0'>
+              <PopoverContent className='mx-4  w-auto rounded-xl p-0'>
                 <Calendar
                   mode='single'
                   selected={date}
@@ -129,7 +128,7 @@ export default function AddEntry() {
               </PopoverContent>
             </Popover>
           </div>
-          <div className='flex '>
+          <div className=' flex'>
             {date && (
               <Button
                 onClick={() => setDate(null)}
@@ -142,7 +141,7 @@ export default function AddEntry() {
           </div>
         </div>
 
-        <div className='flex justify-center pt-4'>
+        <div className='flex justify-center pt-8'>
           <Button
             type='submit'
             className='bg-amber-700  text-white hover:bg-amber-600'>

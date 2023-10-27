@@ -11,9 +11,21 @@ html {
     rgba(255, 212, 19, 1) 31%,
     rgba(255, 186, 2, 1) 73%
   );
-
+  height: 100dvh;
+  width: 100dvw;
+  overflow: auto;
   /* overflow-y: scroll !important;
   overflow-x: scroll !important; */
+}
+
+body {
+  height: 100dvh;
+  height: -webkit-fill-available;
+}
+
+* {
+  margin: 0;
+  padding: 0;
 }
 
 .menu {

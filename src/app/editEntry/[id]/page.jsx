@@ -2,10 +2,6 @@ import EditEntryForm from '../../components/EditEntryForm';
 
 const getEntryById = async (id) => {
   try {
-    // const res = await fetch(`https://gitpub.vercel.app/api/entries/${id}`, {
-    //   cache: 'no-store',
-    // });
-    // const res = await fetch(`http://localhost:3000/api/entries/${id}`, {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/entries/${id}`,
       {

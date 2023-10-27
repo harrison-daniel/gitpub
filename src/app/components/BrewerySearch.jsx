@@ -10,7 +10,6 @@ import {
   ModalFooter,
   useDisclosure,
 } from '@nextui-org/react';
-// import { CgCloseR } from 'react-icons/cg';
 import StateComboBox from './StateComboBox';
 import CityComboBox from '../components/CityComboBox';
 import { Button } from '../components/ui/button';
@@ -27,11 +26,8 @@ export default function BrewerySearch() {
   const [address, setAddress] = useState('');
   const [description, setDescription] = useState('');
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [scrollBehavior, setScrollBehavior] = React.useState('inside');
+  const [scrollBehavior] = React.useState('inside');
   const [date, setDate] = useState(new Date());
-
-  // const [open, setOpen] = React.useState(false);
-  // const [value, setValue] = React.useState('');
 
   useEffect(() => {
     if (!state) {
@@ -127,50 +123,46 @@ export default function BrewerySearch() {
 
   return (
     <>
-      <div>
-        <div className='flex flex-col p-2'>
-          <h1 className='flex justify-center pb-4 text-center text-2xl font-bold'>
-            Search for a Brewery below
-          </h1>
+      <div className='mt-6 flex flex-col px-2  md:mt-12 '>
+        <h1 className=' mb-4 flex justify-center text-center text-2xl font-bold '>
+          Find Your Next Brewery <br />
+        </h1>
+
+        <div className='flex flex-col items-center  gap-2 '>
+          <StateComboBox
+            onStateSelect={(selectedState) => setState(selectedState)}
+            // onMenuSearchClick={{ state: 'open' }}
+            value={state}
+          />
+
           {state && (
-            <Button
-              onClick={handleClearSearch}
-              title='Clear Search'
-              className='  flex justify-center bg-transparent text-base font-semibold text-red-600 hover:bg-transparent hover:text-red-500'>
-              Clear Search
-              <RotateCcw className='ml-2' />
-              {/* <X /> */}
-            </Button>
+            <>
+              <CityComboBox
+                cities={cities}
+                onCitySelect={(selectedCity) => setCity(selectedCity)}
+                value={city}
+              />
+            </>
           )}
-
-          <div className='flex flex-col  items-center gap-2'>
-            <StateComboBox
-              onStateSelect={(selectedState) => setState(selectedState)}
-              // onMenuSearchClick={{ state: 'open' }}
-              value={state}
-            />
-
-            {state && (
-              <>
-                <CityComboBox
-                  cities={cities}
-                  onCitySelect={(selectedCity) => setCity(selectedCity)}
-                  value={city}
-                />
-              </>
-            )}
-          </div>
-          {/* show button after city is selected */}
-          <div className='flex justify-center  '>
-            {city && (
+        </div>
+        {/* show button after city is selected */}
+        <div className='mt-2 flex justify-center gap-2'>
+          {city && (
+            <>
               <Button
-                className='mt-2 bg-amber-700  text-white hover:bg-amber-600'
+                className=' bg-amber-700  text-white hover:bg-amber-600'
                 onClick={handleCityFilter}>
                 <Search className='mr-2 h-4 w-4' />
                 Search
               </Button>
-            )}
-          </div>
+              <Button
+                onClick={handleClearSearch}
+                title='Clear Search'
+                className='   bg-amber-700  text-white hover:bg-amber-600'>
+                <RotateCcw size={21} />
+              </Button>
+            </>
+          )}
         </div>
 
         <div className='flex flex-col gap-2'>
