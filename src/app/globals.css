@@ -14,13 +14,14 @@ html {
   height: 100dvh;
   width: 100dvw;
   overflow: auto;
+  height: -webkit-fill-available;
   /* overflow-y: scroll !important;
   overflow-x: scroll !important; */
 }
 
 body {
   max-height: 100dvh;
-  /* height: -webkit-fill-available; */
+  height: -webkit-fill-available;
 }
 
 * {
