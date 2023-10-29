@@ -123,7 +123,7 @@ export default function Navbar() {
                 strokeWidth='3'
                 strokeLinecap='square'
                 stroke='currentColor'
-                initial={{ d: 'M 3 30 L 21 20' }} // initial state
+                initial={{ d: 'M 3 20 L 21 20' }} // initial state
                 variants={bottomBarVariants}
               />
             </svg>

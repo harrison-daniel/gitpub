@@ -36,46 +36,47 @@ export default function ComboBox({ dataList, onSelect, placeholder, value }) {
   }, [value]);
 
   return (
-    <div className=''>
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            variant='outline'
-            role='combobox'
-            aria-expanded={open}
-            className='w-[300px] justify-between  '>
-            {value
-              ? dataList.find((dataItem) => dataItem.value === localValue)
-                  ?.label
-              : placeholder}
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant='outline'
+          role='combobox'
+          aria-expanded={open}
+          className='w-[270px] justify-between  '>
+          {value
+            ? dataList.find((dataItem) => dataItem.value === localValue)?.label
+            : placeholder}
 
-            <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className='h-[275px] max-h-fit w-[350px] p-0'>
-          <Command>
-            <CommandInput placeholder={`Search or ${placeholder}`} />
-            <ScrollArea className='h-96 '>
-              <CommandEmpty>No State found.</CommandEmpty>
-              <CommandGroup>
-                {dataList.map((dataItem) => (
-                  <CommandItem
-                    key={dataItem.value}
-                    onSelect={() => handleSelect(dataItem.value)}>
-                    <Check
-                      className={cn(
-                        'mr-2 h-4 w-4 ',
-                        value === dataItem.value ? 'opacity-100' : 'opacity-0',
-                      )}
-                    />
-                    {dataItem.label}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
+          <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className='h-[44svh] w-[240px]  p-0   '>
+        <Command>
+          <CommandInput placeholder={`Search or ${placeholder}`} />
+
+          <CommandEmpty>{`No ${placeholder
+            .replace('Select a ', '')
+            .replace('...', '')} found.`}</CommandEmpty>
+
+          <CommandGroup>
+            <ScrollArea className='h-[44svh] '>
+              {dataList.map((dataItem) => (
+                <CommandItem
+                  key={dataItem.value}
+                  onSelect={() => handleSelect(dataItem.value)}>
+                  <Check
+                    className={cn(
+                      'mr-2 h-4 w-4 ',
+                      value === dataItem.value ? 'opacity-100' : 'opacity-0',
+                    )}
+                  />
+                  {dataItem.label}
+                </CommandItem>
+              ))}
             </ScrollArea>
-          </Command>
-        </PopoverContent>
-      </Popover>
-    </div>
+          </CommandGroup>
+        </Command>
+      </PopoverContent>
+    </Popover>
   );
 }
