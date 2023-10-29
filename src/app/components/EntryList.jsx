@@ -38,8 +38,8 @@ export default function EntryList({ entries }) {
   };
 
   return (
-    <div className='mx-auto max-w-3xl px-9 '>
-      <h1 className='mt-16 flex justify-center pb-4 text-center text-2xl font-bold '>
+    <div className='mx-auto max-w-3xl px-8 '>
+      <h1 className='mt-4 flex justify-center pb-4 text-center text-2xl font-bold '>
         My Trips:
       </h1>
       <div className=' mb-4 flex justify-center gap-4 '>
@@ -47,21 +47,21 @@ export default function EntryList({ entries }) {
           // size='md'
           className='bg-amber-700  text-white hover:bg-amber-600'
           onClick={() => handleSort('date')}>
-          Sort by Date{' '}
+          Sort by Date
           {sortOption === 'date' && <HiOutlineSelector className=' h-5 w-5' />}
         </Button>
         <Button
           // size='md'
           className='bg-amber-700  text-white hover:bg-amber-600'
           onClick={() => handleSort('title')}>
-          Sort by Name{' '}
+          Sort by Name
           {sortOption === 'title' && <HiOutlineSelector className=' h-5 w-5' />}
         </Button>
         <Button
           // size='md'
           className='bg-amber-700  text-white hover:bg-amber-600'
           onClick={() => handleSort('address')}>
-          Sort by Location{' '}
+          Sort by Location
           {sortOption === 'address' && (
             <HiOutlineSelector className=' h-5 w-5' />
           )}

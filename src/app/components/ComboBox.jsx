@@ -59,7 +59,7 @@ export default function ComboBox({ dataList, onSelect, placeholder, value }) {
             .replace('...', '')} found.`}</CommandEmpty>
 
           <CommandGroup>
-            <ScrollArea className='h-unit-4xl '>
+            <ScrollArea className='h-[120px] '>
               {dataList.map((dataItem) => (
                 <CommandItem
                   key={dataItem.value}

@@ -69,7 +69,7 @@ export default function Navbar() {
       </AnimatePresence>
 
       {/* mobile nav */}
-      <div className='fixed bottom-6 right-3 z-40  md:hidden'>
+      <div className='fixed bottom-24 right-3 z-40  md:hidden'>
         <motion.div
           className='menu-container'
           initial={false}
