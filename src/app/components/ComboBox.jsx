@@ -50,7 +50,7 @@ export default function ComboBox({ dataList, onSelect, placeholder, value }) {
           <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className='h-[44svh] w-[240px]  p-0   '>
+      <PopoverContent className='h-[44dvh] w-[240px]  p-0   '>
         <Command>
           <CommandInput placeholder={`Search or ${placeholder}`} />
 
@@ -59,7 +59,7 @@ export default function ComboBox({ dataList, onSelect, placeholder, value }) {
             .replace('...', '')} found.`}</CommandEmpty>
 
           <CommandGroup>
-            <ScrollArea className='h-[44svh] '>
+            <ScrollArea className='h-[44dvh] '>
               {dataList.map((dataItem) => (
                 <CommandItem
                   key={dataItem.value}
