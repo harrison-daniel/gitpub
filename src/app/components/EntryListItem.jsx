@@ -14,12 +14,12 @@ export default function EntryListItem({ entry }) {
     <>
       <div className=' mb-2 flex flex-col justify-center gap-0  rounded-lg border  border-slate-900  bg-amber-500 bg-opacity-80 p-2'>
         <div className='mb-4 flex flex-row justify-between'>
-          <div className='text-md  flex flex-col font-mono font-semibold '>
+          <div className='text-md flex flex-col pl-2 font-mono font-semibold '>
             {entry.date && !isNaN(new Date(entry.date).getTime())
               ? format(new Date(entry.date), 'PPP')
               : null}
           </div>
-          <div className='flex flex-row gap-2 pr-4'>
+          <div className='flex flex-row gap-4 pr-8'>
             <RemoveBtn id={entry._id} />
 
             <Link href={`/editEntry/${entry._id}`}>
@@ -35,7 +35,7 @@ export default function EntryListItem({ entry }) {
             <p className='mb-2 text-sm italic'>{entry.address}</p>
           </div>
 
-          <div className=' flex flex-wrap justify-start'>
+          <div className=' flex flex-wrap justify-center'>
             <Accordion type='single' collapsible className=''>
               <AccordionItem value='item-1 '>
                 <AccordionTrigger>Notes</AccordionTrigger>

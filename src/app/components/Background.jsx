@@ -10,7 +10,7 @@ export default function Background() {
       quality={75}
       priority
       fill
-      className='mt-[60px] md:mt-[110px] lg:mt-[110px]'
+      className='mt-[55px] md:mt-[110px] lg:mt-[110px]'
       style={{
         objectFit: 'contain ',
         objectPosition: 'top',

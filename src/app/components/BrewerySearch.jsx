@@ -123,15 +123,14 @@ export default function BrewerySearch() {
 
   return (
     <>
-      <div className=' mb-4 mt-5  flex flex-col px-2 md:mt-7 lg:mt-7 '>
+      <div className=' mb-4 mt-3  flex flex-col px-2 md:mt-10 lg:mt-10 '>
         <h1 className=' mb-1.5 flex justify-center text-center text-xl font-bold md:text-2xl lg:text-2xl '>
           Find Your Next Brewery <br />
         </h1>
 
-        <div className='flex flex-col items-center gap-1 '>
+        <div className='flex flex-col items-center gap-0.5 '>
           <StateComboBox
             onStateSelect={(selectedState) => setState(selectedState)}
-            // onMenuSearchClick={{ state: 'open' }}
             value={state}
           />
 

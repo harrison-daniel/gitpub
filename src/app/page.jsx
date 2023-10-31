@@ -1,28 +1,30 @@
-'use client';
-import { groupEntriesByYear } from './lib/groupEntriesByYear';
+// 'use client';
+// import { groupEntriesByYear } from './lib/groupEntriesByYear';
 import getAllEntries from './lib/getAllEntries';
 import BrewerySearch from './components/BrewerySearch';
 import Background from './components/Background';
 import EntryList from './components/EntryList';
 import { Analytics } from '@vercel/analytics/react';
 import './loading';
-import React, { useEffect, useState } from 'react';
+// import React, { useEffect, useState } from 'react';
 
-export default function Home() {
-  const [entries, setEntries] = useState([]);
+export default async function Home() {
+  // const [entries, setEntries] = useState([]);
+  const { entries = [] } = (await getAllEntries()) || {};
 
-  useEffect(() => {
-    const fetchEntries = async () => {
-      try {
-        const data = await getAllEntries('date', 'desc');
-        setEntries(data.entries || []);
-      } catch (error) {
-        console.error('Failed to fetch entries:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchEntries = async () => {
+  //     try {
+  //       const data = await getAllEntries('date', 'desc');
+  //       setEntries(data.entries || []);
+  //       Router.refresh();
+  //     } catch (error) {
+  //       console.error('Failed to fetch entries:', error);
+  //     }
+  //   };
 
-    fetchEntries();
-  }, []);
+  //   fetchEntries();
+  // }, []);
 
   return (
     <>
