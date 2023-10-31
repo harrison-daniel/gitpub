@@ -124,7 +124,7 @@ export default function BrewerySearch() {
   return (
     <>
       <div className=' mb-4 mt-3  flex flex-col px-2 md:mt-10 lg:mt-10 '>
-        <h1 className=' mb-1.5 flex justify-center text-center text-xl font-bold md:text-2xl lg:text-2xl '>
+        <h1 className=' mb-1 flex justify-center text-center text-xl font-bold md:text-2xl lg:text-2xl '>
           Find Your Next Brewery <br />
         </h1>
 
