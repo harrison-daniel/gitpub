@@ -80,8 +80,8 @@ export default function BrewerySearch() {
 
   function addBreweryInfoToEntry(brewery) {
     const truncatedPostalCode = brewery.postal_code.substring(0, 5);
-    const breweryListAddress = `${brewery.address_1}
-    ${brewery.city}, ${brewery.state} ${truncatedPostalCode}`;
+    const breweryListAddress = `${brewery.address_1}  -  
+    ${brewery.city}, ${brewery.state}   ${truncatedPostalCode}`;
 
     setTitle(brewery.name);
     setAddress(breweryListAddress);
@@ -123,12 +123,12 @@ export default function BrewerySearch() {
 
   return (
     <>
-      <div className='mt-4 flex flex-col px-2  md:mt-12 '>
-        <h1 className=' mb-1 flex justify-center text-center text-2xl font-bold '>
+      <div className=' mb-4 mt-5  flex flex-col px-2 md:mt-7 lg:mt-7 '>
+        <h1 className=' mb-1.5 flex justify-center text-center text-xl font-bold md:text-2xl lg:text-2xl '>
           Find Your Next Brewery <br />
         </h1>
 
-        <div className='flex flex-col items-center  gap-2 '>
+        <div className='flex flex-col items-center gap-1 '>
           <StateComboBox
             onStateSelect={(selectedState) => setState(selectedState)}
             // onMenuSearchClick={{ state: 'open' }}
@@ -171,29 +171,31 @@ export default function BrewerySearch() {
             onOpenChange={onOpenChange}
             scrollBehavior={scrollBehavior}>
             <form type='submit' onSubmit={handleModalSubmit}>
-              <ModalContent>
+              <ModalContent className='bg-amber-400'>
                 {(onClose) => (
                   <>
-                    <ModalHeader className='sticky top-0 flex items-center justify-between rounded-2xl bg-white py-4 text-lg font-medium leading-6 text-gray-900 shadow-xl'>
+                    <ModalHeader className='sticky top-0 flex items-center  rounded-lg bg-amber-500 py-2 text-lg font-medium leading-6 text-black shadow-xl'>
                       <div className='flex-grow text-center '>
-                        Breweries in <br />
-                        {city}, {capitalizeState(state.replace(/_/g, ' '))}
+                        Breweries in: <br />
+                        <b>
+                          {city}, {capitalizeState(state.replace(/_/g, ' '))}
+                        </b>
                       </div>
                       <div className='ml-auto pr-4'>
                         <X
-                          size={34}
+                          size={30}
                           onClick={onOpenChange}
                           aria-label='Close Modal'
-                          className=' rounded-lg hover:bg-red-700 active:bg-red-600 '
+                          className='cursor-pointer rounded-lg text-amber-950  hover:bg-amber-700 active:bg-amber-700 '
                         />
                       </div>
                     </ModalHeader>
 
-                    <ModalBody>
+                    <ModalBody className='px-3'>
                       <div className='text-center'>
                         {filteredBreweries.map((brewery) => (
                           <div
-                            className=' m-4 rounded-lg bg-white p-2  shadow-2xl'
+                            className=' m-4 rounded-lg bg-amber-500 p-2  shadow-2xl'
                             key={brewery.id}>
                             <h1 className='text-lg font-bold'>
                               {brewery.name}
@@ -206,17 +208,9 @@ export default function BrewerySearch() {
                             </div>
 
                             <div className='mt-4 '>
-                              {/* <Button
-                                  color=''
-                                  className='bg-amber-600 font-semibold text-white hover:bg-amber-500 active:bg-amber-600'
-                                  onClick={(e) => {
-                                    addBreweryInfoToEntry(brewery);
-                                  }}>
-                                  Add Brewery to Entries
-                                </Button> */}
                               <button
                                 color='primary'
-                                className='m-4 rounded-xl border bg-amber-600 px-6 py-2  font-semibold text-white  shadow hover:bg-amber-500 active:bg-amber-600 '
+                                className='m-4 rounded-lg bg-amber-700 px-6 py-2  font-semibold text-amber-100  shadow hover:bg-amber-500 active:bg-amber-600 '
                                 onClick={(e) => {
                                   addBreweryInfoToEntry(brewery);
                                 }}>
@@ -227,14 +221,14 @@ export default function BrewerySearch() {
                         ))}
                       </div>
                     </ModalBody>
-                    <ModalFooter>
+                    {/* <ModalFooter>
                       <Button
                         type='button'
                         className='bg-red-600 text-white hover:bg-red-500'
                         onClick={onClose}>
                         Close
                       </Button>
-                    </ModalFooter>
+                    </ModalFooter> */}
                   </>
                 )}
               </ModalContent>

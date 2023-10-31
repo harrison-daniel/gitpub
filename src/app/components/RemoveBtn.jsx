@@ -53,7 +53,7 @@ export default function RemoveBtn({ id, onRemove }) {
       <button
         onClick={onOpenChange}
         className='text-red-700 hover:text-red-500 active:text-red-700'>
-        <HiOutlineTrash size={28} />
+        <HiOutlineTrash size={22} />
       </button>
 
       <Modal

@@ -13,7 +13,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang='en'>
       <body>
-        <div className=' mt-3 text-center font-serif text-7xl font-extrabold '>
+        <div className=' mt-2 text-center font-serif text-7xl font-extrabold '>
           GitPub
         </div>
 

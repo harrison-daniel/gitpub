@@ -42,7 +42,7 @@ export default function ComboBox({ dataList, onSelect, placeholder, value }) {
           variant='outline'
           role='combobox'
           aria-expanded={open}
-          className='w-[270px] justify-between  '>
+          className='h-[33px] w-[240px] justify-between sm:h-[33px] md:h-[40px] lg:h-[40px]  '>
           {value
             ? dataList.find((dataItem) => dataItem.value === localValue)?.label
             : placeholder}
@@ -52,14 +52,17 @@ export default function ComboBox({ dataList, onSelect, placeholder, value }) {
       </PopoverTrigger>
       <PopoverContent className=' w-[240px]  p-0   '>
         <Command>
-          <CommandInput placeholder={`Search or ${placeholder}`} />
+          <CommandInput
+            placeholder={`Search or ${placeholder}`}
+            className='h-[35px]'
+          />
 
           <CommandEmpty>{`No ${placeholder
             .replace('Select a ', '')
             .replace('...', '')} found.`}</CommandEmpty>
 
           <CommandGroup>
-            <ScrollArea className='h-[120px] '>
+            <ScrollArea className='h-[150px] sm:h-[150px] md:h-[290px] lg:h-[290px]'>
               {dataList.map((dataItem) => (
                 <CommandItem
                   key={dataItem.value}

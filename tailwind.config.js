@@ -11,13 +11,13 @@ module.exports = {
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    container: {
-      center: true,
-      padding: '2rem',
-      screens: {
-        '2xl': '1400px',
-      },
-    },
+    // container: {
+    //   center: true,
+    //   padding: '2rem',
+    //   screens: {
+    //     '2xl': '1400px',
+    //   },
+    // },
     extend: {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
@@ -54,10 +54,10 @@ module.exports = {
           DEFAULT: 'hsl(var(--popover))',
           foreground: 'hsl(var(--popover-foreground))',
         },
-        card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
-        },
+        // card: {
+        //   DEFAULT: 'hsl(var(--card))',
+        //   foreground: 'hsl(var(--card-foreground))',
+        // },
       },
       // borderRadius: {
       //   lg: 'var(--radius)',

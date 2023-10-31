@@ -19,27 +19,11 @@ export async function POST(request) {
 export async function GET(request) {
   try {
     await dbConnect();
-    const sortOption = request.nextUrl.searchParams.get('sort');
+    const sortOption = request.nextUrl.searchParams.get('sort') || 'date';
+    // const sortOption = request.nextUrl.searchParams.get('sort');
     const direction = request.nextUrl.searchParams.get('direction') || 'desc'; // default to 'desc' if not provided
     let sortValue = direction === 'desc' ? -1 : 1;
-    let sortCriteria = {};
-
-    switch (sortOption) {
-      case 'date':
-        sortCriteria = { date: sortValue };
-        break;
-      case 'title':
-        sortCriteria = { title: sortValue };
-        break;
-      case 'address':
-        sortCriteria = { address: sortValue };
-        break;
-      // case 'city':
-      //   sortCriteria = { city: sortValue };
-      //   break;
-      default:
-        sortCriteria = { date: -1 };
-    }
+    let sortCriteria = { [sortOption]: sortValue };
 
     const entries = await Entry.find({}).sort(sortCriteria).exec();
     return NextResponse.json({ entries });
@@ -49,6 +33,33 @@ export async function GET(request) {
       { status: 500 },
     );
   }
+  // let sortCriteria = {};
+
+  //   switch (sortOption) {
+  //     case 'date':
+  //       sortCriteria = { date: sortValue };
+  //       break;
+  //     case 'title':
+  //       sortCriteria = { title: sortValue };
+  //       break;
+  //     case 'address':
+  //       sortCriteria = { address: sortValue };
+  //       break;
+  //     // case 'city':
+  //     //   sortCriteria = { city: sortValue };
+  //     //   break;
+  //     default:
+  //       sortCriteria = { date: -1 };
+  //   }
+
+  //   const entries = await Entry.find({}).sort(sortCriteria).exec();
+  //   return NextResponse.json({ entries });
+  // } catch (error) {
+  //   return NextResponse.json(
+  //     { error: 'Failed to fetch entries' },
+  //     { status: 500 },
+  //   );
+  // }
 }
 
 export async function DELETE(request) {

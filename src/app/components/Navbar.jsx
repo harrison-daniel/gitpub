@@ -82,7 +82,7 @@ export default function Navbar() {
               <Link
                 href='/addEntry'
                 passHref
-                className=' block rounded  bg-amber-700  py-3 text-white hover:bg-amber-600'
+                className=' block rounded  bg-amber-700  py-3 text-amber-100 hover:bg-amber-600'
                 onClick={() => setIsOpen(false)}>
                 Add Entry
               </Link>
@@ -91,7 +91,7 @@ export default function Navbar() {
               <Link
                 href='/'
                 passHref
-                className='mt-3 block  rounded bg-amber-700  py-3 text-white hover:bg-amber-600'
+                className='mt-3 block  rounded bg-amber-700  py-3 text-amber-100 hover:bg-amber-600'
                 onClick={() => setIsOpen(false)}>
                 Home
               </Link>
@@ -100,7 +100,7 @@ export default function Navbar() {
 
           <motion.button
             onClick={() => setIsOpen(!isOpen)}
-            className='flex items-center justify-center  rounded-full bg-white p-5'>
+            className='flex items-center justify-center  rounded-full bg-amber-700 p-4 text-amber-200'>
             <svg width='24' height='24' viewBox='0 0 24 24' fill='none'>
               <motion.path
                 fill='none'
