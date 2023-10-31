@@ -19,11 +19,11 @@ export default function EntryList({ entries }) {
       {/* {entries.length === 0 ? (
         <div>No Entries, Search or Click Add to start your list!</div>
       ) : null} */}
-      {entries.length === 0 ? (
+      {/* {entries.length === 0 ? (
         <div className='mx-auto mt-56 gap-4 text-center'>
           <Spinner label='Loading...' size='lg' className='top-50' />
         </div>
-      ) : null}
+      ) : null} */}
 
       {sortedAndGroupedEntries.map(({ year, entries }) => (
         <Accordion
