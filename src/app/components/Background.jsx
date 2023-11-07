@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import beerLight from '../../../public/assets/images/mug.png';
-import beerDark from '../../../public/assets/images/beer-mug-dark.png';
-import beerDark2 from '../../../public/assets/images/beer-mug-dark2.png';
+import beerDark from '../../../public/assets/images/beer-mug-dark8.png';
 
 export default function Background() {
   return (
@@ -25,7 +24,7 @@ export default function Background() {
       </div>
       <div className='imgDark '>
         <Image
-          src={beerDark2}
+          src={beerDark}
           alt='Dark Theme Beer'
           placeholder='empty'
           quality={100}
@@ -36,7 +35,7 @@ export default function Background() {
             objectFit: 'contain ',
             objectPosition: 'top',
             zIndex: '-10',
-            opacity: '0.5',
+            opacity: '.95',
             marginTop: '40px',
           }}
         />
