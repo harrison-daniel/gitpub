@@ -40,13 +40,13 @@ export default function Navbar() {
           <div className='flex items-center gap-8 px-12 pt-2 align-middle'>
             <Link
               href={'/'}
-              className=' rounded border border-zinc-950 px-4 py-1 font-extrabold text-black hover:bg-zinc-950 hover:text-white'>
+              className='rounded border border-zinc-950 bg-black px-4 py-1 font-extrabold text-white hover:bg-zinc-800  dark:bg-zinc-300 dark:text-black dark:hover:bg-zinc-200 '>
               Home
             </Link>
 
             <Link
               href={'/addEntry'}
-              className='  rounded border border-zinc-950 px-4 py-1 font-extrabold text-black hover:bg-zinc-950 hover:text-white'>
+              className='rounded border border-zinc-950 bg-black px-4 py-1 font-extrabold text-white hover:bg-zinc-800  dark:bg-zinc-300 dark:text-black dark:hover:bg-zinc-200'>
               Add Entry
             </Link>
           </div>

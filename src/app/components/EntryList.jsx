@@ -15,7 +15,7 @@ export default function EntryList({ entries }) {
 
   return (
     <div className='mx-auto max-w-sm px-8'>
-      <h1 className='pb-4 text-center text-2xl font-bold'>My Trips:</h1>
+      <h1 className='pb-4 text-center text-2xl font-bold '>My Trips:</h1>
       {/* {entries.length === 0 ? (
         <div>No Entries, Search or Click Add to start your list!</div>
       ) : null} */}

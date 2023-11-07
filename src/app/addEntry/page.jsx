@@ -69,7 +69,7 @@ export default function AddEntry() {
             label='Entry Name'
             labelPlacement='outside'
             placeholder='Enter your description'
-            className='max-w-2xl'
+            className='dark:text-red max-w-2xl'
             onChange={(e) => setTitle(e.target.value)}
             value={title}
             rows={3}

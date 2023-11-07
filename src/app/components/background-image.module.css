@@ -1,0 +1,17 @@
+.imgLight {
+  display: block; /* Show by default */
+  z-index: -50;
+}
+
+.dark .imgLight {
+  display: none; /* Hide when dark theme is active */
+}
+
+.imgDark {
+  display: none; /* Hide by default */
+}
+
+.dark .imgDark {
+  display: block; /* Show when dark theme is active */
+  z-index: -50;
+}

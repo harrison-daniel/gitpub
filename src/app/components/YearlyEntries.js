@@ -41,7 +41,7 @@ export default function YearlyEntries({ year, entries }) {
         <div className=' mb-4 flex justify-center gap-4 '>
           <Button
             // size='md'
-            className='bg-amber-700  text-white hover:bg-amber-600'
+            className='bg-amber-700  text-white hover:bg-amber-600 dark:bg-zinc-300 dark:text-black dark:hover:bg-zinc-200'
             onClick={() => handleSort('date')}>
             Sort by Date
             {sortOption === 'date' && (
@@ -50,7 +50,7 @@ export default function YearlyEntries({ year, entries }) {
           </Button>
           <Button
             // size='md'
-            className='bg-amber-700  text-white hover:bg-amber-600'
+            className='bg-amber-700  text-white hover:bg-amber-600 dark:bg-zinc-300 dark:text-black dark:hover:bg-zinc-200'
             onClick={() => handleSort('title')}>
             Sort by Name
             {sortOption === 'title' && (
@@ -59,7 +59,7 @@ export default function YearlyEntries({ year, entries }) {
           </Button>
           <Button
             // size='md'
-            className='bg-amber-700  text-white hover:bg-amber-600'
+            className='bg-amber-700  text-white hover:bg-amber-600 dark:bg-zinc-300 dark:text-black dark:hover:bg-zinc-200'
             onClick={() => handleSort('address')}>
             Sort by Location
             {sortOption === 'address' && (

@@ -12,7 +12,7 @@ import { format } from 'date-fns';
 export default function EntryListItem({ entry }) {
   return (
     <>
-      <div className=' mb-2 flex flex-col justify-center gap-0  rounded-lg border  border-slate-900  bg-amber-500 bg-opacity-80 p-2'>
+      <div className=' mb-2 flex flex-col justify-center gap-0  rounded-lg border  border-slate-900  bg-amber-500 bg-opacity-80 p-2 dark:bg-zinc-800'>
         <div className='mb-4 flex flex-row justify-between'>
           <div className='text-md flex flex-col pl-2 font-mono font-semibold '>
             {entry.date && !isNaN(new Date(entry.date).getTime())
@@ -29,7 +29,7 @@ export default function EntryListItem({ entry }) {
         </div>
         <div>
           <div className='mx-auto flex   flex-col justify-center gap-1    text-center '>
-            <div className='mx-auto border-b-medium  border-black  text-xl font-extrabold'>
+            <div className='border-b-medium mx-auto  border-black  text-xl font-extrabold dark:text-amber-700'>
               {entry.title}
             </div>
             <p className='mb-2 text-sm italic'>{entry.address}</p>

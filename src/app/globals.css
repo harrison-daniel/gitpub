@@ -2,9 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-  /* background: oklch(84.12% 0.1675 89.2); */
+.imgLight {
+  display: block; /* Show by default */
+}
 
+.dark .imgLight {
+  display: none; /* Hide when dark theme is active */
+}
+
+.imgDark {
+  display: none; /* Hide by default */
+}
+
+.dark .imgDark {
+  display: block; /* Show when dark theme is active */
+}
+
+html {
   background: rgb(255, 212, 19);
   background: radial-gradient(
     circle,
@@ -13,12 +27,15 @@ html {
   );
   height: 100vh;
   width: 100vw;
+}
+/* background: oklch(84.12% 0.1675 89.2); */
+/* min-height: calc(100% + env(safe-area-inset-top));
+padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); */
+/* overflow-y: scroll !important; */
+/* overflow-x: scroll !important; */
 
-  /* min-height: calc(100% + env(safe-area-inset-top));
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); */
-
-  /* overflow-y: scroll !important; */
-  /* overflow-x: scroll !important; */
+html.dark {
+  background: #121212;
 }
 
 body {
@@ -29,8 +46,6 @@ body {
 
 .menu {
   filter: drop-shadow(1px 1px 1px #5116a9);
-
-  /* width: 300px; */
 }
 
 /* @media (color-gamut: srgb) {
