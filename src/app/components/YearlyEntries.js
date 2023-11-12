@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import EntryListItem from './EntryListItem';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '../components/ui/accordion';
 import { Button } from '../components/ui/button';
 import { HiOutlineSelector } from 'react-icons/hi';
 
 export default function YearlyEntries({ year, entries }) {
   const [sortOption, setSortOption] = useState('date');
-  const [sortDirection, setSortDirection] = useState('desc');
+  const [sortDirection, setSortDirection] = useState('asc');
 
   const handleSort = (option) => {
     if (sortOption === option) {
@@ -29,49 +35,69 @@ export default function YearlyEntries({ year, entries }) {
         : a.title.localeCompare(b.title);
     } else {
       return sortDirection === 'asc'
-        ? b.address.localeCompare(a.address)
-        : a.address.localeCompare(b.address);
+        ? b.cityStateAddress.localeCompare(a.cityStateAddress)
+        : a.cityStateAddress.localeCompare(b.cityStateAddress);
     }
   });
+  // const handleSort = (option) => {
+  //   setSortOption(option);
+  //   setSortDirection(
+  //     sortOption === option && sortDirection === 'asc' ? 'desc' : 'asc',
+  //   );
+  // };
+
+  // const sortedEntries = entries.sort((a, b) => {
+  //   let comparison = 0;
+  //   if (sortOption === 'date') {
+  //     comparison = new Date(b.date) - new Date(a.date);
+  //   } else if (sortOption === 'title' || sortOption === 'cityStateAddress') {
+  //     comparison = a[sortOption].localeCompare(b[sortOption]);
+  //   }
+  //   return sortDirection === 'asc' ? comparison : -comparison;
+  // });
 
   return (
-    <div>
-      <div className='mb-4 flex justify-center gap-4'>
-        {/* Sorting Buttons */}
-        <div className=' mb-4 flex justify-center gap-4 '>
-          <Button
-            // size='md'
-            className='bg-amber-700  text-white hover:bg-amber-600 dark:bg-zinc-300 dark:text-black dark:hover:bg-zinc-200'
-            onClick={() => handleSort('date')}>
-            Sort by Date
-            {sortOption === 'date' && (
-              <HiOutlineSelector className=' h-5 w-5' />
-            )}
-          </Button>
-          <Button
-            // size='md'
-            className='bg-amber-700  text-white hover:bg-amber-600 dark:bg-zinc-300 dark:text-black dark:hover:bg-zinc-200'
-            onClick={() => handleSort('title')}>
-            Sort by Name
-            {sortOption === 'title' && (
-              <HiOutlineSelector className=' h-5 w-5' />
-            )}
-          </Button>
-          <Button
-            // size='md'
-            className='bg-amber-700  text-white hover:bg-amber-600 dark:bg-zinc-300 dark:text-black dark:hover:bg-zinc-200'
-            onClick={() => handleSort('address')}>
-            Sort by Location
-            {sortOption === 'address' && (
-              <HiOutlineSelector className=' h-5 w-5' />
-            )}
-          </Button>
-        </div>
-        {/* ... other sort options ... */}
-      </div>
-      {sortedEntries.map((entry) => (
-        <EntryListItem key={entry._id} entry={entry} />
-      ))}
-    </div>
+    <Accordion
+      key={year}
+      type='single'
+      collapsible
+      className='my-2 border border-black'>
+      <AccordionItem value={`year-${year}`} className='mx-4'>
+        <AccordionTrigger className='entryList-header flex justify-center text-3xl font-extrabold'>
+          {year}
+        </AccordionTrigger>
+        <AccordionContent>
+          <div className=' mb-4 flex justify-center gap-2  '>
+            <Button
+              onClick={() => handleSort('title')}
+              className=' bg-amber-700  text-white hover:bg-amber-600 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-200'>
+              Sort by Name
+              {sortOption === 'title' && (
+                <HiOutlineSelector className=' h-5 w-5' />
+              )}
+            </Button>
+            <Button
+              onClick={() => handleSort('address')}
+              className=' bg-amber-700  text-white hover:bg-amber-600 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-200'>
+              Sort by Location
+              {sortOption === 'address' && (
+                <HiOutlineSelector className=' h-5 w-5' />
+              )}
+            </Button>
+            <Button
+              onClick={() => handleSort('date')}
+              className='bg-amber-700  text-white hover:bg-amber-600 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-200'>
+              Sort by Date{' '}
+              {sortOption === 'date' && (
+                <HiOutlineSelector className=' h-5 w-5' />
+              )}
+            </Button>
+          </div>
+          {sortedEntries.map((entry) => (
+            <EntryListItem key={entry._id} entry={entry} />
+          ))}
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 }

@@ -2,22 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.imgLight {
-  display: block; /* Show by default */
-}
-
-.dark .imgLight {
-  display: none; /* Hide when dark theme is active */
-}
-
-.imgDark {
-  display: none; /* Hide by default */
-}
-
-.dark .imgDark {
-  display: block; /* Show when dark theme is active */
-}
-
 html {
   background: rgb(255, 212, 19);
   background: radial-gradient(
@@ -35,19 +19,98 @@ padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset
 /* overflow-x: scroll !important; */
 
 html.dark {
-  background: #121212;
+  /* background: #121212; */
+  background: rgb(15, 10, 6);
+  margin: 0;
 }
 
 body {
-  height: 100vh;
   margin: 0;
-  padding: 0;
+  overflow-y: scroll;
+  width: 100vw;
+  height: 100vh;
+}
+
+.imgLight {
+  display: block; /* Show by default */
+}
+
+.dark .imgLight {
+  display: none; /* Hide when dark theme is active */
+}
+
+.imgDark {
+  display: none; /* Hide by default */
+}
+
+.dark .imgDark {
+  display: block; /* Show when dark theme is active */
 }
 
 .menu {
   filter: drop-shadow(1px 1px 1px #5116a9);
 }
 
+.dark .main-header,
+.dark .entryListItem-header {
+  color: #d5cea3;
+}
+
+.dark .search-header {
+  /* color: #361500; */
+  /* color: #65451f; */
+  /* color: #3c2a21; */
+  /* color: #61481c; */
+  /* color: #1a120b; */
+  /* color: #d5cea3; */
+  color: black;
+  -webkit-text-stroke: 0.3px white;
+}
+
+.dark .mode-toggle {
+  background-color: #d5cea3;
+}
+
+.dark .mobile-nav {
+  background-color: #d5cea3;
+  color: black;
+}
+
+.dark .mobile-navItem {
+  background-color: #d5cea3;
+  color: black;
+  font-weight: bold;
+}
+
+.dark .entryList-header {
+  color: white;
+  -webkit-text-stroke: 0.5px black;
+}
+
+/* Slide-up modal styles */
+@media (max-width: 640px) {
+  /* Adjust this value based on your 'sm' breakpoint */
+  .slide-up-modal {
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .slide-up-modal.closed {
+    transform: translateY(100%);
+  }
+
+  .slide-up-modal.open {
+    transform: translateY(0);
+  }
+}
+
+/* .combobox-content {
+  height: calc(100vh - env(safe-area-inset-bottom));
+} */
+
+/* .dark .entryList-header {
+  -webkit-text-stroke: 1px black;
+  font-weight: bold;
+} */
 /* @media (color-gamut: srgb) {
    safe to use srgb colors 
 }

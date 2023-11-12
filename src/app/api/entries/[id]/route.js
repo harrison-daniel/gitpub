@@ -7,13 +7,22 @@ export async function PUT(request, { params }) {
     const { id } = params;
     const {
       newTitle: title,
-      newAddress: address,
+      newStreetAddress: streetAddress,
+      newCityStateAddress: cityStateAddress,
       newDescription: description,
       newDate: date,
+      newWebsiteUrl: websiteUrl,
     } = await request.json();
     // Input validation can be added here
     await dbConnect();
-    await Entry.findByIdAndUpdate(id, { title, address, description, date });
+    await Entry.findByIdAndUpdate(id, {
+      title,
+      streetAddress,
+      cityStateAddress,
+      description,
+      date,
+      websiteUrl,
+    });
     return NextResponse.json({ message: 'Entry updated' }, { status: 200 });
   } catch (error) {
     return NextResponse.json(

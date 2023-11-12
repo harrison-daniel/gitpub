@@ -69,7 +69,7 @@ export default function Navbar() {
       </AnimatePresence>
 
       {/* mobile nav */}
-      <div className='fixed bottom-24 right-3 z-40  md:hidden'>
+      <div className=' fixed bottom-24 right-3 z-40  md:hidden'>
         <motion.div
           className='menu-container'
           initial={false}
@@ -82,7 +82,7 @@ export default function Navbar() {
               <Link
                 href='/addEntry'
                 passHref
-                className=' block rounded  bg-amber-700  py-3 text-amber-100 hover:bg-amber-600'
+                className='mobile-navItem block rounded  bg-amber-700  py-3 text-amber-100 hover:bg-amber-600 '
                 onClick={() => setIsOpen(false)}>
                 Add Entry
               </Link>
@@ -91,7 +91,7 @@ export default function Navbar() {
               <Link
                 href='/'
                 passHref
-                className='mt-3 block  rounded bg-amber-700  py-3 text-amber-100 hover:bg-amber-600'
+                className='mobile-navItem mt-3 block  rounded bg-amber-700  py-3 text-amber-100 hover:bg-amber-600'
                 onClick={() => setIsOpen(false)}>
                 Home
               </Link>
@@ -100,8 +100,8 @@ export default function Navbar() {
 
           <motion.button
             onClick={() => setIsOpen(!isOpen)}
-            className='flex items-center justify-center  rounded-full bg-amber-700 p-4 text-amber-200'>
-            <svg width='24' height='24' viewBox='0 0 24 24' fill='none'>
+            className='mobile-nav flex items-center justify-center rounded-full  bg-amber-700 p-3.5 text-amber-200 '>
+            <svg width='23.5' height='23.5' viewBox='0 0 23.5 23.5' fill='none'>
               <motion.path
                 fill='none'
                 strokeWidth='3'

@@ -19,6 +19,7 @@ export default function Background() {
             objectPosition: 'top',
             zIndex: '-10',
             marginTop: '50px',
+            opacity: '.85',
           }}
         />
       </div>
@@ -35,8 +36,8 @@ export default function Background() {
             objectFit: 'contain ',
             objectPosition: 'top',
             zIndex: '-10',
-            opacity: '.95',
-            marginTop: '40px',
+            opacity: '.85',
+            marginTop: '34px',
           }}
         />
       </div>

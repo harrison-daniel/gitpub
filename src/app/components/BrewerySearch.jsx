@@ -22,12 +22,25 @@ export default function BrewerySearch() {
   const [breweries, setBreweries] = useState([]);
   const [cities, setCities] = useState([]);
   const [filteredBreweries, setFilteredBreweries] = useState([]);
-  const [title, setTitle] = useState('');
-  const [address, setAddress] = useState('');
-  const [description, setDescription] = useState('');
+  // const [title, setTitle] = useState('');
+  // const [address, setAddress] = useState('');
+  // const [streetAddress, setStreetAddress] = useState('');
+  // const [cityStateAddress, setCityStateAddress] = useState('');
+  // const [description, setDescription] = useState('');
+  // const [date, setDate] = useState(new Date());
+  // const [websiteUrl, setWebsiteUrl] = useState('');
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [scrollBehavior] = React.useState('inside');
-  const [date, setDate] = useState(new Date());
+
+  const [breweryEntry, setBreweryEntry] = useState({
+    title: '',
+    address: '',
+    streetAddress: '',
+    cityStateAddress: '',
+    description: 'Edit entry to add notes',
+    date: new Date(),
+    websiteUrl: '',
+  });
 
   useEffect(() => {
     if (!state) {
@@ -79,21 +92,27 @@ export default function BrewerySearch() {
       .join(' ');
 
   function addBreweryInfoToEntry(brewery) {
-    const truncatedPostalCode = brewery.postal_code.substring(0, 5);
-    const breweryListAddress = `${brewery.address_1}  -  
-    ${brewery.city}, ${brewery.state}   ${truncatedPostalCode}`;
-
-    setTitle(brewery.name);
-    setAddress(breweryListAddress);
-    setDescription('Edit entry to add notes');
-    setDate(new Date());
-    router.refresh();
-
-    // onOpenChange(false);
+    setBreweryEntry({
+      title: brewery.name, // Title is the name of the brewery
+      streetAddress: brewery.street, // Street address of the brewery
+      cityStateAddress: `${brewery.city}, ${brewery.state}`,
+      description: 'Edit entry to add notes',
+      date: new Date().toISOString(),
+      websiteUrl: brewery.website_url,
+    });
   }
 
   const handleModalSubmit = async (e) => {
     e.preventDefault();
+
+    const entryData = {
+      title: breweryEntry.title,
+      streetAddress: breweryEntry.streetAddress,
+      cityStateAddress: breweryEntry.cityStateAddress,
+      description: breweryEntry.description,
+      date: breweryEntry.date,
+      websiteUrl: breweryEntry.websiteUrl,
+    };
 
     try {
       const res = await fetch(
@@ -101,11 +120,13 @@ export default function BrewerySearch() {
         {
           method: 'POST',
           headers: { 'Content-type': 'application/json' },
-          body: JSON.stringify({ title, address, description, date }),
+          body: JSON.stringify(entryData),
         },
       );
 
       if (res.ok) {
+        // Handle successful addition
+        console.log('Entry added successfully');
         onOpenChange(false);
         router.refresh();
       } else {
@@ -123,12 +144,12 @@ export default function BrewerySearch() {
 
   return (
     <>
-      <div className=' mb-4 mt-3  flex flex-col px-2 md:mt-10 lg:mt-10 '>
-        <h1 className=' mb-1 flex justify-center text-center text-xl font-bold md:text-2xl lg:text-2xl '>
+      <div className=' mb-12 mt-3  flex flex-col px-2 lg:mt-5 '>
+        <h1 className='search-header m-auto mb-1 flex w-96 justify-center text-center text-2xl font-extrabold   lg:text-4xl '>
           Find Your Next Brewery <br />
         </h1>
 
-        <div className='flex flex-col items-center gap-0.5 '>
+        <div className='m-2  flex   flex-col items-center gap-0.5'>
           <StateComboBox
             onStateSelect={(selectedState) => setState(selectedState)}
             value={state}
@@ -170,10 +191,10 @@ export default function BrewerySearch() {
             onOpenChange={onOpenChange}
             scrollBehavior={scrollBehavior}>
             <form type='submit' onSubmit={handleModalSubmit}>
-              <ModalContent className='bg-amber-400'>
+              <ModalContent className='bg-amber-400 dark:bg-neutral-800 '>
                 {(onClose) => (
                   <>
-                    <ModalHeader className='sticky top-0 flex items-center  rounded-lg bg-amber-500 py-2 text-lg font-medium leading-6 text-black shadow-xl'>
+                    <ModalHeader className='sticky top-0 flex items-center rounded-lg bg-amber-500  py-2 text-lg font-medium leading-6 text-black shadow-xl dark:bg-neutral-800 dark:text-white'>
                       <div className='flex-grow text-center '>
                         Breweries in: <br />
                         <b>
@@ -185,31 +206,31 @@ export default function BrewerySearch() {
                           size={30}
                           onClick={onOpenChange}
                           aria-label='Close Modal'
-                          className='cursor-pointer rounded-lg text-amber-950  hover:bg-amber-700 active:bg-amber-700 '
+                          className='cursor-pointer rounded-lg text-amber-950  hover:bg-amber-700 active:bg-amber-700 dark:text-red-700 dark:hover:bg-neutral-800 dark:hover:text-red-600'
                         />
                       </div>
                     </ModalHeader>
 
-                    <ModalBody className='px-3'>
-                      <div className='text-center'>
+                    <ModalBody className='px-3 dark:bg-neutral-800'>
+                      <div className='text-center '>
                         {filteredBreweries.map((brewery) => (
                           <div
-                            className=' m-4 rounded-lg bg-amber-500 p-2  shadow-2xl'
+                            className='m-4 rounded-lg bg-amber-500 p-2 shadow-2xl  dark:bg-neutral-800'
                             key={brewery.id}>
-                            <h1 className='text-lg font-bold'>
+                            <h1 className='text-lg font-bold dark:bg-neutral-800'>
                               {brewery.name}
                             </h1>
                             <div>
                               {`${brewery.address_1},
-                              ${brewery.city},
-                              ${brewery.state}
-                              ${brewery.postal_code.substring(0, 5)}`}
+                                ${brewery.city},
+                                ${brewery.state}
+                                ${brewery.postal_code.substring(0, 5)}`}
                             </div>
 
                             <div className='mt-4 '>
                               <button
                                 color='primary'
-                                className='m-4 rounded-lg bg-amber-700 px-6 py-2  font-semibold text-amber-100  shadow hover:bg-amber-500 active:bg-amber-600 '
+                                className='m-4 rounded-lg bg-amber-700 px-6 py-2  font-semibold text-amber-100  shadow hover:bg-amber-500 active:bg-amber-600 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-200 dark:hover:text-black'
                                 onClick={(e) => {
                                   addBreweryInfoToEntry(brewery);
                                 }}>

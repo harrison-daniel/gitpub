@@ -41,7 +41,6 @@ export default function RemoveBtn({ id, onRemove }) {
       await removeEntry(); // Wait for entry removal to complete
       toast({ description: 'Entry Deleted' }); // Show toast after removal
     } catch (error) {
-      // Handle error (e.g., show an error toast or log to an error reporting service)
       toast({ description: 'Error deleting entry', status: 'error' });
     } finally {
       onOpenChange(false); // Ensure modal is closed in both success and failure cases
@@ -49,11 +48,12 @@ export default function RemoveBtn({ id, onRemove }) {
   };
 
   return (
-    <div className='flex flex-col gap-2'>
+    <div className='flex flex-col gap-2 '>
       <button
         onClick={onOpenChange}
-        className='text-red-700 hover:text-red-500 active:text-red-700'>
-        <HiOutlineTrash size={22} />
+        className='flex flex-row items-center text-red-700 hover:text-red-500 active:text-red-700'>
+        Delete
+        <HiOutlineTrash size={22} className='mx-1' />
       </button>
 
       <Modal

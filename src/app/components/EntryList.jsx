@@ -1,46 +1,47 @@
 'use client';
+
 import React from 'react';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '../components/ui/accordion';
-import { groupEntriesByYear } from '../lib/groupEntriesByYear';
 import YearlyEntries from './YearlyEntries';
-import { Spinner } from '@nextui-org/react';
+import NoDateEntries from './NoDateEntries';
 
 export default function EntryList({ entries }) {
-  const sortedAndGroupedEntries = groupEntriesByYear(entries);
+  const { datedEntries, noDateEntries } = entries.reduce(
+    (acc, entry) => {
+      const entryDate = new Date(entry.date);
+      const entryYear =
+        entry.date && !isNaN(entryDate.getTime())
+          ? entryDate.getFullYear().toString()
+          : 'No Date';
+
+      if (entryYear === 'No Date') {
+        acc.noDateEntries.push(entry);
+      } else {
+        if (!acc.datedEntries[entryYear]) {
+          acc.datedEntries[entryYear] = [];
+        }
+        acc.datedEntries[entryYear].push(entry);
+      }
+      return acc;
+    },
+    { datedEntries: {}, noDateEntries: [] },
+  );
+
+  // Sort the years in descending order
+  const yearsSortedDescending = Object.keys(datedEntries).sort((a, b) =>
+    b.localeCompare(a),
+  );
 
   return (
-    <div className='mx-auto max-w-sm px-8'>
-      <h1 className='pb-4 text-center text-2xl font-bold '>My Trips:</h1>
-      {/* {entries.length === 0 ? (
-        <div>No Entries, Search or Click Add to start your list!</div>
-      ) : null} */}
-      {/* {entries.length === 0 ? (
-        <div className='mx-auto mt-56 gap-4 text-center'>
-          <Spinner label='Loading...' size='lg' className='top-50' />
-        </div>
-      ) : null} */}
+    <div className='mx-auto max-w-md  px-9 pb-12 md:max-w-xl'>
+      <h1 className='entryList-header pb-4 text-center text-4xl font-extrabold '>
+        My Trips:
+      </h1>
 
-      {sortedAndGroupedEntries.map(({ year, entries }) => (
-        <Accordion
-          key={year}
-          type='single'
-          collapsible
-          className='my-2 border border-black'>
-          <AccordionItem value={`year-${year}`}>
-            <AccordionTrigger className='flex justify-center text-2xl font-bold'>
-              {year}
-            </AccordionTrigger>
-            <AccordionContent>
-              <YearlyEntries year={year} entries={entries} />
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+      {yearsSortedDescending.map((year) => (
+        <YearlyEntries key={year} year={year} entries={datedEntries[year]} />
       ))}
+
+      {noDateEntries.length > 0 && <NoDateEntries entries={noDateEntries} />}
     </div>
   );
 }

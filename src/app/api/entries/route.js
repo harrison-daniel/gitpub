@@ -4,9 +4,23 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request) {
   try {
-    const { title, address, description, date } = await request.json();
+    const {
+      title,
+      streetAddress,
+      cityStateAddress,
+      description,
+      date,
+      websiteUrl,
+    } = await request.json();
     await dbConnect();
-    await Entry.create({ title, address, description, date });
+    await Entry.create({
+      title,
+      streetAddress,
+      cityStateAddress,
+      description,
+      date,
+      websiteUrl,
+    });
     return NextResponse.json({ message: 'Entry created' }, { status: 201 });
   } catch (error) {
     return NextResponse.json(
@@ -33,33 +47,6 @@ export async function GET(request) {
       { status: 500 },
     );
   }
-  // let sortCriteria = {};
-
-  //   switch (sortOption) {
-  //     case 'date':
-  //       sortCriteria = { date: sortValue };
-  //       break;
-  //     case 'title':
-  //       sortCriteria = { title: sortValue };
-  //       break;
-  //     case 'address':
-  //       sortCriteria = { address: sortValue };
-  //       break;
-  //     // case 'city':
-  //     //   sortCriteria = { city: sortValue };
-  //     //   break;
-  //     default:
-  //       sortCriteria = { date: -1 };
-  //   }
-
-  //   const entries = await Entry.find({}).sort(sortCriteria).exec();
-  //   return NextResponse.json({ entries });
-  // } catch (error) {
-  //   return NextResponse.json(
-  //     { error: 'Failed to fetch entries' },
-  //     { status: 500 },
-  //   );
-  // }
 }
 
 export async function DELETE(request) {

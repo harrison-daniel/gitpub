@@ -17,10 +17,10 @@ export default function ModeToggle() {
     }
   };
   return (
-    <div>
+    <div className='mode-toggle'>
       <button
         onClick={switchTheme}
-        className='absolute right-1 top-0 rounded-full bg-gray-800 px-1 py-1 text-sm capitalize text-gray-200 dark:bg-white dark:text-gray-800'>
+        className='mode-toggle absolute right-1 top-0 rounded-full bg-gray-800 px-1 py-1 text-sm capitalize text-gray-200  dark:text-gray-800'>
         {/* {theme} Mode */}
         <SunMoon />
       </button>
