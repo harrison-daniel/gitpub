@@ -1,90 +1,85 @@
-'use client';
+// 'use client';
 
-import { useState, useEffect } from 'react';
-import { Check, ChevronsUpDown } from 'lucide-react';
-import { cn } from '../lib/utils';
-import { Button } from './ui/button';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from './ui/command';
-import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
-import { ScrollArea } from './ui/scroll-area';
-import {
-  Autocomplete,
-  AutocompleteSection,
-  AutocompleteItem,
-} from '@nextui-org/react';
+// import { useState, useEffect } from 'react';
+// import { Check, ChevronsUpDown } from 'lucide-react';
+// import { cn } from '../lib/utils';
+// import { Button } from './ui/button';
+// import {
+//   Command,
+//   CommandEmpty,
+//   CommandGroup,
+//   CommandInput,
+//   CommandItem,
+// } from './ui/command';
+// import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
+// import { ScrollArea } from './ui/scroll-area';
 
-export default function ComboBoxWorking({
-  dataList,
-  onSelect,
-  placeholder,
-  value,
-}) {
-  const [open, setOpen] = useState(false);
-  // const [value, setValue] = useState('');
-  const [localValue, setLocalValue] = useState(value || '');
+// export default function ComboBoxWorking({
+//   dataList,
+//   onSelect,
+//   placeholder,
+//   value,
+// }) {
+//   const [open, setOpen] = useState(false);
+//   // const [value, setValue] = useState('');
+//   const [localValue, setLocalValue] = useState(value || '');
 
-  const handleSelect = (currentValue) => {
-    setLocalValue(currentValue === localValue ? '' : currentValue);
-    setOpen(false);
-    onSelect(currentValue);
-  };
+//   const handleSelect = (currentValue) => {
+//     setLocalValue(currentValue === localValue ? '' : currentValue);
+//     setOpen(false);
+//     onSelect(currentValue);
+//   };
 
-  useEffect(() => {
-    setLocalValue(value || '');
-  }, [value]);
+//   useEffect(() => {
+//     setLocalValue(value || '');
+//   }, [value]);
 
-  return (
-    <>
-      <Dialog open={open} onOpenChange={setOpen} className='overflow-auto'>
-        <DialogTrigger asChild>
-          <Button variant='outline' className='h-[33px] w-[240px]'>
-            {localValue
-              ? dataList.find((item) => item.value === localValue)?.label
-              : placeholder}
-            <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <Command className=''>
-            <CommandInput
-              placeholder={`Search or ${placeholder}`}
-              className='h-[35px]'
-            />
+//   return (
+//     <>
+//       <Dialog open={open} onOpenChange={setOpen} modal={false}>
+//         <DialogTrigger asChild>
+//           <Button variant='outline' className='h-[33px] w-[240px]'>
+//             {localValue
+//               ? dataList.find((item) => item.value === localValue)?.label
+//               : placeholder}
+//             <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+//           </Button>
+//         </DialogTrigger>
+//         <DialogContent>
+//           <Command>
+//             <CommandInput
+//               placeholder={`Search or ${placeholder}`}
+//               className='h-[35px]'
+//             />
 
-            <CommandEmpty>{`No ${placeholder
-              .replace('Select a ', '')
-              .replace('...', '')} found.`}</CommandEmpty>
+//             <CommandEmpty>{`No ${placeholder
+//               .replace('Select a ', '')
+//               .replace('...', '')} found.`}</CommandEmpty>
 
-            <CommandGroup className='max-h-[42svh]'>
-              {/* <ScrollArea className='h-[143px] p-4 sm:h-[143px] md:h-[290px] lg:h-[290px]'> */}
-              <ScrollArea>
-                {dataList.map((dataItem) => (
-                  <CommandItem
-                    key={dataItem.value}
-                    onSelect={() => handleSelect(dataItem.value)}>
-                    <Check
-                      className={cn(
-                        'mr-2 h-4 w-4 ',
-                        value === dataItem.value ? 'opacity-100' : 'opacity-0',
-                      )}
-                    />
-                    {dataItem.label}
-                  </CommandItem>
-                ))}
-              </ScrollArea>
-            </CommandGroup>
-          </Command>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
-}
+//             <CommandGroup className='max-h-[42svh] '>
+//               {/* <ScrollArea className='h-[143px] p-4 sm:h-[143px] md:h-[290px] lg:h-[290px]'> */}
+//               <ScrollArea>
+//                 {dataList.map((dataItem) => (
+//                   <CommandItem
+//                     key={dataItem.value}
+//                     onSelect={() => handleSelect(dataItem.value)}>
+//                     <Check
+//                       className={cn(
+//                         'mr-2 h-4 w-4 ',
+//                         value === dataItem.value ? 'opacity-100' : 'opacity-0',
+//                       )}
+//                     />
+//                     {dataItem.label}
+//                   </CommandItem>
+//                 ))}
+//               </ScrollArea>
+//             </CommandGroup>
+//           </Command>
+//         </DialogContent>
+//       </Dialog>
+//     </>
+//   );
+// }
 
 // transition UP
 // 'use client';

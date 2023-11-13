@@ -11,7 +11,7 @@ export default function Background() {
           alt='Light Theme Beer'
           placeholder='empty'
           quality={100}
-          priority
+          // priority
           fill
           // sizes='width: 100px; height: 100px;'
           style={{
@@ -29,7 +29,7 @@ export default function Background() {
           alt='Dark Theme Beer'
           placeholder='empty'
           quality={100}
-          priority
+          // priority
           // sizes='width: 100px; height: 100px'
           fill
           style={{

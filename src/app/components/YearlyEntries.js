@@ -62,7 +62,7 @@ export default function YearlyEntries({ year, entries }) {
       type='single'
       collapsible
       className='my-2 border border-black'>
-      <AccordionItem value={`year-${year}`} className='mx-4'>
+      <AccordionItem value={`year-${year}`} className='mx-2'>
         <AccordionTrigger className='entryList-header flex justify-center text-3xl font-extrabold'>
           {year}
         </AccordionTrigger>

@@ -17,12 +17,12 @@ export default function EntryListItem({ entry }) {
   //     : 'No Date';
 
   return (
-    <div className=' mb-4 flex flex-col  gap-0 rounded-lg border border-slate-900 bg-amber-500 bg-opacity-80 p-2 dark:bg-neutral-800'>
-      <div className=' flex flex-row  justify-between gap-4 text-left '>
-        <div className='entryListItem-header  flex  flex-wrap border-b-medium border-black text-xl font-extrabold'>
+    <div className=' mb-4 flex flex-col  gap-0 rounded-lg border border-slate-900 bg-amber-500 bg-opacity-80 p-2  dark:bg-neutral-800'>
+      <div className=' flex flex-row  justify-between gap-6 text-left '>
+        <div className='entryListItem-header flex  flex-wrap  border-b-medium border-black pb-2 text-lg font-extrabold'>
           {entry.title}
         </div>
-        <div className='mb-1 flex    font-mono text-xl font-bold '>
+        <div className='text-md mb-1  flex font-mono font-semibold text-stone-800 dark:text-gray-400 '>
           {entry.date && !isNaN(new Date(entry.date).getTime())
             ? format(new Date(entry.date), 'MM/dd/yyyy')
             : null}
@@ -33,17 +33,17 @@ export default function EntryListItem({ entry }) {
 
       <div>
         <div className='flex flex-row items-center justify-between'>
-          <div className='flex  text-lg text-amber-600'>
+          <div className='text-md mt-2 flex font-medium text-neutral-800 dark:text-gray-400'>
             {entry.cityStateAddress}
           </div>
-          <div className='flex font-mono  text-xs'>{entry.streetAddress}</div>
         </div>
+        <div className='flex font-mono  text-xs'>{entry.streetAddress}</div>
         {/* <div>{`${entry.cityStateAddress} - ${entry.streetAddress}`}</div> */}
 
         <div className=' flex  justify-start dark:text-neutral-300'>
           <Accordion type='single' collapsible>
             <AccordionItem value='item-1'>
-              <AccordionTrigger className=' text-lg'>Notes</AccordionTrigger>
+              <AccordionTrigger className=' text-md'>Notes</AccordionTrigger>
               <AccordionContent>
                 {entry.description}
                 {entry.websiteUrl && (

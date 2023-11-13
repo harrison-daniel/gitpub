@@ -11,22 +11,17 @@ export const metadata = {
   description: 'Brewery Locator and Journal',
 };
 
-export const viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 1,
-  // Also supported by less commonly used
-  // interactiveWidget: 'resizes-visual',
-};
 export default function RootLayout({ children }) {
   return (
     <html lang='en'>
       <body>
-        <Link
-          className='main-header mt-0.5 flex justify-center text-center font-serif text-7xl font-extrabold'
-          href='/'>
-          GitPub
-        </Link>
+        <div>
+          <Link
+            className='main-header mt-0.5 flex justify-center text-center font-serif text-7xl font-extrabold'
+            href='/'>
+            GitPub
+          </Link>
+        </div>
         <ModeToggle />
         <Background />
         <Navbar />

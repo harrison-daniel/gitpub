@@ -76,6 +76,7 @@ export default function BrewerySearch() {
     const matchingUniqueCities = breweries.filter(
       (brewery) => brewery.city.toLowerCase() === city.toLowerCase(),
     );
+
     setFilteredBreweries(matchingUniqueCities);
     onOpen();
   };
@@ -191,7 +192,7 @@ export default function BrewerySearch() {
             onOpenChange={onOpenChange}
             scrollBehavior={scrollBehavior}>
             <form type='submit' onSubmit={handleModalSubmit}>
-              <ModalContent className='bg-amber-400 dark:bg-neutral-800 '>
+              <ModalContent className='bg-amber-400 dark:bg-neutral-800  '>
                 {(onClose) => (
                   <>
                     <ModalHeader className='sticky top-0 flex items-center rounded-lg bg-amber-500  py-2 text-lg font-medium leading-6 text-black shadow-xl dark:bg-neutral-800 dark:text-white'>

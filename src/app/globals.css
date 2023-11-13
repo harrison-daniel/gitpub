@@ -11,12 +11,19 @@ html {
   );
   height: 100vh;
   width: 100vw;
+  margin: 0;
+  /* scrollbar-gutter: stable; */
+  /* overflow-y: scroll !important;
+  overflow-x: scroll !important; */
+  /* margin-right: 0px !important; */
 }
 /* background: oklch(84.12% 0.1675 89.2); */
 /* min-height: calc(100% + env(safe-area-inset-top));
 padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); */
 /* overflow-y: scroll !important; */
 /* overflow-x: scroll !important; */
+
+/* This will apply styles only when the orientation is portrait */
 
 html.dark {
   /* background: #121212; */
@@ -25,10 +32,12 @@ html.dark {
 }
 
 body {
-  margin: 0;
-  overflow-y: scroll;
-  width: 100vw;
-  height: 100vh;
+  --removed-body-scroll-bar-size: 17px;
+  /* overflow-y: overlay; */
+  overflow-x: overlay;
+
+  /* overflow-y: scroll !important;
+  overflow-x: scroll !important; */
 }
 
 .imgLight {
@@ -86,22 +95,182 @@ body {
   color: white;
   -webkit-text-stroke: 0.5px black;
 }
-
-/* Slide-up modal styles */
-@media (max-width: 640px) {
-  /* Adjust this value based on your 'sm' breakpoint */
-  .slide-up-modal {
-    transition: transform 0.3s ease-in-out;
-  }
-
-  .slide-up-modal.closed {
-    transform: translateY(100%);
-  }
-
-  .slide-up-modal.open {
-    transform: translateY(0);
-  }
+.displayNone {
+  display: none;
 }
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10; /* Ensure it's below the popover but above other content */
+}
+
+/* .area { */
+/* background: #4e54c8;  */
+/* background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8);
+  width: 100%;
+  height: 100vh;
+}
+
+/* .circles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.circles li {
+  position: absolute;
+  display: block;
+  list-style: none;
+  width: 10px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  animation: animate 10s linear infinite;
+  bottom: -10px;
+}
+
+.circles li:nth-child(1) {
+  left: 25%;
+  width: 10px;
+  height: 10pxpx;
+  animation-delay: 0s;
+  z-index: -50;
+}
+
+.circles li:nth-child(2) {
+  left: 10%;
+  width: 10px;
+  height: 10px;
+  animation-delay: 2s;
+  animation-duration: 12s;
+  z-index: -50;
+}
+
+.circles li:nth-child(3) {
+  left: 70%;
+  width: 10px;
+  height: 10px;
+  animation-delay: 4s;
+  z-index: -50;
+}
+
+.circles li:nth-child(4) {
+  left: 40%;
+  width: 10px;
+  height: 10px;
+  animation-delay: 0s;
+  animation-duration: 18s;
+  z-index: -50;
+}
+
+.circles li:nth-child(5) {
+  left: 65%;
+  width: 10px;
+  height: 10px;
+  animation-delay: 0s;
+  z-index: -50;
+}
+
+.circles li:nth-child(6) {
+  left: 75%;
+  width: 10px;
+  height: 10px;
+  animation-delay: 3s;
+  z-index: -50;
+}
+
+.circles li:nth-child(7) {
+  left: 35%;
+  width: 10px;
+  height: 10px;
+  animation-delay: 7s;
+  z-index: -50;
+}
+
+.circles li:nth-child(8) {
+  left: 50%;
+  width: 15px;
+  height: 15px;
+  animation-delay: 15s;
+  animation-duration: 45s;
+  z-index: -50;
+}
+
+.circles li:nth-child(9) {
+  left: 20%;
+  width: 10px;
+  height: 10px;
+  animation-delay: 2s;
+  animation-duration: 35s;
+  z-index: -50;
+}
+
+.circles li:nth-child(10) {
+  left: 85%;
+  width: 10px;
+  height: 10px;
+  animation-delay: 0s;
+  animation-duration: 11s;
+  z-index: -50;
+}
+
+@keyframes animate {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+    border-radius: 0;
+  }
+
+  100% {
+    transform: translateY(-1000px) rotate(720deg);
+    opacity: 0;
+    border-radius: 50%;
+  }
+} */
+
+/* @keyframes animate {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-500px) translateX(5px);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-1000px) translateX(-5px);
+     
+    opacity: 0;
+  }
+} */
+
+/* styles.css */
+/* .DialogOverlay {
+  background: rgba(0 0 0 / 0.5);
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  place-items: center;
+  overflow-y: auto;
+} */
+
+/* .DialogContent {
+  min-width: 300px;
+  background: white;
+  padding: 30px;
+  border-radius: 4px;
+} */
 
 /* .combobox-content {
   height: calc(100vh - env(safe-area-inset-bottom));

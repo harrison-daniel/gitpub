@@ -32,7 +32,7 @@ export default function EntryList({ entries }) {
   );
 
   return (
-    <div className='mx-auto max-w-md  px-9 pb-12 md:max-w-xl'>
+    <div className='mx-auto max-w-md  px-7 pb-12 md:max-w-xl'>
       <h1 className='entryList-header pb-4 text-center text-4xl font-extrabold '>
         My Trips:
       </h1>
