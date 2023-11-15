@@ -70,7 +70,7 @@ export default function YearlyEntries({ year, entries }) {
           <div className=' mb-4 flex justify-center gap-2  '>
             <Button
               onClick={() => handleSort('title')}
-              className=' bg-amber-700  text-white hover:bg-amber-600 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-200'>
+              className=' bg-amber-700  text-white hover:bg-amber-600 dark:bg-neutral-800  dark:text-zinc-300 dark:hover:bg-zinc-200'>
               Sort by Name
               {sortOption === 'title' && (
                 <HiOutlineSelector className=' h-5 w-5' />
@@ -78,7 +78,7 @@ export default function YearlyEntries({ year, entries }) {
             </Button>
             <Button
               onClick={() => handleSort('address')}
-              className=' bg-amber-700  text-white hover:bg-amber-600 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-200'>
+              className=' bg-amber-700  text-white hover:bg-amber-600 dark:bg-neutral-800 dark:text-zinc-300 dark:hover:bg-zinc-200'>
               Sort by Location
               {sortOption === 'address' && (
                 <HiOutlineSelector className=' h-5 w-5' />
@@ -86,7 +86,7 @@ export default function YearlyEntries({ year, entries }) {
             </Button>
             <Button
               onClick={() => handleSort('date')}
-              className='bg-amber-700  text-white hover:bg-amber-600 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-200'>
+              className='bg-amber-700  text-white hover:bg-amber-600 dark:bg-neutral-800  dark:text-zinc-300 dark:hover:bg-zinc-200'>
               Sort by Date{' '}
               {sortOption === 'date' && (
                 <HiOutlineSelector className=' h-5 w-5' />

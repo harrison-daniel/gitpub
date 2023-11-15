@@ -82,7 +82,7 @@ export default function Navbar() {
               <Link
                 href='/addEntry'
                 passHref
-                className='mobile-navItem block rounded  bg-amber-700  py-3 text-amber-100 hover:bg-amber-600 '
+                className='mobile-navItem block rounded  bg-amber-700  py-3 text-amber-100 hover:bg-amber-600 dark:hover:bg-yellow-100'
                 onClick={() => setIsOpen(false)}>
                 Add Entry
               </Link>
@@ -91,7 +91,7 @@ export default function Navbar() {
               <Link
                 href='/'
                 passHref
-                className='mobile-navItem mt-3 block  rounded bg-amber-700  py-3 text-amber-100 hover:bg-amber-600'
+                className='mobile-navItem mt-3 block  rounded bg-amber-700  py-3 text-amber-100 hover:bg-amber-600 dark:hover:bg-yellow-100'
                 onClick={() => setIsOpen(false)}>
                 Home
               </Link>

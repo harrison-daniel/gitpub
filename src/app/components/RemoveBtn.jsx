@@ -51,28 +51,28 @@ export default function RemoveBtn({ id, onRemove }) {
     <div className='flex flex-col gap-2 '>
       <button
         onClick={onOpenChange}
-        className='flex flex-row items-center text-red-700 hover:text-red-500 active:text-red-700'>
+        className='flex flex-row items-center gap-2 text-red-700 hover:text-red-500 active:text-red-700'>
+        <HiOutlineTrash size={19} />
         Delete
-        <HiOutlineTrash size={22} className='mx-1' />
       </button>
 
       <Modal
         isOpen={isOpen}
         placement={modalPlacement}
         onOpenChange={onOpenChange}>
-        <ModalContent>
+        <ModalContent className='bg-amber-500 dark:bg-slate-950'>
           {(onClose) => (
             <>
-              <ModalHeader className='flex flex-col gap-1'>
+              <ModalHeader className='flex flex-col gap-1 '>
                 Are you sure you want to delete this entry?
               </ModalHeader>
               <ModalBody></ModalBody>
               <ModalFooter>
-                <Button variant='outline' onClick={onClose}>
+                <Button onClick={onClose} className='bg-amber-500'>
                   No, Go Back
                 </Button>
                 <Button
-                  className='bg-red-600 text-white hover:bg-red-500'
+                  className='bg-red-700 text-white hover:bg-red-500 dark:bg-red-700 dark:text-white  dark:hover:bg-red-600 '
                   onClick={handleDelete}>
                   Delete Entry
                 </Button>

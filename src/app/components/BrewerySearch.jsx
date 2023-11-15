@@ -167,26 +167,32 @@ export default function BrewerySearch() {
           )}
         </div>
         {/* show button after city is selected */}
-        <div className='mt-2 flex justify-center gap-2'>
+        <div className='mt-2 flex justify-center gap-5'>
           {city && (
             <>
               <Button
-                className=' bg-amber-700  text-white hover:bg-amber-600'
+                className=' bg-amber-700  text-white hover:bg-amber-600 dark:bg-slate-950 dark:text-yellow-100'
                 onClick={handleCityFilter}>
                 <Search className='mr-2 h-4 w-4' />
                 Search
               </Button>
-              <Button
+              {/* <Button
                 onClick={handleClearSearch}
                 title='Clear Search'
-                className='   bg-amber-700  text-white hover:bg-amber-600'>
-                <RotateCcw size={21} />
-              </Button>
+                className='    text-white  hover:bg-amber-600 dark:text-red-600'> */}
+              <div className='flex items-center justify-center'>
+                <RotateCcw
+                  size={24}
+                  onClick={handleClearSearch}
+                  title='Clear Search'
+                  className='  cursor-pointer text-red-600 hover:text-red-400 dark:text-red-600 dark:hover:text-red-400 '></RotateCcw>
+              </div>
+              {/* </Button> */}
             </>
           )}
         </div>
 
-        <div className='flex flex-col gap-2'>
+        <div className='-col flex flex gap-2'>
           <Modal
             isOpen={isOpen}
             onOpenChange={onOpenChange}
@@ -195,8 +201,8 @@ export default function BrewerySearch() {
               <ModalContent className='bg-amber-400 dark:bg-neutral-800  '>
                 {(onClose) => (
                   <>
-                    <ModalHeader className='sticky top-0 flex items-center rounded-lg bg-amber-500  py-2 text-lg font-medium leading-6 text-black shadow-xl dark:bg-neutral-800 dark:text-white'>
-                      <div className='flex-grow text-center '>
+                    <ModalHeader className='sticky top-0 flex items-center rounded-lg bg-amber-500  py-2 text-lg font-medium leading-6 text-black shadow-xl dark:bg-neutral-800  dark:text-yellow-100'>
+                      <div className='flex-grow text-center  '>
                         Breweries in: <br />
                         <b>
                           {city}, {capitalizeState(state.replace(/_/g, ' '))}
@@ -213,12 +219,12 @@ export default function BrewerySearch() {
                     </ModalHeader>
 
                     <ModalBody className='px-3 dark:bg-neutral-800'>
-                      <div className='text-center '>
+                      <div className='text-start '>
                         {filteredBreweries.map((brewery) => (
                           <div
                             className='m-4 rounded-lg bg-amber-500 p-2 shadow-2xl  dark:bg-neutral-800'
                             key={brewery.id}>
-                            <h1 className='text-lg font-bold dark:bg-neutral-800'>
+                            <h1 className='text-lg font-bold dark:bg-neutral-800 dark:text-yellow-100'>
                               {brewery.name}
                             </h1>
                             <div>
@@ -228,7 +234,7 @@ export default function BrewerySearch() {
                                 ${brewery.postal_code.substring(0, 5)}`}
                             </div>
 
-                            <div className='mt-4 '>
+                            <div className='mt-4 flex justify-center '>
                               <button
                                 color='primary'
                                 className='m-4 rounded-lg bg-amber-700 px-6 py-2  font-semibold text-amber-100  shadow hover:bg-amber-500 active:bg-amber-600 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-200 dark:hover:text-black'
