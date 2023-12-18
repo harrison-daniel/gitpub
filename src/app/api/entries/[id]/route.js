@@ -2,7 +2,7 @@ import Entry from '../../../models/entry';
 import dbConnect from '../../../db/dbConnect';
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../auth/[...nextauth]/route';
+import { authOptions } from '../../auth/[...nextauth]/options';
 
 export async function PUT(request, { params }) {
   const session = await getServerSession(authOptions);

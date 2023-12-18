@@ -5,25 +5,25 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSession, signIn, signOut } from 'next-auth/react';
 // import { usePathname } from 'next/navigation';
 
-// function AuthButton() {
-//   if (session) {
-//     return (
-//       <>
-//         <div className='dark:text-white'>
-//           {session.user.name} <br />
-//         </div>
+function AuthButton() {
+  if (session) {
+    return (
+      <>
+        <div className='dark:text-white'>
+          {session.user.name} <br />
+        </div>
 
-//         <button onClick={() => signOut()}>Sign out</button>
-//       </>
-//     );
-//   }
-//   return (
-//     <>
-//       Not signed in <br />
-//       <button onClick={() => signIn()}>Sign in</button>
-//     </>
-//   );
-// }
+        <button onClick={() => signOut()}>Sign out</button>
+      </>
+    );
+  }
+  return (
+    <>
+      Not signed in <br />
+      <button onClick={() => signIn()}>Sign in</button>
+    </>
+  );
+}
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);

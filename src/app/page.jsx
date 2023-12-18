@@ -5,7 +5,7 @@ import { Analytics } from '@vercel/analytics/react';
 import './loading';
 import { getServerSession } from 'next-auth/next';
 import { signIn, signOut } from 'next-auth/react';
-import { authOptions } from './api/auth/[...nextauth]/route';
+import { authOptions } from './api/auth/[...nextauth]/options';
 import { headers } from 'next/headers';
 
 const getUserEntries = async (sortOption = 'date', sortDirection = 'desc') => {

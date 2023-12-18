@@ -192,7 +192,7 @@ export default function BrewerySearch() {
           )}
         </div>
 
-        <div className='-col flex flex gap-2'>
+        <div className='-col  flex gap-2'>
           <Modal
             isOpen={isOpen}
             onOpenChange={onOpenChange}
