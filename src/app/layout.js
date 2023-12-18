@@ -10,6 +10,7 @@ import beerLight from '../../public/assets/images/mug.png';
 import beerDark from '../../public/assets/images/beer-mug-dark8.png';
 import SessionProvider from './components/SessionProvider';
 import { getServerSession } from 'next-auth';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const metadata = {
   title: 'gitpub',
