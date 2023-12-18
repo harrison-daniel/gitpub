@@ -167,6 +167,7 @@ export default function BrewerySearch() {
           )}
         </div>
         {/* show button after city is selected */}
+
         <div className='mt-2 flex justify-center gap-5'>
           {city && (
             <>
