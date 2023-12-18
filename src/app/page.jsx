@@ -4,7 +4,7 @@ import EntryList from './components/EntryList';
 // import { Analytics } from '@vercel/analytics/react';
 import './loading';
 import { getServerSession } from 'next-auth/next';
-import { signIn, signOut } from 'next-auth/react';
+// import { signIn, signOut } from 'next-auth/react';
 import { authOptions } from './api/auth/[...nextauth]/options';
 import { headers } from 'next/headers';
 
