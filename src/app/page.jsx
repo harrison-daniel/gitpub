@@ -3,7 +3,9 @@ import BrewerySearch from './components/BrewerySearch';
 import EntryList from './components/EntryList';
 // import { Analytics } from '@vercel/analytics/react';
 import './loading';
-import { getServerSession } from 'next-auth/next';
+
+import { getServerSession } from 'next-auth';
+// import { getServerSession } from 'next-auth/next';
 // import { signIn, signOut } from 'next-auth/react';
 import { authOptions } from './api/auth/[...nextauth]/options';
 import { headers } from 'next/headers';
@@ -12,6 +14,7 @@ const getUserEntries = async (sortOption = 'date', sortDirection = 'desc') => {
   const session = await getServerSession(authOptions);
 
   if (!session) {
+    console.log('no session');
     return { entries: [] };
   }
 
