@@ -2,7 +2,7 @@ import dbConnect from '../../db/dbConnect';
 import Entry from '../../models/entry';
 // import User from '../../models/user';
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
+import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]/options';
 
 export async function POST(request) {

@@ -9,7 +9,7 @@ import Image from 'next/image';
 import beerLight from '../../public/assets/images/mug.png';
 import beerDark from '../../public/assets/images/beer-mug-dark8.png';
 import SessionProvider from './components/SessionProvider';
-import { getServerSession } from 'next-auth';
+import { getServerSession } from 'next-auth/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const metadata = {

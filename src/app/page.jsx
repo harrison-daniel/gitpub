@@ -1,41 +1,26 @@
-// import getAllEntries from './lib/getAllEntries';
 import BrewerySearch from './components/BrewerySearch';
 import EntryList from './components/EntryList';
-// import { Analytics } from '@vercel/analytics/react';
 import './loading';
+import { getServerSession } from 'next-auth/next';
 
-import { getServerSession } from 'next-auth';
-// import { getServerSession } from 'next-auth/next';
-// import { signIn, signOut } from 'next-auth/react';
 import { authOptions } from './api/auth/[...nextauth]/options';
 import { headers } from 'next/headers';
 
 const getUserEntries = async (sortOption = 'date', sortDirection = 'desc') => {
-  const session = await getServerSession(authOptions);
-
-  if (!session) {
-    console.log('no session');
-    return { entries: [] };
-  }
-
-  if (session) {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/entries?sort=${sortOption}&direction=${sortDirection}`,
-        {
-          method: 'GET',
-          headers: headers(),
-        },
-      );
-      if (res.ok) {
-        const userEntries = await res.json();
-        console.log(userEntries);
-        return userEntries;
-      }
-    } catch (error) {}
-  } else {
-    console.log('no session');
-  }
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/entries?sort=${sortOption}&direction=${sortDirection}`,
+      {
+        method: 'GET',
+        headers: headers(),
+      },
+    );
+    if (res.ok) {
+      const userEntries = await res.json();
+      console.log(userEntries);
+      return userEntries;
+    }
+  } catch (error) {}
 };
 
 export default async function Home() {
