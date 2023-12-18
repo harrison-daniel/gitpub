@@ -1,7 +1,7 @@
 // import getAllEntries from './lib/getAllEntries';
 import BrewerySearch from './components/BrewerySearch';
 import EntryList from './components/EntryList';
-import { Analytics } from '@vercel/analytics/react';
+// import { Analytics } from '@vercel/analytics/react';
 import './loading';
 import { getServerSession } from 'next-auth/next';
 import { signIn, signOut } from 'next-auth/react';
@@ -64,9 +64,8 @@ export default async function Home() {
 
       <div className='justify center flex'>
         <div className='font-white flex justify-center bg-black'></div>
-        <div></div>
       </div>
-      <Analytics />
+      {/* <Analytics /> */}
     </>
   );
 }
