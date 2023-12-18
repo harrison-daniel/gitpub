@@ -1,10 +1,34 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSession, signIn, signOut } from 'next-auth/react';
+// import { usePathname } from 'next/navigation';
+
+// function AuthButton() {
+//   if (session) {
+//     return (
+//       <>
+//         <div className='dark:text-white'>
+//           {session.user.name} <br />
+//         </div>
+
+//         <button onClick={() => signOut()}>Sign out</button>
+//       </>
+//     );
+//   }
+//   return (
+//     <>
+//       Not signed in <br />
+//       <button onClick={() => signIn()}>Sign in</button>
+//     </>
+//   );
+// }
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { status } = useSession();
+  const { data: session } = useSession();
 
   // Simplified variants for animations
   const menuItemVariants = {
@@ -21,10 +45,9 @@ export default function Navbar() {
     closed: { d: 'M 3 4 L 21 4' },
     open: { d: 'M 3 4 L 21 20' },
   };
-
   const middleBarVariants = {
-    closed: { opacity: 1 },
-    open: { opacity: 0 },
+    closed: { scaleY: 1, opacity: 1, transition: { duration: 0.1 } },
+    open: { scaleY: 0, opacity: 0, transition: { duration: 0.1 } },
   };
 
   const bottomBarVariants = {
@@ -75,23 +98,55 @@ export default function Navbar() {
           initial={false}
           animate={isOpen ? 'open' : 'closed'}>
           <motion.ul
-            className={`absolute bottom-16 right-1 mb-2 w-32  text-center ${
+            className={`absolute  bottom-16 right-1 mb-2 w-32  text-center ${
               isOpen ? 'pointer-events-auto' : 'pointer-events-none'
             }`}>
+            {/* navbar buttons */}
+
+            <motion.li variants={menuItemVariants}>
+              {status === 'authenticated' ? (
+                <div>
+                  <button
+                    onClick={() => signOut()}
+                    className='mobile-navItem  mb-3 block  w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 dark:hover:bg-yellow-100'>
+                    Sign Out
+                  </button>
+                  <Link
+                    href={'/userDash'}
+                    onClick={() => setIsOpen(false)}
+                    className='mobile-navItem  mb-3 block  w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 dark:hover:bg-yellow-100'>
+                    Dashboard
+                  </Link>
+                </div>
+              ) : (
+                <>
+                  <div>
+                    <div>You are not logged in</div>
+                    <button
+                      onClick={() => signIn()}
+                      className='mobile-navItem  mb-3 block  w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 dark:hover:bg-yellow-100'>
+                      Sign In
+                    </button>
+                  </div>
+                </>
+              )}
+            </motion.li>
+
             <motion.li variants={menuItemVariants}>
               <Link
                 href='/addEntry'
                 passHref
-                className='mobile-navItem block rounded  bg-amber-700  py-3 text-amber-100 hover:bg-amber-600 dark:hover:bg-yellow-100'
+                className='mobile-navItem mb-3 block  rounded bg-amber-700  py-3 text-amber-100 hover:bg-amber-600 dark:hover:bg-yellow-100'
                 onClick={() => setIsOpen(false)}>
                 Add Entry
               </Link>
             </motion.li>
+
             <motion.li variants={menuItemVariants}>
               <Link
                 href='/'
                 passHref
-                className='mobile-navItem mt-3 block  rounded bg-amber-700  py-3 text-amber-100 hover:bg-amber-600 dark:hover:bg-yellow-100'
+                className='mobile-navItem block  rounded bg-amber-700  py-3 text-amber-100 hover:bg-amber-600 dark:hover:bg-yellow-100'
                 onClick={() => setIsOpen(false)}>
                 Home
               </Link>
@@ -100,7 +155,7 @@ export default function Navbar() {
 
           <motion.button
             onClick={() => setIsOpen(!isOpen)}
-            className='mobile-nav flex items-center justify-center rounded-full  bg-amber-700 p-3.5 text-amber-200 '>
+            className='mobile-nav flex items-center justify-center rounded-full bg-amber-700 p-3.5 text-amber-200'>
             <svg width='23.5' height='23.5' viewBox='0 0 23.5 23.5' fill='none'>
               <motion.path
                 fill='none'

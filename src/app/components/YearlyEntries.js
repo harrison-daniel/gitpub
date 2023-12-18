@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import EntryListItem from './EntryListItem';
 import {

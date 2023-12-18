@@ -1,21 +1,29 @@
 import EditEntryForm from '../../components/EditEntryForm';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '../../api/auth/[...nextauth]/route';
 
 const getEntryById = async (id) => {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/entries/${id}`,
-      {
-        cache: 'no-store',
-      },
-    );
+  const session = await getServerSession(authOptions);
 
-    if (!res.ok) {
-      throw new Error('Failed to fetch entry');
+  if (session) {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/entries/${id}`,
+        {
+          cache: 'no-store',
+        },
+      );
+
+      if (!res.ok) {
+        throw new Error('Failed to fetch entry');
+      }
+      return res.json();
+    } catch (error) {
+      console.log(error);
+      return {};
     }
-    return res.json();
-  } catch (error) {
-    console.log(error);
-    return {};
+  } else {
+    console.log('no session');
   }
 };
 

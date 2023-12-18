@@ -2,18 +2,17 @@ import mongoose, { Schema } from 'mongoose';
 
 const entrySchema = new Schema(
   {
-    date: Date,
     title: String,
-    cityStateAddress: String,
     streetAddress: String,
+    cityStateAddress: String,
     description: String,
+    date: Date,
     websiteUrl: String,
-    // title: { type: String, required: true },
-    // streetAddress: { type: String, required: false },
-    // cityStateAddress: { type: String, required: false },
-    // description: { type: String, required: false },
-    // date: { type: Date, required: false },
-    // websiteUrl: { type: String, required: false },
+
+    userId: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,

@@ -1,53 +1,121 @@
 import dbConnect from '../../db/dbConnect';
 import Entry from '../../models/entry';
+// import User from '../../models/user';
 import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../auth/[...nextauth]/route';
 
 export async function POST(request) {
-  try {
-    const {
-      title,
-      streetAddress,
-      cityStateAddress,
-      description,
-      date,
-      websiteUrl,
-    } = await request.json();
-    await dbConnect();
-    await Entry.create({
-      title,
-      streetAddress,
-      cityStateAddress,
-      description,
-      date,
-      websiteUrl,
+  const session = await getServerSession(authOptions);
+  if (session) {
+    try {
+      await dbConnect();
+
+      const {
+        title,
+        streetAddress,
+        cityStateAddress,
+        description,
+        date,
+        websiteUrl,
+        // userId,
+      } = await request.json();
+
+      const newEntry = await Entry.create({
+        title,
+        streetAddress,
+        cityStateAddress,
+        description,
+        date,
+        websiteUrl,
+        userId: session.user.id,
+      });
+
+      return new Response(
+        JSON.stringify({ message: 'Entry created', entry: newEntry }),
+        {
+          status: 201,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+    } catch (error) {
+      console.error(error);
+      return new Response(
+        JSON.stringify({
+          error: 'Failed to create entry',
+          details: error.message,
+        }),
+        {
+          status: 500,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+    }
+  } else {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
     });
-    return NextResponse.json({ message: 'Entry created' }, { status: 201 });
-  } catch (error) {
-    return NextResponse.json(
-      { error: 'Failed to create entry' },
-      { status: 500 },
-    );
   }
 }
 
 export async function GET(request) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ message: 'You are not logged in' });
+  }
+  // return NextResponse.json({ name: session.user.name });
+
+  // if (session) {
   try {
     await dbConnect();
+    if (!session) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+      });
+    }
+
     const sortOption = request.nextUrl.searchParams.get('sort') || 'date';
-    // const sortOption = request.nextUrl.searchParams.get('sort');
+
     const direction = request.nextUrl.searchParams.get('direction') || 'desc'; // default to 'desc' if not provided
     let sortValue = direction === 'desc' ? -1 : 1;
     let sortCriteria = { [sortOption]: sortValue };
 
-    const entries = await Entry.find({}).sort(sortCriteria).exec();
-    return NextResponse.json({ entries });
+    const userId = session.user.id;
+
+    const userEntries = await Entry.find({ userId }).sort(sortCriteria).exec();
+    return NextResponse.json({ userEntries });
+
+    // const entries = await Entry.find({ userId });
+    // return new Response(JSON.stringify({ entries }), { status: 200 });
   } catch (error) {
-    return NextResponse.json(
-      { error: 'Failed to fetch entries' },
-      { status: 500 },
-    );
+    return new Response(JSON.stringify({ error: 'Failed to fetch entries' }), {
+      status: 500,
+    });
   }
 }
+
+// export async function GET(request) {
+//   try {
+//     await dbConnect();
+//     const sortOption = request.nextUrl.searchParams.get('sort') || 'date';
+//     // const sortOption = request.nextUrl.searchParams.get('sort');
+//     const direction = request.nextUrl.searchParams.get('direction') || 'desc'; // default to 'desc' if not provided
+//     let sortValue = direction === 'desc' ? -1 : 1;
+//     let sortCriteria = { [sortOption]: sortValue };
+
+//     const entries = await Entry.find({}).sort(sortCriteria).exec();
+//     return NextResponse.json({ entries });
+//   } catch (error) {
+//     return NextResponse.json(
+//       { error: 'Failed to fetch entries' },
+//       { status: 500 },
+//     );
+//   }
+// }
 
 export async function DELETE(request) {
   try {

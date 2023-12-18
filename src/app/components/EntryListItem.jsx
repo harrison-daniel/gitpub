@@ -65,15 +65,6 @@ export default function EntryListItem({ entry }) {
               <div className=' text-md mb-2 mt-1 dark:text-gray-400'>
                 {entry.cityStateAddress}
               </div>
-
-              {/* <div className='flex flex-row items-center gap-2 text-left'>
-                <div className='mt-1 text-[18px] font-semibold text-neutral-800 dark:text-gray-400'>
-                  {entry.cityStateAddress}
-                </div>
-                <div className=' mt-1 pb-0 font-mono text-xs dark:text-gray-400'>
-                  {entry.streetAddress}
-                </div>
-              </div> */}
             </AccordionTrigger>
 
             <AccordionContent className='pl-3 '>

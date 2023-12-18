@@ -40,21 +40,25 @@ body {
   overflow-x: scroll !important; */
 }
 
-.imgLight {
-  display: block; /* Show by default */
-}
-
-.dark .imgLight {
-  display: none; /* Hide when dark theme is active */
-}
-
 .imgDark {
   display: none; /* Hide by default */
+}
+.dark .imgLight {
+  display: none; /* Hide when dark theme is active */
 }
 
 .dark .imgDark {
   display: block; /* Show when dark theme is active */
 }
+
+/* .bg-image-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -10;
+} */
 
 .menu {
   filter: drop-shadow(1px 1px 1px #5116a9);
@@ -66,12 +70,6 @@ body {
 }
 
 .dark .search-header {
-  /* color: #361500; */
-  /* color: #65451f; */
-  /* color: #3c2a21; */
-  /* color: #61481c; */
-  /* color: #1a120b; */
-  /* color: #d5cea3; */
   color: black;
   -webkit-text-stroke: 0.3px white;
 }
@@ -91,10 +89,16 @@ body {
   font-weight: bold;
 }
 
-.dark .entryList-header {
+/* .dark .entryList-header {
   color: white;
   -webkit-text-stroke: 0.5px black;
+} */
+
+.dark .entryList-header {
+  color: black; /* Set the inside color to black */
+  -webkit-text-stroke: 1px white; /* Apply a white stroke */
 }
+
 .displayNone {
   display: none;
 }

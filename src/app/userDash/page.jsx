@@ -1,0 +1,17 @@
+import { authOptions } from '../api/auth/[...nextauth]/route';
+import { getServerSession } from 'next-auth/next';
+import { redirect } from 'next/navigation';
+import UserInfo from '../components/UserInfo';
+
+export default async function UserDash() {
+  const session = await getServerSession(authOptions);
+  if (session) {
+    return (
+      <>
+        <UserInfo />
+      </>
+    );
+  } else {
+    redirect('/');
+  }
+}

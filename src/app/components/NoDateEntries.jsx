@@ -10,7 +10,7 @@ import {
 import { Button } from '../components/ui/button';
 import { HiOutlineSelector } from 'react-icons/hi';
 
-export default function NoDateEntries({ entries }) {
+export default function NoDateEntries({ userEntries }) {
   const [sortOption, setSortOption] = useState('title');
   const [sortDirection, setSortDirection] = useState('asc');
 
@@ -21,7 +21,7 @@ export default function NoDateEntries({ entries }) {
     );
   };
 
-  const sortedEntries = entries.sort((a, b) => {
+  const sortedEntries = userEntries.sort((a, b) => {
     // Check if the properties exist and are not undefined
     const valueA = a[sortOption] || '';
     const valueB = b[sortOption] || '';
@@ -31,8 +31,8 @@ export default function NoDateEntries({ entries }) {
       typeof valueA === 'string' && typeof valueB === 'string'
         ? valueA.localeCompare(valueB)
         : valueA > valueB
-        ? 1
-        : -1;
+          ? 1
+          : -1;
 
     return sortDirection === 'asc' ? comparison : -comparison;
   });

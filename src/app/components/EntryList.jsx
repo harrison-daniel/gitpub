@@ -1,11 +1,11 @@
-'use client';
+// 'use client';
 
 import React from 'react';
 import YearlyEntries from './YearlyEntries';
 import NoDateEntries from './NoDateEntries';
 
-export default function EntryList({ entries }) {
-  const { datedEntries, noDateEntries } = entries.reduce(
+export default function EntryList({ userEntries }) {
+  const { datedEntries, noDateEntries } = userEntries.reduce(
     (acc, entry) => {
       const entryDate = new Date(entry.date);
       const entryYear =
@@ -45,3 +45,34 @@ export default function EntryList({ entries }) {
     </div>
   );
 }
+
+// import React, { useState, useEffect } from 'react';
+
+// const [datedEntries, setDatedEntries] = useState({});
+// const [noDateEntries, setNoDateEntries] = useState([]);
+
+// const processEntries = (entries) => {
+//   const dated = {};
+//   const noDate = [];
+
+//   entries.forEach((entry) => {
+//     const entryYear = entry.date
+//       ? new Date(entry.date).getFullYear()
+//       : 'No Date';
+//     if (entryYear === 'No Date') {
+//       noDate.push(entry);
+//     } else {
+//       dated[entryYear] = dated[entryYear] || [];
+//       dated[entryYear].push(entry);
+//     }
+//   });
+
+//   setDatedEntries(dated);
+//   setNoDateEntries(noDate);
+// };
+
+// useEffect(() => {
+//   if (session) {
+//     fetchEntries().then((entries) => processEntries(entries));
+//   }
+// }, [session]);
