@@ -13,10 +13,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '../components/ui/popover';
-import { useSession } from 'next-auth/react';
+// import { useSession } from 'next-auth/react';
 // import { authOptions } from '../api/auth/[...nextauth]/options';
 export default function AddEntry() {
-  const { session } = useSession();
+  // const { session } = useSession();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [streetAddress, setStreetAddress] = useState('');

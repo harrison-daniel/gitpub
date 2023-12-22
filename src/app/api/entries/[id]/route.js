@@ -3,7 +3,7 @@ import dbConnect from '../../../db/dbConnect';
 import { NextResponse } from 'next/server';
 // import { getServerSession } from 'next-auth/next';
 // import { authOptions } from '../../auth/[...nextauth]/options';
-import { auth } from './auth';
+import { auth } from '../../../auth';
 
 export async function PUT(request, { params }) {
   // const session = await getServerSession(authOptions);
