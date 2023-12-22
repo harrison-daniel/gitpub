@@ -5,6 +5,11 @@ import YearlyEntries from './YearlyEntries';
 import NoDateEntries from './NoDateEntries';
 
 export default function EntryList({ userEntries }) {
+  if (!Array.isArray(userEntries)) {
+    console.error('userEntries is not an array.', userEntries);
+    return <p>Error: Entries data is not in the correct format.</p>;
+  }
+
   const { datedEntries, noDateEntries } = userEntries.reduce(
     (acc, entry) => {
       const entryDate = new Date(entry.date);
@@ -45,34 +50,3 @@ export default function EntryList({ userEntries }) {
     </div>
   );
 }
-
-// import React, { useState, useEffect } from 'react';
-
-// const [datedEntries, setDatedEntries] = useState({});
-// const [noDateEntries, setNoDateEntries] = useState([]);
-
-// const processEntries = (entries) => {
-//   const dated = {};
-//   const noDate = [];
-
-//   entries.forEach((entry) => {
-//     const entryYear = entry.date
-//       ? new Date(entry.date).getFullYear()
-//       : 'No Date';
-//     if (entryYear === 'No Date') {
-//       noDate.push(entry);
-//     } else {
-//       dated[entryYear] = dated[entryYear] || [];
-//       dated[entryYear].push(entry);
-//     }
-//   });
-
-//   setDatedEntries(dated);
-//   setNoDateEntries(noDate);
-// };
-
-// useEffect(() => {
-//   if (session) {
-//     fetchEntries().then((entries) => processEntries(entries));
-//   }
-// }, [session]);

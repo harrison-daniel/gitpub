@@ -67,6 +67,7 @@ export async function POST(request) {
 export async function GET(request) {
   // const session = await getServerSession(authOptions);
   const session = await auth();
+
   if (!session) {
     return NextResponse.json({ message: 'You are not logged in' });
   }
