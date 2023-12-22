@@ -1,17 +1,17 @@
 import BrewerySearch from './components/BrewerySearch';
 import EntryList from './components/EntryList';
 import './loading';
-import { getServerSession } from 'next-auth/next';
+// import { getServerSession } from 'next-auth/next';
 
-import { authOptions } from './api/auth/[...nextauth]/options';
+// import { authOptions } from './api/auth/[...nextauth]/options';
 import { headers } from 'next/headers';
 
-const getUserEntries = async (
+const getAllEntries = async (
   userId,
   sortOption = 'date',
   sortDirection = 'desc',
 ) => {
-  if (!userId) return []; // Early return if no user ID is provided
+  if (!userId) return [];
 
   try {
     const res = await fetch(
@@ -25,7 +25,6 @@ const getUserEntries = async (
       const userEntries = await res.json();
       return userEntries;
     } else {
-      // Handle HTTP error response
       console.error('Failed to fetch user entries:', res.status);
       return [];
     }
@@ -35,33 +34,68 @@ const getUserEntries = async (
   }
 };
 
-export default async function Home() {
-  const session = await getServerSession(authOptions);
+import getAllEntries from './lib/getAllEntries';
 
-  let userEntries = [];
-  if (session) {
-    userEntries = await getUserEntries(session.user.id);
-  }
+export default async function Home() {
+  const { entries = [] } = (await getAllEntries()) || {};
 
   return (
     <>
+      {/* <Suspense fallback={<div>Loading...</div>}> */}
+      <Background />
       <BrewerySearch />
-      {session ? (
-        <div>
-          <EntryList userEntries={userEntries} />
-        </div>
-      ) : (
-        <div className='dark: m-auto flex w-72 justify-center text-xl font-bold text-black dark:text-white'>
-          <p>
-            Search for a brewery above, or create an account to save an entry
-            from your favorite brewery!
-          </p>
-        </div>
-      )}
-      {/* Other components */}
+      <EntryList entries={entries} />
+      <Analytics />
+      {/* </Suspense> */}
     </>
   );
 }
+
+// export default async function Home() {
+//   const session = await getServerSession(authOptions);
+
+//   let userEntries = [];
+//   console.log('session', session);
+//   if (session) {
+//     userEntries = await getUserEntries(session.user.id);
+//     return (
+//       <>
+//         <BrewerySearch />
+//         <div>
+//           <EntryList userEntries={userEntries} />
+//         </div>
+//       </>
+//     );
+//   }
+
+//   return (
+//     <>
+//       <p>
+//         Search for a brewery above, or create an account to save an entry from
+//         your favorite brewery!
+//       </p>
+//     </>
+//   );
+
+// return (
+//   <>
+//     <BrewerySearch />
+//     {session ? (
+//       <div>
+//         <EntryList userEntries={userEntries} />
+//       </div>
+//     ) : (
+//       <div className='dark: m-auto flex w-72 justify-center text-xl font-bold text-black dark:text-white'>
+//         <p>
+//           Search for a brewery above, or create an account to save an entry
+//           from your favorite brewery!
+//         </p>
+//       </div>
+//     )}
+
+//   </>
+// );
+// }
 
 // export default async function Home() {
 //   const session = await getServerSession(authOptions);
