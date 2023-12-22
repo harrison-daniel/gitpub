@@ -1,11 +1,13 @@
 import Entry from '../../../models/entry';
 import dbConnect from '../../../db/dbConnect';
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '../../auth/[...nextauth]/options';
+// import { getServerSession } from 'next-auth/next';
+// import { authOptions } from '../../auth/[...nextauth]/options';
+import { auth } from './auth';
 
 export async function PUT(request, { params }) {
-  const session = await getServerSession(authOptions);
+  // const session = await getServerSession(authOptions);
+  const session = await auth();
 
   if (session) {
     try {

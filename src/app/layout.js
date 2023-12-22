@@ -9,7 +9,8 @@ import Image from 'next/image';
 import beerLight from '../../public/assets/images/mug.png';
 import beerDark from '../../public/assets/images/beer-mug-dark8.png';
 import SessionProvider from './components/SessionProvider';
-import { getServerSession } from 'next-auth/next';
+// import { getServerSession } from 'next-auth/next';
+import { auth } from './auth';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const metadata = {
@@ -18,7 +19,8 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const session = await getServerSession();
+  // const session = await getServerSession();
+  const session = await auth();
 
   return (
     <html lang='en'>

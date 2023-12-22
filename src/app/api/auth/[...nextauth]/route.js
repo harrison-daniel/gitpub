@@ -1,8 +1,9 @@
-import NextAuth from 'next-auth/next';
-// import GitHubProvider from 'next-auth/providers/github';
-// import GoogleProvider from 'next-auth/providers/google';
-import { authOptions } from '../[...nextauth]/options';
+export { GET, POST } from '../../../auth';
+// export const runtime = 'edge'; // optional
 
-const handler = NextAuth(authOptions);
+// import NextAuth from 'next-auth/next';
+// import { authOptions } from '../[...nextauth]/options';
 
-export { handler as GET, handler as POST };
+// const handler = NextAuth(authOptions);
+
+// export { handler as GET, handler as POST };

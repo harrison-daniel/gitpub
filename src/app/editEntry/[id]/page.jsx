@@ -1,9 +1,11 @@
 import EditEntryForm from '../../components/EditEntryForm';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '../../api/auth/[...nextauth]/options';
+// import { getServerSession } from 'next-auth/next';
+// import { authOptions } from '../../api/auth/[...nextauth]/options';
+import { auth } from './auth';
 
 const getEntryById = async (id) => {
-  const session = await getServerSession(authOptions);
+  // const session = await getServerSession(authOptions);
+  const session = await auth();
 
   if (session) {
     try {

@@ -1,14 +1,17 @@
-import GitHubProvider from 'next-auth/providers/github';
-import GoogleProvider from 'next-auth/providers/google';
+import NextAuth from 'next-auth';
+import GitHub from 'next-auth/providers/github';
+import Google from 'next-auth/providers/google';
 
-export const authOptions = {
-  // adapter: MongoDBAdapter(dbConnect),
+export const {
+  handlers: { GET, POST },
+  auth,
+} = NextAuth({
   providers: [
-    GitHubProvider({
+    GitHub({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
     }),
-    GoogleProvider({
+    Google({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
     }),
@@ -20,7 +23,7 @@ export const authOptions = {
         // console.log('Token:', token);
         // session.user = token.user
         session.user.id = token.sub;
-        session.user.accessToken = token.accessToken;
+        // session.user.accessToken = token.accessToken;
       }
       return session;
     },
@@ -35,6 +38,4 @@ export const authOptions = {
   //   },
   // }
   secret: process.env.NEXTAUTH_SECRET,
-};
-
-// export default authOptions;
+});
