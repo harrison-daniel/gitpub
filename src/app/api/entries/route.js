@@ -65,26 +65,25 @@ export async function POST(request) {
 export async function GET(request) {
   const session = await getServerSession(authOptions);
   if (!session) {
-    return NextResponse.json({ message: 'You are not logged in' });
+    return NextResponse.json({ error: 'Unauthorized' });
   }
   // return NextResponse.json({ name: session.user.name });
 
   // if (session) {
   try {
     await dbConnect();
+
     if (!session) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 401,
       });
     }
 
+    const userId = session.user.id;
     const sortOption = request.nextUrl.searchParams.get('sort') || 'date';
-
     const direction = request.nextUrl.searchParams.get('direction') || 'desc'; // default to 'desc' if not provided
     let sortValue = direction === 'desc' ? -1 : 1;
     let sortCriteria = { [sortOption]: sortValue };
-
-    const userId = session.user.id;
 
     const userEntries = await Entry.find({ userId }).sort(sortCriteria).exec();
     return NextResponse.json({ userEntries });
@@ -92,6 +91,7 @@ export async function GET(request) {
     // const entries = await Entry.find({ userId });
     // return new Response(JSON.stringify({ entries }), { status: 200 });
   } catch (error) {
+    console.log('error in GET request, catch block', error);
     return new Response(JSON.stringify({ error: 'Failed to fetch entries' }), {
       status: 500,
     });

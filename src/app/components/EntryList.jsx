@@ -5,6 +5,19 @@ import YearlyEntries from './YearlyEntries';
 import NoDateEntries from './NoDateEntries';
 
 export default function EntryList({ userEntries }) {
+  console.log('ENTRYLIST ENTRIES:', userEntries);
+
+  if (!userEntries || userEntries.length === 0) {
+    return (
+      <p>
+        Search for a brewery above, and create an Account to save one to your
+        list!
+      </p>
+    );
+  }
+
+  // Sort the entries into dated and no date entries
+
   const { datedEntries, noDateEntries } = userEntries.reduce(
     (acc, entry) => {
       const entryDate = new Date(entry.date);
