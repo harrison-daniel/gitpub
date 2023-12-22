@@ -34,8 +34,6 @@ const getAllEntries = async (
   }
 };
 
-import getAllEntries from './lib/getAllEntries';
-
 export default async function Home() {
   const { entries = [] } = (await getAllEntries()) || {};
 
