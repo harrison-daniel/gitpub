@@ -15,32 +15,31 @@ const getUserEntries = async (sortOption = 'date', sortDirection = 'desc') => {
     return [];
     // return { entries: [] };
   }
-  if (session) {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/entries?sort=${sortOption}&direction=${sortDirection}`,
-        {
-          method: 'GET',
-          headers: headers(),
-        },
-      );
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
 
-      return await res.json();
-    } catch (error) {
-      console.error('Error fetching user entries:', error);
-      return [];
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/entries?sort=${sortOption}&direction=${sortDirection}`,
+      {
+        method: 'GET',
+        // headers: headers(),
+
+        headers: {
+          'Content-Type': 'application/json',
+          'X-User-ID': session.user.id,
+          // Authorization: `Bearer ${session.accessToken}`,
+        },
+        // headers: { Authorization: `Bearer ${session.user.id}` },
+      },
+      console.log('session', session),
+    );
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
     }
-    //   if (res.ok) {
-    //     const userEntries = await res.json();
-    //     // console.log(userEntries);
-    //     return userEntries;
-    //   }
-    // } catch (error) {
-    //   console.error('Error fetching user entries:', error);
-    // }
+
+    return await res.json();
+  } catch (error) {
+    console.error('Error fetching user entries:', error);
+    return [];
   }
 };
 

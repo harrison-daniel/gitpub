@@ -65,39 +65,30 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
-  // const session = await getServerSession(authOptions);
-  const session = await auth();
-
-  if (!session) {
-    return NextResponse.json({ message: 'You are not logged in' });
-  }
-  // return NextResponse.json({ name: session.user.name });
-
-  // if (session) {
   try {
     await dbConnect();
-    if (!session) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+
+    const sortOption = request.nextUrl.searchParams.get('sort') || 'date';
+    const direction = request.nextUrl.searchParams.get('direction') || 'desc';
+    let sortValue = direction === 'desc' ? -1 : 1;
+    let sortCriteria = { [sortOption]: sortValue };
+
+    const userId = request.headers.get('X-User-ID'); // Extract userId from 'X-User-ID' header
+    if (!userId) {
+      return new Response(JSON.stringify({ error: 'User ID not provided' }), {
         status: 401,
       });
     }
 
-    const sortOption = request.nextUrl.searchParams.get('sort') || 'date';
-
-    const direction = request.nextUrl.searchParams.get('direction') || 'desc'; // default to 'desc' if not provided
-    let sortValue = direction === 'desc' ? -1 : 1;
-    let sortCriteria = { [sortOption]: sortValue };
-
-    const userId = session.user.id;
-
     const userEntries = await Entry.find({ userId }).sort(sortCriteria).exec();
-    return NextResponse.json({ userEntries });
-
-    // const entries = await Entry.find({ userId });
-    // return new Response(JSON.stringify({ entries }), { status: 200 });
+    return new Response(JSON.stringify({ userEntries }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
   } catch (error) {
     return new Response(JSON.stringify({ error: 'Failed to fetch entries' }), {
       status: 500,
+      headers: { 'Content-Type': 'application/json' },
     });
   }
 }
@@ -122,23 +113,15 @@ export async function GET(request) {
 // }
 
 export async function DELETE(request) {
-  const session = await auth();
-  if (!session) {
-    return NextResponse.json({ message: 'You are not logged in' });
-  }
-  if (session) {
-    try {
-      const id = request.nextUrl.searchParams.get('id');
-      await dbConnect();
-      await Entry.findByIdAndDelete(id);
-      return NextResponse.json({ message: 'Entry deleted' }, { status: 200 });
-    } catch (error) {
-      return NextResponse.json(
-        { error: 'Failed to delete entry' },
-        { status: 500 },
-      );
-    }
-  } else {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  try {
+    const id = request.nextUrl.searchParams.get('id');
+    await dbConnect();
+    await Entry.findByIdAndDelete(id);
+    return NextResponse.json({ message: 'Entry deleted' }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Failed to delete entry' },
+      { status: 500 },
+    );
   }
 }

@@ -17,25 +17,26 @@ export const {
     }),
   ],
   callbacks: {
-    session: async ({ session, token }) => {
+    // async jwt({ token, user, account }) {
+    //   if (account && user) {
+    //     token.accessToken = account.access_token;
+    //     token.userId = user.id;
+    //   }
+    //   return token;
+    // },
+    // async session({ session, token }) {
+    //   session.user.id = token.userId; // Make sure this is the ID you use in your database
+    //   session.accessToken = token.accessToken; // Include the access token in the session
+    //   return session;
+    // },
+
+    async session({ session, token }) {
       if (token) {
-        //       // session.accessToken = token.accessToken;
-        // console.log('Token:', token);
-        // session.user = token.user
         session.user.id = token.sub;
-        // session.user.accessToken = token.accessToken;
       }
       return session;
     },
   },
 
-  // callbacks: {
-  //   jwt: async ({ token, user }) => {
-  //     if (user) {
-  //       token.userId = user.id;
-  //     }
-  //     return token;
-  //   },
-  // }
   secret: process.env.AUTH_SECRET,
 });

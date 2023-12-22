@@ -3,15 +3,13 @@ import Navbar from './components/Navbar';
 import './globals.css';
 import { Toaster } from './components/ui/toaster';
 import ModeToggle from './lib/ModeToggle';
-// import Background from './components/Background';
 import Link from 'next/link';
 import Image from 'next/image';
 import beerLight from '../../public/assets/images/mug.png';
 import beerDark from '../../public/assets/images/beer-mug-dark8.png';
 import SessionProvider from './components/SessionProvider';
-// import { getServerSession } from 'next-auth/next';
 import { auth } from './auth';
-import { SpeedInsights } from '@vercel/speed-insights/next';
+// import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const metadata = {
   title: 'gitpub',
@@ -69,7 +67,6 @@ export default async function RootLayout({ children }) {
           <div className=''>
             <ModeToggle />
           </div>
-          {/* <Background /> */}
           <Navbar />
           <Providers>{children}</Providers>
           <Toaster />
