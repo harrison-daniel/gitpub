@@ -40,10 +40,10 @@ export default async function Home() {
   return (
     <>
       {/* <Suspense fallback={<div>Loading...</div>}> */}
-      <Background />
+
       <BrewerySearch />
       <EntryList entries={entries} />
-      <Analytics />
+
       {/* </Suspense> */}
     </>
   );
