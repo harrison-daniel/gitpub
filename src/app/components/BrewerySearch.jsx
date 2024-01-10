@@ -1,5 +1,6 @@
 'use client';
 
+import {auth} from '../auth';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
@@ -16,25 +17,20 @@ import { Button } from '../components/ui/button';
 import { Search, X, RotateCcw } from 'lucide-react';
 
 export default function BrewerySearch() {
+  // const session = await auth();
   const router = useRouter();
   const [state, setState] = useState('');
   const [city, setCity] = useState('');
   const [breweries, setBreweries] = useState([]);
   const [cities, setCities] = useState([]);
   const [filteredBreweries, setFilteredBreweries] = useState([]);
-  // const [title, setTitle] = useState('');
-  // const [address, setAddress] = useState('');
-  // const [streetAddress, setStreetAddress] = useState('');
-  // const [cityStateAddress, setCityStateAddress] = useState('');
-  // const [description, setDescription] = useState('');
-  // const [date, setDate] = useState(new Date());
-  // const [websiteUrl, setWebsiteUrl] = useState('');
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [scrollBehavior] = React.useState('inside');
 
   const [breweryEntry, setBreweryEntry] = useState({
     title: '',
-    address: '',
+    // address: '',
     streetAddress: '',
     cityStateAddress: '',
     description: 'Edit entry to add notes',
@@ -249,14 +245,7 @@ export default function BrewerySearch() {
                         ))}
                       </div>
                     </ModalBody>
-                    {/* <ModalFooter>
-                      <Button
-                        type='button'
-                        className='bg-red-600 text-white hover:bg-red-500'
-                        onClick={onClose}>
-                        Close
-                      </Button>
-                    </ModalFooter> */}
+                   
                   </>
                 )}
               </ModalContent>

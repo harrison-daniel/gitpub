@@ -41,23 +41,7 @@ export default function YearlyEntries({ year, entries }) {
         : a.cityStateAddress.localeCompare(b.cityStateAddress);
     }
   });
-  // const handleSort = (option) => {
-  //   setSortOption(option);
-  //   setSortDirection(
-  //     sortOption === option && sortDirection === 'asc' ? 'desc' : 'asc',
-  //   );
-  // };
-
-  // const sortedEntries = entries.sort((a, b) => {
-  //   let comparison = 0;
-  //   if (sortOption === 'date') {
-  //     comparison = new Date(b.date) - new Date(a.date);
-  //   } else if (sortOption === 'title' || sortOption === 'cityStateAddress') {
-  //     comparison = a[sortOption].localeCompare(b[sortOption]);
-  //   }
-  //   return sortDirection === 'asc' ? comparison : -comparison;
-  // });
-
+ 
   return (
     <Accordion
       key={year}

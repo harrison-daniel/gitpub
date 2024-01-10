@@ -28,7 +28,7 @@ function AuthButton() {
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { status } = useSession();
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
 
   // Simplified variants for animations
   const menuItemVariants = {
@@ -58,23 +58,58 @@ export default function Navbar() {
   return (
     <>
       {/* Desktop Navigation */}
-      <div className='flex  '>
-        <div className='hidden md:mx-auto md:flex md:max-w-3xl md:flex-row md:items-center md:justify-center'>
-          <div className='flex items-center gap-8 px-12 pt-2 align-middle'>
-            <Link
-              href={'/'}
-              className='rounded border border-zinc-950 bg-black px-4 py-1 font-extrabold text-white hover:bg-zinc-800  dark:bg-zinc-300 dark:text-black dark:hover:bg-zinc-200 '>
-              Home
-            </Link>
 
-            <Link
-              href={'/addEntry'}
-              className='rounded border border-zinc-950 bg-black px-4 py-1 font-extrabold text-white hover:bg-zinc-800  dark:bg-zinc-300 dark:text-black dark:hover:bg-zinc-200'>
-              Add Entry
-            </Link>
+      {status === 'authenticated' ? (
+        <>
+          <div className='flex  '>
+            <div className='hidden md:mx-auto md:flex md:max-w-3xl md:flex-row md:items-center md:justify-center'>
+              <div className='flex items-center gap-8 px-12 pt-2 align-middle'>
+                <Link
+                  href={'/'}
+                  className='rounded border border-zinc-950 bg-black px-4 py-1 font-extrabold text-white hover:bg-zinc-800  dark:bg-zinc-300 dark:text-black dark:hover:bg-zinc-200 '>
+                  Home
+                </Link>
+
+                <Link
+                  href={'/addEntry'}
+                  className='rounded border border-zinc-950 bg-black px-4 py-1 font-extrabold text-white hover:bg-zinc-800  dark:bg-zinc-300 dark:text-black dark:hover:bg-zinc-200'>
+                  Add Entry
+                </Link>
+                <Link
+                  href={'/userDash'}
+                  onClick={() => setIsOpen(false)}
+                  className='rounded border border-zinc-950 bg-black px-4 py-1 font-extrabold text-white hover:bg-zinc-800  dark:bg-zinc-300 dark:text-black dark:hover:bg-zinc-200'>
+                  Dashboard
+                </Link>
+                <button
+                  onClick={() => signOut()}
+                  className='rounded border border-zinc-950 bg-black px-4 py-1 font-extrabold text-white hover:bg-zinc-800  dark:bg-zinc-300 dark:text-black dark:hover:bg-zinc-200'>
+                  Sign Out
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      ) : (
+        <>
+          <div className='flex  '>
+            <div className='hidden md:mx-auto md:flex md:max-w-3xl md:flex-row md:items-center md:justify-center'>
+              <div className='flex items-center gap-8 px-12 pt-2 align-middle'>
+                <Link
+                  href={'/'}
+                  className='rounded border border-zinc-950 bg-black px-4 py-1 font-extrabold text-white hover:bg-zinc-800  dark:bg-zinc-300 dark:text-black dark:hover:bg-zinc-200 '>
+                  Home
+                </Link>
+                <button
+                  onClick={() => signIn()}
+                  className='rounded border border-zinc-950 bg-black px-4 py-1 font-extrabold text-white hover:bg-zinc-800  dark:bg-zinc-300 dark:text-black dark:hover:bg-zinc-200'>
+                  Sign In
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Overlay */}
       <AnimatePresence>
@@ -117,6 +152,12 @@ export default function Navbar() {
                     className='mobile-navItem  mb-3 block  w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 dark:hover:bg-yellow-100'>
                     Dashboard
                   </Link>
+                  <Link
+                    href={'/addEntry'}
+                    onClick={() => setIsOpen(false)}
+                    className='mobile-navItem  mb-3 block  w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 dark:hover:bg-yellow-100'>
+                    Add Entry
+                  </Link>
                 </div>
               ) : (
                 <>
@@ -132,7 +173,7 @@ export default function Navbar() {
               )}
             </motion.li>
 
-            <motion.li variants={menuItemVariants}>
+            {/* <motion.li variants={menuItemVariants}>
               <Link
                 href='/addEntry'
                 passHref
@@ -140,7 +181,7 @@ export default function Navbar() {
                 onClick={() => setIsOpen(false)}>
                 Add Entry
               </Link>
-            </motion.li>
+            </motion.li> */}
 
             <motion.li variants={menuItemVariants}>
               <Link

@@ -1,13 +1,10 @@
 import dbConnect from '../../db/dbConnect';
 import Entry from '../../models/entry';
-// import User from '../../models/user';
 import { NextResponse } from 'next/server';
-// import { getServerSession } from 'next-auth/next';
-// import { authOptions } from '../auth/[...nextauth]/options';
 import { auth } from '../../auth';
 
+
 export async function POST(request) {
-  // const session = await getServerSession(authOptions);
   const session = await auth();
   if (session) {
     try {
@@ -64,34 +61,7 @@ export async function POST(request) {
   }
 }
 
-export async function GET(request) {
-  try {
-    await dbConnect();
 
-    const sortOption = request.nextUrl.searchParams.get('sort') || 'date';
-    const direction = request.nextUrl.searchParams.get('direction') || 'desc';
-    let sortValue = direction === 'desc' ? -1 : 1;
-    let sortCriteria = { [sortOption]: sortValue };
-
-    const userId = request.headers.get('X-User-ID'); // Extract userId from 'X-User-ID' header
-    if (!userId) {
-      return new Response(JSON.stringify({ error: 'User ID not provided' }), {
-        status: 401,
-      });
-    }
-
-    const userEntries = await Entry.find({ userId }).sort(sortCriteria).exec();
-    return new Response(JSON.stringify({ userEntries }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  } catch (error) {
-    return new Response(JSON.stringify({ error: 'Failed to fetch entries' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-}
 
 // export async function GET(request) {
 //   try {
@@ -113,15 +83,22 @@ export async function GET(request) {
 // }
 
 export async function DELETE(request) {
-  try {
-    const id = request.nextUrl.searchParams.get('id');
-    await dbConnect();
-    await Entry.findByIdAndDelete(id);
-    return NextResponse.json({ message: 'Entry deleted' }, { status: 200 });
-  } catch (error) {
-    return NextResponse.json(
-      { error: 'Failed to delete entry' },
-      { status: 500 },
-    );
+  const session = await auth();
+  if (session) {
+    try {
+      const id = request.nextUrl.searchParams.get('id');
+      await dbConnect();
+      await Entry.findByIdAndDelete(id);
+      return NextResponse.json({ message: 'Entry deleted' }, { status: 200 });
+    } catch (error) {
+      return NextResponse.json(
+        { error: 'Failed to delete entry' },
+        { status: 500 },
+      );
+    }
+  } else {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+    });
   }
 }

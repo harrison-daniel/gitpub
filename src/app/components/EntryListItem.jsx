@@ -17,10 +17,7 @@ import {
 } from '../components/ui/popover';
 
 export default function EntryListItem({ entry }) {
-  // const entryDate =
-  //   entry.date && !isNaN(new Date(entry.date).getTime())
-  //     ? format(new Date(entry.date), 'yyyy')
-  //     : 'No Date';
+
 
   return (
     <>
