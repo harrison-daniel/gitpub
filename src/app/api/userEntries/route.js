@@ -1,10 +1,10 @@
 import { auth } from '../../auth';
 import dbConnect from '../../db/dbConnect';
 import Entry from '../../models/entry';
-// import { NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-
-export const GET = auth(async (request) => {
+export async function GET(request) {
+// export const GET = auth(async (request) => {
   const session = await auth();
 
   // console.log('APIIIII SESSION', session);
@@ -17,14 +17,16 @@ export const GET = auth(async (request) => {
   
     const userEntries = await Entry.find({ userId: session.user.id }).sort(sortCriteria).exec();
     // console.log(userEntries);
-    return new Response(JSON.stringify({ userEntries }), {
+    return NextResponse(JSON.stringify({ userEntries }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
     console.error('Error in GET API:', error);
-    Response.json({ error: 'Internal Server Error' });
+    NextResponse.json({ error: 'Internal Server Error' });
   }
+
 }
-);
+
+
 
