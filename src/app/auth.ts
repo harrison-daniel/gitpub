@@ -16,9 +16,9 @@ export const { handlers: { GET, POST }, auth } = NextAuth({
     //   return token;
     // },
   
-    async session({ session, token }) {
-      if (token) {
-        session.user.id = token.sub;
+    async session({ session, user, token }) {
+      if (token && session.user) {
+        session.user.id = token.sub || '';
       }
       return session;
     },
