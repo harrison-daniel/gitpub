@@ -16,7 +16,11 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "paths": {
+      "@/*": ["./*"],
+      "auth": ["./auth"]
+    }
   },
   "include": [
     "next-env.d.ts",
@@ -24,6 +28,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "src/app/api/userEntries/route.js"  ],
   "exclude": ["node_modules"]
 }
+ 

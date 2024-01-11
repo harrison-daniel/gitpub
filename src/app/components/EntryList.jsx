@@ -9,6 +9,7 @@ export default function EntryList({ userEntries }) {
     console.error('userEntries is not an array.', userEntries);
     return <p>Error: Entries data is not in the correct format.</p>;
   }
+  
 
   const { datedEntries, noDateEntries } = userEntries.reduce(
     (acc, entry) => {

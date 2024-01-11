@@ -4,12 +4,7 @@ import './loading';
 import { auth } from './auth';
 import { headers } from 'next/headers';
 
-const getUserEntries = async (sortOption = 'date', sortDirection = 'desc') => {
-  const session = await auth();
-  if (!session) {
-    console.log('no session');
-    return [];
-  }
+async function getUserEntries (sortOption = 'date', sortDirection = 'desc') {
 
   try {
     // console.log('session in getUserEntries', session);
@@ -36,8 +31,8 @@ export default async function Home() {
   let entries = [];
   if (session) {
     const response = await getUserEntries();
-    entries = response.userEntries || [];
-    // console.log('entries', entries);
+    entries = response.userEntries;
+    console.log('entries', entries);
   } else {
     console.log('No session in Home component');
   }

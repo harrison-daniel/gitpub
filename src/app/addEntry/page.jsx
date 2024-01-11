@@ -13,7 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '../components/ui/popover';
-import { useSession, getSession } from "next-auth/react"
+import { useSession } from "next-auth/react"
 import { redirect } from 'next/navigation';
 
 export default function AddEntry() {
@@ -25,8 +25,7 @@ export default function AddEntry() {
   const [websiteUrl, setWebsiteUrl] = useState('');
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const router = useRouter();
-  const { data: session, status } = useSession()
-
+  const { data: session } = useSession()
   if (!session || !session.user) {
     redirect ('/');
   }
