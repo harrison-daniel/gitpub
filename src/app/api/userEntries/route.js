@@ -17,13 +17,13 @@ export async function GET(request) {
   
     const userEntries = await Entry.find({ userId: session.user.id }).sort(sortCriteria).exec();
     // console.log(userEntries);
-    return new NextResponse(JSON.stringify({ userEntries }), {
+    return  NextResponse.json  ({ userEntries }, {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
     console.error('Error in GET API:', error);
-    new NextResponse.json({ error: 'Internal Server Error' });
+    return NextResponse.json({ error: 'Internal Server Error' });
   }
 
 }
