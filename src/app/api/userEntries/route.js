@@ -1,7 +1,7 @@
 import { auth } from '../../auth';
 import dbConnect from '../../db/dbConnect';
 import Entry from '../../models/entry';
-import { NextResponse } from 'next/server';
+// import { NextResponse } from 'next/server';
 
 
 // export const GET = auth((req) => {
@@ -21,48 +21,34 @@ import { NextResponse } from 'next/server';
 //   return Response.json({ message: "Not authenticated" }, { status: 401 })
 // }) as any // TODO: Fix `auth()` return type
 
+export const GET = auth ((req) => {
 
-export async function GET(request) {
+
+// export async function GET(request) {
   // export const GET = auth(async (request) => {
-    const session = await auth();
-    console.log('APIIIII SESSION', session);  
-    if (session) {
+    // const session = await auth();
+    // console.log('APIIIII SESSION', session);  
+    if (req.auth) {
   
     // console.log('APIIIII SESSION', session);
-    try {
-      await dbConnect();
+ 
+       dbConnect();
       const sortOption = request.nextUrl.searchParams.get('sort') || 'date';
       const direction = request.nextUrl.searchParams.get('direction') || 'desc';
       let sortValue = direction === 'desc' ? -1 : 1;
       let sortCriteria = { [sortOption]: sortValue };
     const userId = session.user.id;
-      const userEntries = await Entry.find({ userId }).sort(sortCriteria).exec();
+      const userEntries =  Entry.find({ userId }).sort(sortCriteria).exec();
       console.log(userEntries);
       return new Response(
         JSON.stringify({ userEntries }),
      
       );
-    } catch (error) {
-      console.error(error);
-      return new Response(
-        JSON.stringify({
-          error: 'Failed to Fetch userEntries',
-          details: error.message,
-        }),
-        {
-          status: 500,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      );
+      }
+      return Response.json({ message: "Not authenticated" }, { status: 401 })
     }
-  } else {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-      status: 401,
-    });
-  }
-  }
+)
+
   
 
 
