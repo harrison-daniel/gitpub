@@ -1,9 +1,8 @@
 import NextAuth from 'next-auth';
 import GitHub from 'next-auth/providers/github';
 import Google from 'next-auth/providers/google';
-// import { NextResponse } from 'next/server';
 
-export const authConfig = {
+export const { handlers: { GET, POST }, auth } = NextAuth({
   providers: [
     GitHub,
     Google,
@@ -26,7 +25,7 @@ export const authConfig = {
     
     
   },
-};
+});
 
-export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
+
 
