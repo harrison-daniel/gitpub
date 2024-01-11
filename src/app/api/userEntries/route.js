@@ -35,8 +35,8 @@ export async function GET(request) {
       const direction = request.nextUrl.searchParams.get('direction') || 'desc';
       let sortValue = direction === 'desc' ? -1 : 1;
       let sortCriteria = { [sortOption]: sortValue };
-    
-      const userEntries = await Entry.find({ userId: session.user.id }).sort(sortCriteria).exec();
+    const userId = session.user.id;
+      const userEntries = await Entry.find({ userId }).sort(sortCriteria).exec();
       console.log(userEntries);
       return new Response(
         JSON.stringify({ userEntries }),
