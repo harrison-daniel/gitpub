@@ -4,6 +4,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "incremental": true,
     "esModuleInterop": true,
@@ -18,17 +19,15 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"],
-      "auth": ["./auth"]
+      "@/*": ["./src/*", "./lib/*"]
     }
   },
   "include": [
     "next-env.d.ts",
-    "next-auth.d.ts",
-    ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "src/app/api/userEntries/route.js"  ],
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/app/auth.js" // "src/app/api/userEntries/route.js"
+  ],
   "exclude": ["node_modules"]
 }
- 

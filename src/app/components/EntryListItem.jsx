@@ -17,8 +17,6 @@ import {
 } from '../components/ui/popover';
 
 export default function EntryListItem({ entry }) {
-
-
   return (
     <>
       <div className=' mb-4 rounded-lg border border-slate-900 bg-amber-400  p-2  dark:bg-neutral-800'>

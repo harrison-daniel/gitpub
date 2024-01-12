@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-
 declare global {
   var mongoose: any; // This must be a `var` and not a `let / const`
 }
@@ -25,8 +24,6 @@ async function dbConnect() {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
     };
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
       return mongoose;
