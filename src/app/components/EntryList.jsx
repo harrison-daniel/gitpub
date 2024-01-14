@@ -4,7 +4,7 @@ import React from 'react';
 import YearlyEntries from './YearlyEntries';
 import NoDateEntries from './NoDateEntries';
 
-export default function EntryList({ userEntries }) {
+export default async function EntryList({ userEntries }) {
   if (!Array.isArray(userEntries)) {
     console.error('userEntries is not an array.', userEntries);
     return <p>Error: Entries data is not in the correct format.</p>;

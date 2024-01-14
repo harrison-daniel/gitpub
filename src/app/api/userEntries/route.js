@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { auth } from '../../auth';
 import dbConnect from '../../db/dbConnect';
 import Entry from '../../models/entry';
@@ -19,6 +21,7 @@ export async function GET(request) {
 
     return new NextResponse(JSON.stringify({ userEntries }), {
       status: 200,
+
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
@@ -52,7 +55,6 @@ export async function GET(request) {
 //     const direction = request.nextUrl.searchParams.get('direction') || 'desc';
 //     let sortValue = direction === 'desc' ? -1 : 1;
 //     let sortCriteria = { [sortOption]: sortValue };
-
 //     const userEntries = await Entry.find({ userId: session?.user?.id })
 //       .sort(sortCriteria)
 //       .exec();
