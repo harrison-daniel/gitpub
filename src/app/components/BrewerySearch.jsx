@@ -1,6 +1,6 @@
 'use client';
 
-import {auth} from '../auth';
+import { useSession } from 'next-auth/react';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
@@ -15,9 +15,12 @@ import StateComboBox from './StateComboBox';
 import CityComboBox from '../components/CityComboBox';
 import { Button } from '../components/ui/button';
 import { Search, X, RotateCcw } from 'lucide-react';
+import useUserEntries from '../lib/useUserEntries';
 
 export default function BrewerySearch() {
-  // const session = await auth();
+  const { data: session } = useSession();
+  // const { mutate } = useUserEntries();
+  const { data: userEntries, mutate } = useUserEntries();
   const router = useRouter();
   const [state, setState] = useState('');
   const [city, setCity] = useState('');
@@ -30,7 +33,6 @@ export default function BrewerySearch() {
 
   const [breweryEntry, setBreweryEntry] = useState({
     title: '',
-    // address: '',
     streetAddress: '',
     cityStateAddress: '',
     description: 'Edit entry to add notes',
@@ -88,10 +90,10 @@ export default function BrewerySearch() {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
 
-  function addBreweryInfoToEntry(brewery) {
+  async function addBreweryInfoToEntry(brewery) {
     setBreweryEntry({
-      title: brewery.name, // Title is the name of the brewery
-      streetAddress: brewery.street, // Street address of the brewery
+      title: brewery.name,
+      streetAddress: brewery.street,
       cityStateAddress: `${brewery.city}, ${brewery.state}`,
       description: 'Edit entry to add notes',
       date: new Date().toISOString(),
@@ -123,9 +125,14 @@ export default function BrewerySearch() {
 
       if (res.ok) {
         // Handle successful addition
-        console.log('Entry added successfully');
         onOpenChange(false);
-        router.refresh();
+        await mutate((currentEntries) => {
+          return currentEntries
+            ? [...currentEntries, newEntry.entry]
+            : [newEntry.entry];
+        }, true); // 'false' to not revalidate immediately
+        console.log('Entry added successfully');
+        // router.refresh();
       } else {
         throw new Error('Failed to create an entry');
       }
@@ -245,7 +252,6 @@ export default function BrewerySearch() {
                         ))}
                       </div>
                     </ModalBody>
-                   
                   </>
                 )}
               </ModalContent>

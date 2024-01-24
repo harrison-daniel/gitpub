@@ -11,6 +11,7 @@ import SessionProvider from './components/SessionProvider';
 import { auth } from './auth';
 import { ThemeProviders } from './themeProviders';
 // import { SpeedInsights } from '@vercel/speed-insights/next';
+// import { getServerSession } from 'next-auth';
 
 export const metadata = {
   title: 'gitpub',
@@ -18,8 +19,17 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  // const session = await getServerSession();
+  // const session = getServerSession();
   const session = await auth();
+
+  if (session?.user) {
+    session.user = {
+      name: session.user.name,
+      email: session.user.email,
+      image: session.user.image,
+      userId: session.user.id,
+    };
+  }
 
   return (
     <html lang='en' suppressHydrationWarning>
