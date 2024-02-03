@@ -2,12 +2,16 @@ import mongoose, { Schema } from 'mongoose';
 
 const entrySchema = new Schema(
   {
-    title: String,
+    title: {
+      type: String,
+      required: true,
+    },
     streetAddress: String,
     cityStateAddress: String,
     description: String,
     date: Date,
     websiteUrl: String,
+    phoneNumber: String,
 
     userId: {
       type: String,

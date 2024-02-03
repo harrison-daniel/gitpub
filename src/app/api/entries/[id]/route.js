@@ -16,8 +16,8 @@ export async function PUT(request, { params }) {
         newDescription: description,
         newDate: date,
         newWebsiteUrl: websiteUrl,
+        newPhoneNumber: phoneNumber,
       } = await request.json();
-      // Input validation can be added here
       await dbConnect();
       await Entry.findByIdAndUpdate(id, {
         title,
@@ -26,6 +26,7 @@ export async function PUT(request, { params }) {
         description,
         date,
         websiteUrl,
+        phoneNumber,
       });
       return NextResponse.json({ message: 'Entry updated' }, { status: 200 });
     } catch (error) {
@@ -56,4 +57,3 @@ export async function GET(request, { params }) {
     );
   }
 }
-

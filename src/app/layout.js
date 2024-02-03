@@ -1,4 +1,3 @@
-import { Providers } from './providers';
 import Navbar from './components/Navbar';
 import './globals.css';
 import { Toaster } from './components/ui/toaster';
@@ -10,8 +9,6 @@ import beerDark from '../../public/assets/images/beer-mug-dark8.png';
 import SessionProvider from './components/SessionProvider';
 import { auth } from './auth';
 import { ThemeProviders } from './themeProviders';
-// import { SpeedInsights } from '@vercel/speed-insights/next';
-// import { getServerSession } from 'next-auth';
 
 export const metadata = {
   title: 'gitpub',
@@ -34,11 +31,11 @@ export default async function RootLayout({ children }) {
   return (
     <html lang='en' suppressHydrationWarning>
       <body>
-        <ThemeProviders>
-          <SessionProvider session={session}>
+        <SessionProvider session={session}>
+          <ThemeProviders>
             {/* backgorund Image */}
-            <div className='absolute  right-0 top-0 -z-10   h-[100vh] w-[100vw] '>
-              <div className='imgLight absolute  top-[50px]  -z-20 h-full w-full '>
+            <div>
+              <div className='imgLight absolute  top-[2vh] -z-20 mx-auto h-[100vh]  w-[100vw] md:top-[4vh] '>
                 <Image
                   src={beerLight}
                   alt='Light Theme Beer'
@@ -53,7 +50,7 @@ export default async function RootLayout({ children }) {
                   }}
                 />
               </div>
-              <div className='imgDark absolute  top-[34px] -z-20  h-full  w-full '>
+              <div className='imgDark absolute  top-[3.5vh] -z-20 h-[100vh] w-[100vw] md:top-[4.5vh] '>
                 <Image
                   src={beerDark}
                   alt='Dark Theme Beer'
@@ -61,7 +58,7 @@ export default async function RootLayout({ children }) {
                   className='imgDark '
                   quality={75}
                   priority
-                  sizes='100 '
+                  sizes='100% '
                   fill
                   style={{
                     objectFit: 'contain ',
@@ -71,19 +68,20 @@ export default async function RootLayout({ children }) {
             </div>
             <div>
               <Link
-                className='main-header mt-0.5 flex justify-center text-center font-serif text-7xl font-extrabold'
+                className='main-header flex justify-center pt-0.5 text-center font-serif text-7xl font-extrabold'
                 href='/'>
                 GitPub
               </Link>
             </div>
-            <div className=''>
+            <div>
               <ModeToggle />
             </div>
             <Navbar />
-            <Providers>{children}</Providers>
+            {children}
+            {/* <Providers>{children}</Providers> */}
             <Toaster />
-          </SessionProvider>
-        </ThemeProviders>
+          </ThemeProviders>
+        </SessionProvider>
       </body>
     </html>
   );

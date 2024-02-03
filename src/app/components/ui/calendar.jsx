@@ -9,21 +9,21 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn('p-3', className)}
+      className={cn(' p-3', className)}
       classNames={{
         months: 'flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0',
         month: 'space-y-4',
         caption: 'flex justify-center pt-1 relative items-center',
         caption_label: 'text-sm font-medium',
-        nav: 'space-x-1 flex items-center',
+        nav: ' space-x-1 flex items-center',
         nav_button: cn(
           buttonVariants({ variant: 'outline' }),
-          'h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100',
+          'h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 ',
         ),
         nav_button_previous: 'absolute left-1',
         nav_button_next: 'absolute right-1',
         table: 'w-full border-collapse space-y-1',
-        head_row: 'flex',
+        head_row: ' flex',
         head_cell:
           'text-slate-500 rounded-md w-9 font-normal text-[0.8rem] dark:text-slate-400',
         row: 'flex w-full mt-2',
@@ -33,7 +33,7 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
           'h-9 w-9 p-0 font-normal aria-selected:opacity-100',
         ),
         day_selected:
-          'bg-slate-900 text-slate-50 hover:bg-slate-900 hover:text-slate-50 focus:bg-slate-900 focus:text-slate-50 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50 dark:hover:text-slate-900 dark:focus:bg-slate-50 dark:focus:text-slate-900',
+          'bg-amber-600 text-slate-50 hover:bg-amber-600 hover:text-slate-50 focus:bg-amber-600 focus:text-slate-50 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50 dark:hover:text-slate-900 dark:focus:bg-slate-50 dark:focus:text-slate-900',
         day_today:
           'bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-50',
         day_outside: 'text-slate-500 opacity-50 dark:text-slate-400',

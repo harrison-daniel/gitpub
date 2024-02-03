@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import EntryListItem from './EntryListItem';
 import {
   Accordion,
@@ -13,7 +13,7 @@ import { HiOutlineSelector } from 'react-icons/hi';
 
 export default function YearlyEntries({ year, entries }) {
   const [sortOption, setSortOption] = useState('date');
-  const [sortDirection, setSortDirection] = useState('asc');
+  const [sortDirection, setSortDirection] = useState('desc');
 
   const handleSort = (option) => {
     if (sortOption === option) {
@@ -41,7 +41,7 @@ export default function YearlyEntries({ year, entries }) {
         : a.cityStateAddress.localeCompare(b.cityStateAddress);
     }
   });
- 
+
   return (
     <Accordion
       key={year}
@@ -53,26 +53,20 @@ export default function YearlyEntries({ year, entries }) {
           {year}
         </AccordionTrigger>
         <AccordionContent>
-          <div className=' mb-4 flex justify-center gap-2  '>
-            <Button
-              onClick={() => handleSort('title')}
-              className=' bg-amber-700  text-white hover:bg-amber-600 dark:bg-neutral-800  dark:text-zinc-300 dark:hover:bg-zinc-200'>
+          <div className='  mb-3  flex justify-center gap-2 '>
+            <Button onClick={() => handleSort('title')} variant='sort'>
               Sort by Name
               {sortOption === 'title' && (
                 <HiOutlineSelector className=' h-5 w-5' />
               )}
             </Button>
-            <Button
-              onClick={() => handleSort('address')}
-              className=' bg-amber-700  text-white hover:bg-amber-600 dark:bg-neutral-800 dark:text-zinc-300 dark:hover:bg-zinc-200'>
+            <Button onClick={() => handleSort('address')} variant='sort'>
               Sort by Location
               {sortOption === 'address' && (
                 <HiOutlineSelector className=' h-5 w-5' />
               )}
             </Button>
-            <Button
-              onClick={() => handleSort('date')}
-              className='bg-amber-700  text-white hover:bg-amber-600 dark:bg-neutral-800  dark:text-zinc-300 dark:hover:bg-zinc-200'>
+            <Button onClick={() => handleSort('date')} variant='sort'>
               Sort by Date{' '}
               {sortOption === 'date' && (
                 <HiOutlineSelector className=' h-5 w-5' />

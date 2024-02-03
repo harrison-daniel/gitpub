@@ -3,23 +3,27 @@
 import { useSession } from 'next-auth/react';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  useDisclosure,
-} from '@nextui-org/react';
+  Dialog,
+  // DialogClose,
+  DialogContent,
+  DialogDescription,
+  // DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../components/ui/dialog';
+import { ScrollArea } from '../components/ui/scroll-area';
 import StateComboBox from './StateComboBox';
 import CityComboBox from '../components/CityComboBox';
 import { Button } from '../components/ui/button';
 import { Search, X, RotateCcw } from 'lucide-react';
 import useUserEntries from '../lib/useUserEntries';
+import { Link2 } from 'lucide-react';
 
 export default function BrewerySearch() {
   const { data: session } = useSession();
-  // const { mutate } = useUserEntries();
   const { data: userEntries, mutate } = useUserEntries();
   const router = useRouter();
   const [state, setState] = useState('');
@@ -27,9 +31,7 @@ export default function BrewerySearch() {
   const [breweries, setBreweries] = useState([]);
   const [cities, setCities] = useState([]);
   const [filteredBreweries, setFilteredBreweries] = useState([]);
-
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [scrollBehavior] = React.useState('inside');
+  const [open, setOpen] = useState(false);
 
   const [breweryEntry, setBreweryEntry] = useState({
     title: '',
@@ -38,6 +40,7 @@ export default function BrewerySearch() {
     description: 'Edit entry to add notes',
     date: new Date(),
     websiteUrl: '',
+    phoneNumber: '',
   });
 
   useEffect(() => {
@@ -64,7 +67,7 @@ export default function BrewerySearch() {
       }
 
       setBreweries(fetchedBreweries);
-      setCities([...new Set(fetchedBreweries.map((b) => b.city))]);
+      setCities([...new Set(fetchedBreweries.map((b) => b.city))].sort());
     };
 
     fetchBreweries();
@@ -76,7 +79,7 @@ export default function BrewerySearch() {
     );
 
     setFilteredBreweries(matchingUniqueCities);
-    onOpen();
+    setOpen(true);
   };
 
   const handleClearSearch = () => {
@@ -90,6 +93,26 @@ export default function BrewerySearch() {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
 
+  function formatPhoneNumber(phoneNumber) {
+    // Check if phoneNumber is null or undefined
+    if (!phoneNumber) {
+      return 'N/A';
+    }
+
+    // Remove all non-numeric characters
+    const digits = phoneNumber.replace(/\D/g, '');
+
+    if (digits.length === 10) {
+      return `(${digits.substring(0, 3)}) ${digits.substring(
+        3,
+        6,
+      )}-${digits.substring(6)}`;
+    }
+
+    // Return original string if it doesn't have 10 digits
+    return phoneNumber;
+  }
+
   async function addBreweryInfoToEntry(brewery) {
     setBreweryEntry({
       title: brewery.name,
@@ -98,6 +121,7 @@ export default function BrewerySearch() {
       description: 'Edit entry to add notes',
       date: new Date().toISOString(),
       websiteUrl: brewery.website_url,
+      phoneNumber: brewery.phone,
     });
   }
 
@@ -111,6 +135,7 @@ export default function BrewerySearch() {
       description: breweryEntry.description,
       date: breweryEntry.date,
       websiteUrl: breweryEntry.websiteUrl,
+      phone: breweryEntry.phone,
     };
 
     try {
@@ -124,20 +149,21 @@ export default function BrewerySearch() {
       );
 
       if (res.ok) {
-        // Handle successful addition
-        onOpenChange(false);
-        await mutate((currentEntries) => {
-          return currentEntries
-            ? [...currentEntries, newEntry.entry]
-            : [newEntry.entry];
-        }, true); // 'false' to not revalidate immediately
+        const newEntry = await res.json();
+        await mutate((currentData) => {
+          const updatedEntries = currentData.entries
+            ? [...currentData.entries, newEntry]
+            : [newEntry];
+          return { ...currentData, entries: updatedEntries };
+        }, true); // false to not revalidate immediately
+
         console.log('Entry added successfully');
-        // router.refresh();
+        setOpen(false);
       } else {
         throw new Error('Failed to create an entry');
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -148,116 +174,133 @@ export default function BrewerySearch() {
 
   return (
     <>
-      <div className=' mb-12 mt-3  flex flex-col px-2 lg:mt-5 '>
-        <h1 className='search-header m-auto mb-1 flex w-96 justify-center text-center text-2xl font-extrabold   lg:text-4xl '>
+      <div className=' mx-12 mb-12  mt-3 flex flex-col lg:mt-5 '>
+        <h1 className='search-header  mb-1 flex  justify-center text-center text-2xl font-extrabold   lg:text-4xl '>
           Find Your Next Brewery <br />
         </h1>
 
-        <div className='m-2  flex   flex-col items-center gap-0.5'>
+        <div className='m-2 flex flex-col items-center gap-0.5'>
           <StateComboBox
             onStateSelect={(selectedState) => setState(selectedState)}
             value={state}
           />
 
           {state && (
-            <>
-              <CityComboBox
-                cities={cities}
-                onCitySelect={(selectedCity) => setCity(selectedCity)}
-                value={city}
-              />
-            </>
-          )}
-        </div>
-        {/* show button after city is selected */}
-
-        <div className='mt-2 flex justify-center gap-5'>
-          {city && (
-            <>
-              <Button
-                className=' bg-amber-700  text-white hover:bg-amber-600 dark:bg-slate-950 dark:text-yellow-100'
-                onClick={handleCityFilter}>
-                <Search className='mr-2 h-4 w-4' />
-                Search
-              </Button>
-              {/* <Button
-                onClick={handleClearSearch}
-                title='Clear Search'
-                className='    text-white  hover:bg-amber-600 dark:text-red-600'> */}
-              <div className='flex items-center justify-center'>
-                <RotateCcw
-                  size={24}
-                  onClick={handleClearSearch}
-                  title='Clear Search'
-                  className='  cursor-pointer text-red-600 hover:text-red-400 dark:text-red-600 dark:hover:text-red-400 '></RotateCcw>
-              </div>
-              {/* </Button> */}
-            </>
+            <CityComboBox
+              cities={cities}
+              onCitySelect={(selectedCity) => setCity(selectedCity)}
+              value={city}
+            />
           )}
         </div>
 
-        <div className='-col  flex gap-2'>
-          <Modal
-            isOpen={isOpen}
-            onOpenChange={onOpenChange}
-            scrollBehavior={scrollBehavior}>
-            <form type='submit' onSubmit={handleModalSubmit}>
-              <ModalContent className='bg-amber-400 dark:bg-neutral-800  '>
-                {(onClose) => (
-                  <>
-                    <ModalHeader className='sticky top-0 flex items-center rounded-lg bg-amber-500  py-2 text-lg font-medium leading-6 text-black shadow-xl dark:bg-neutral-800  dark:text-yellow-100'>
-                      <div className='flex-grow text-center  '>
-                        Breweries in: <br />
-                        <b>
-                          {city}, {capitalizeState(state.replace(/_/g, ' '))}
-                        </b>
-                      </div>
-                      <div className='ml-auto pr-4'>
-                        <X
-                          size={30}
-                          onClick={onOpenChange}
-                          aria-label='Close Modal'
-                          className='cursor-pointer rounded-lg text-amber-950  hover:bg-amber-700 active:bg-amber-700 dark:text-red-700 dark:hover:bg-neutral-800 dark:hover:text-red-600'
-                        />
-                      </div>
-                    </ModalHeader>
+        {city && (
+          <div className='flex flex-row items-center justify-center gap-6'>
+            <Button
+              className=' bg-amber-700  text-white hover:bg-amber-600 dark:bg-slate-950 dark:text-yellow-100'
+              onClick={handleCityFilter}>
+              <Search className='mr-2 h-4 w-4' />
+              Search
+            </Button>
 
-                    <ModalBody className='px-3 dark:bg-neutral-800'>
-                      <div className='text-start '>
-                        {filteredBreweries.map((brewery) => (
-                          <div
-                            className='m-4 rounded-lg bg-amber-500 p-2 shadow-2xl  dark:bg-neutral-800'
-                            key={brewery.id}>
-                            <h1 className='text-lg font-bold dark:bg-neutral-800 dark:text-yellow-100'>
-                              {brewery.name}
-                            </h1>
-                            <div>
-                              {`${brewery.address_1},
-                                ${brewery.city},
-                                ${brewery.state}
-                                ${brewery.postal_code.substring(0, 5)}`}
-                            </div>
+            <RotateCcw
+              size={24}
+              onClick={handleClearSearch}
+              title='Clear Search'
+              className='cursor-pointer   text-red-600 hover:text-red-400 dark:text-red-600 dark:hover:text-red-400 '
+            />
+          </div>
+        )}
 
-                            <div className='mt-4 flex justify-center '>
-                              <button
-                                color='primary'
-                                className='m-4 rounded-lg bg-amber-700 px-6 py-2  font-semibold text-amber-100  shadow hover:bg-amber-500 active:bg-amber-600 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-200 dark:hover:text-black'
-                                onClick={(e) => {
-                                  addBreweryInfoToEntry(brewery);
-                                }}>
-                                Add Brewery to Entries
-                              </button>
+        <Dialog open={open} onOpenChange={setOpen} className='h-auto'>
+          <DialogContent className=' bg-amber-400 bg-opacity-90 '>
+            <DialogHeader>
+              <DialogTitle className='sticky top-0 z-10 flex flex-col items-center rounded-lg bg-amber-400 py-2 text-lg font-medium leading-6 text-black shadow-xl dark:bg-neutral-800 dark:text-yellow-100'>
+                <div>
+                  <div className='font-normal'>Breweries in:</div>
+                  <div className='text-xl'>
+                    {city}, {capitalizeState(state.replace(/_/g, ' '))}
+                  </div>
+                  {session?.user ? (
+                    <></>
+                  ) : (
+                    <div className='mt-2 text-xs italic text-white'>
+                      Sign into an account to save Entries
+                    </div>
+                  )}
+                </div>
+              </DialogTitle>
+            </DialogHeader>
+            {/* <DialogueDescription> */}
+            <ScrollArea className=' overflow-y-auto'>
+              {filteredBreweries.map((brewery) => (
+                <form
+                  key={brewery.id}
+                  type='submit'
+                  className='flex flex-col '
+                  onSubmit={handleModalSubmit}>
+                  <div
+                    className='m-4 rounded-lg bg-amber-400 p-2 shadow-2xl dark:bg-neutral-800  '
+                    key={brewery.id}>
+                    <div className='text-lg font-bold dark:bg-neutral-800 dark:text-yellow-100'>
+                      {brewery.name}
+                    </div>
+                    <div>
+                      <div>{`${brewery.address_1}`}</div>
+                      <div>
+                        <div
+                          href={`tel:${
+                            brewery.phone
+                              ? brewery.phone.replace(/\D/g, '')
+                              : ''
+                          }`}
+                          className=' cursor-pointer font-medium text-blue-600 underline hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300'>
+                          {brewery.phone
+                            ? formatPhoneNumber(brewery.phone)
+                            : ''}
+                        </div>
+                        {brewery.website_url && (
+                          <div>
+                            <div
+                              href={
+                                brewery.website_url.startsWith('http')
+                                  ? brewery.website_url
+                                  : `http://${brewery.website_url}`
+                              }
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='  flex w-24 flex-row items-center gap-2 py-1  text-blue-600 visited:text-purple-600 hover:text-blue-800'>
+                              <Link2 />
+                              Website
                             </div>
                           </div>
-                        ))}
+                        )}
                       </div>
-                    </ModalBody>
-                  </>
-                )}
-              </ModalContent>
-            </form>
-          </Modal>
-        </div>
+                    </div>
+
+                    <div className='mt-4 flex justify-center '>
+                      {session ? (
+                        <div>
+                          <button
+                            color='primary'
+                            className='m-4 rounded-lg bg-amber-700 px-6 py-2  font-semibold text-amber-100  shadow hover:bg-amber-500 active:bg-amber-600 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-200 dark:hover:text-black'
+                            onClick={(e) => {
+                              addBreweryInfoToEntry(brewery);
+                            }}>
+                            Add Brewery to Entries
+                          </button>
+                        </div>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  </div>
+                </form>
+              ))}
+            </ScrollArea>
+            {/* </DialogDescription> */}
+          </DialogContent>
+        </Dialog>
       </div>
     </>
   );

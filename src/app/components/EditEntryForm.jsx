@@ -1,7 +1,8 @@
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Textarea } from '@nextui-org/react';
+import { Textarea } from '../components/ui/textarea';
+import { Label } from '../components/ui/label';
 import { format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { cn } from '../lib/utils';
@@ -30,6 +31,7 @@ export default function EditEntryForm({
     useState(cityStateAddress);
   const [newDate, setNewDate] = useState(date ? new Date(date) : null);
   const [newWebsiteUrl, setNewWebsiteUrl] = useState(websiteUrl);
+  const [newPhoneNumber, setNewPhoneNumber] = useState('');
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const router = useRouter();
@@ -50,6 +52,7 @@ export default function EditEntryForm({
         newCityStateAddress,
         newDescription,
         newWebsiteUrl,
+        newPhoneNumber,
       };
       if (newDate) {
         // Only add newDate if it's set
@@ -68,6 +71,7 @@ export default function EditEntryForm({
             newDescription,
             newDate,
             newWebsiteUrl,
+            newPhoneNumber,
           }),
         },
       );
@@ -84,17 +88,19 @@ export default function EditEntryForm({
 
   return (
     <>
-      <div className=''>
-        <form onSubmit={handleSubmit} className='mx-auto flex flex-col  px-8 '>
-          <div className='mx-auto mb-4 mt-6 flex flex-row gap-3'>
+      <div>
+        <form
+          onSubmit={handleSubmit}
+          className='mx-auto  flex w-full max-w-md  flex-col  px-8'>
+          <div className='mx-auto mb-4 mt-5 flex flex-row gap-3'>
             {/* DATE PICKER  */}
-            <div className=' '>
+            <div>
               <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                 <PopoverTrigger asChild className='rounded-md'>
                   <Button
                     variant={'outline'}
                     className={cn(
-                      'w-[200px] justify-start text-left font-normal',
+                      'w-[200px] justify-start bg-amber-200 text-left  font-normal hover:bg-amber-200',
                       !newDate && 'text-muted-foreground',
                     )}>
                     <CalendarIcon className='mr-2 h-4 w-4 ' />
@@ -105,7 +111,7 @@ export default function EditEntryForm({
                     )}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className='mx-4  w-auto rounded-xl p-0'>
+                <PopoverContent className='mx-4 w-auto  rounded-xl bg-amber-200 p-0'>
                   <Calendar
                     mode='single'
                     selected={newDate}
@@ -115,90 +121,132 @@ export default function EditEntryForm({
                 </PopoverContent>
               </Popover>
             </div>
-            <div className='flex '>
+            <div className='flex'>
               {newDate && (
                 <Button
                   onClick={() => setNewDate(null)}
                   title='Clear Date'
-                  className='bg-transparent text-base font-semibold text-red-600 hover:bg-transparent hover:text-red-500'>
+                  variant='formAction'
+                  className='gap-1 bg-transparent  text-sm font-semibold text-red-600 hover:bg-transparent hover:text-red-500'>
                   Clear Date
-                  <X />
+                  <X size={20} />
                 </Button>
               )}
             </div>
           </div>
-          <div className='flex flex-col items-center   '>
-            <Textarea
-              size='lg'
-              radius='sm'
-              isRequired
-              label='Entry Name'
-              labelPlacement='outside'
-              placeholder='Enter your description'
-              className='max-w-2xl'
-              onChange={(e) => setNewTitle(e.target.value)}
-              value={newTitle}
-              rows={3}
-              fullWidth='false'
-            />
-            <Textarea
-              size='lg'
-              radius='sm'
-              isRequired
-              label='Street'
-              labelPlacement='outside'
-              placeholder='Enter your description'
-              className='max-w-2xl'
-              onChange={(e) => setNewStreetAddress(e.target.value)}
-              value={newStreetAddress}
-              rows={3}
-              fullWidth='false'
-            />
-            <Textarea
-              size='lg'
-              radius='sm'
-              isRequired
-              label='City and State'
-              labelPlacement='outside'
-              placeholder='Enter your location'
-              className='max-w-2xl'
-              onChange={(e) => setNewCityStateAddress(e.target.value)}
-              value={newCityStateAddress}
-              rows={3}
-              fullWidth='false'
-            />
-            <Textarea
-              size='lg'
-              radius='sm'
-              isRequired
-              label='Notes'
-              labelPlacement='outside'
-              placeholder='Enter your notes'
-              className='max-w-2xl'
-              onChange={(e) => setNewDescription(e.target.value)}
-              value={newDescription}
-              rows={3}
-              fullWidth='false'
-            />
-            <Textarea
-              size='lg'
-              radius='sm'
-              isRequired
-              label='Website'
-              labelPlacement='outside'
-              placeholder='Enter your notes'
-              className='max-w-2xl'
-              onChange={(e) => setNewWebsiteUrl(e.target.value)}
-              value={newWebsiteUrl}
-              rows={3}
-              fullWidth='false'
-            />
+          <div className='flex  flex-col items-center gap-2'>
+            <div className='w-full'>
+              <Label
+                className='  rounded-md bg-amber-200 bg-opacity-80 p-0.5 font-bold text-black dark:bg-neutral-800 dark:text-white'
+                htmlFor='phoneNumber'>
+                Phone: {''}
+              </Label>
+              <Textarea
+                label='phoneNumber'
+                type='text'
+                id='phoneNumber'
+                placeholder='Enter the phone number'
+                className='  resize-none '
+                autoComplete='off'
+                rows={1}
+                onChange={(e) => setNewPhoneNumber(e.target.value)}
+                value={newPhoneNumber}
+              />
+            </div>
+            <div className='w-full'>
+              <Label
+                className='rounded-md bg-amber-200 bg-opacity-80 p-0.5 font-bold text-black dark:bg-neutral-800 dark:text-white'
+                htmlFor='breweryName'>
+                Entry or Brewery Name
+              </Label>
+              <Textarea
+                label='breweryName'
+                type='text'
+                id='breweryName'
+                placeholder='Enter the entry or brewery name'
+                className='resize-none'
+                autoComplete='off'
+                rows={1}
+                onChange={(e) => setNewTitle(e.target.value)}
+                value={newTitle}
+              />
+            </div>
+            <div className='w-full'>
+              <Label
+                className='rounded-md bg-amber-200 bg-opacity-80 p-0.5 font-bold text-black dark:bg-neutral-800 dark:text-white'
+                htmlFor='street'>
+                Street Address
+              </Label>
+              <Textarea
+                variant='addEntryTextArea'
+                label='street'
+                type='text'
+                id='street'
+                placeholder='Enter the street address'
+                className=' max-w-2xl resize-none bg-amber-200'
+                autoComplete='off'
+                rows={1}
+                onChange={(e) => setNewStreetAddress(e.target.value)}
+                value={newStreetAddress}
+              />
+            </div>
+            <div className='w-full'>
+              <Label
+                className='rounded-md bg-amber-200 bg-opacity-80 p-0.5 font-bold text-black dark:bg-neutral-800 dark:text-white'
+                htmlFor='cityState'>
+                City / State
+              </Label>
+              <Textarea
+                label='cityState'
+                type='text'
+                id='cityState'
+                placeholder='Enter the location'
+                className=' max-w-2xl resize-none bg-amber-200'
+                autoComplete='off'
+                rows={1}
+                onChange={(e) => setNewCityStateAddress(e.target.value)}
+                value={newCityStateAddress}
+              />
+            </div>
+            <div className='w-full'>
+              <Label
+                className='rounded-md bg-amber-200 bg-opacity-80 p-0.5 font-bold text-black dark:bg-neutral-800 dark:text-white'
+                htmlFor='webUrl'>
+                Website
+              </Label>
+              <Textarea
+                label='webUrl'
+                type='text'
+                id='webUrl'
+                placeholder='Enter the website url'
+                className=' max-w-2xl bg-amber-200'
+                autoComplete='off'
+                rows={1}
+                onChange={(e) => setNewWebsiteUrl(e.target.value)}
+                value={newWebsiteUrl}
+              />
+            </div>
+            <div className='w-full'>
+              <Label
+                className='rounded-md bg-amber-200 bg-opacity-80 p-0.5 font-bold text-black dark:bg-neutral-800 dark:text-white'
+                htmlFor='notes'>
+                Notes
+              </Label>
+              <Textarea
+                label='notes'
+                type='text'
+                id='notes'
+                placeholder='Enter your notes'
+                className='max-w-2xl bg-amber-200'
+                autoComplete='off'
+                onChange={(e) => setNewDescription(e.target.value)}
+                value={newDescription}
+              />
+            </div>
           </div>
 
-          <div className='mb-12 flex justify-center pt-8'>
-            <Button
-              type='submit'
-              className='  bg-amber-700 text-white hover:bg-amber-600'>
+          <div className='flex justify-center pt-6'>
+            <Button type='submit' variant='formAction'>
               Update Entry
             </Button>
           </div>

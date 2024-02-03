@@ -1,6 +1,5 @@
 import BrewerySearch from './components/BrewerySearch';
 import EntryList from './components/EntryList';
-import './loading';
 import { auth } from './auth';
 
 export default async function Home() {
@@ -14,8 +13,8 @@ export default async function Home() {
       ) : (
         <div className='dark: m-auto flex w-72 justify-center text-xl font-bold text-black dark:text-white'>
           <p>
-            Search for a brewery above, or create an account to save an entry
-            from your favorite brewery!
+            Search for a brewery above or sign in and add them to your saved
+            trips!
           </p>
         </div>
       )}

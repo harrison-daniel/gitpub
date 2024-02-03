@@ -7,7 +7,7 @@ export default async function UserDash() {
   if (session) {
     return (
       <>
-        <div className='grid mt-72 place-items-center'>
+        <div className='mx-auto my-auto flex justify-center pt-32  '>
           <div className='my-6 flex flex-col gap-2 bg-zinc-300/10 p-8 shadow-lg'>
             <UserInfo />
           </div>

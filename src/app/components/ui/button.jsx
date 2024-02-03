@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva } from 'class-variance-authority';
+
 import { cn } from '../../lib/utils';
 
 const buttonVariants = cva(
+  // 'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300',
   'inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300',
   {
     variants: {
@@ -19,12 +21,18 @@ const buttonVariants = cva(
         ghost:
           'hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-50',
         link: 'text-slate-900 underline-offset-4 hover:underline dark:text-slate-50',
+        addEntry: '  bg-amber-200 text-black dark:bg-slate-950 dark:text-white',
+        // sort: '  bg-amber-700  text-slate-100 dark:bg-neutral-800 border border-neutral-700 dark:text-white',
+        sort: 'dark:active:bg-zinc-500 dark:hover:bg-zinc-500 dark:focus:bg-zinc-500  bg-amber-700 active:bg-amber-500 hover:bg-amber-500 focus:bg-amber-500 text-white hover:bg-amber-600 dark:bg-neutral-800 dark:text-zinc-300 ',
+        formAction:
+          'dark:active:bg-yellow-100 dark:hover:bg-yellow-100 dark:focus:bg-yellow-100  bg-amber-700 active:bg-amber-500 hover:bg-amber-500 focus:bg-amber-500 text-white hover:bg-amber-600 mobile-navItem dark:text-black   font-bold',
       },
       size: {
         default: 'h-10 px-4 py-2',
         sm: 'h-9 rounded-md px-3',
         lg: 'h-11 rounded-md px-8',
         icon: 'h-10 w-10',
+        form: 'h-10 rounded-md px-2 py-2',
       },
     },
     defaultVariants: {
