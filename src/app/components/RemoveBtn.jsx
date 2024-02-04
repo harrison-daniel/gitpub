@@ -26,7 +26,8 @@ export default function RemoveBtn({ id, onClose }) {
     onClose();
   };
 
-  const removeEntry = async () => {
+  const removeEntry = async (event) => {
+    event.stopPropagation();
     await mutate((currentEntries) => {
       if (Array.isArray(currentEntries)) {
         return currentEntries.filter((entry) => entry._id !== id);
@@ -78,7 +79,7 @@ export default function RemoveBtn({ id, onClose }) {
           <div className='mx-auto mb-4 flex flex-col gap-2.5'>
             <Button
               className='bg-red-700 text-white hover:bg-red-500 dark:bg-red-700 dark:text-white  dark:hover:bg-red-600 '
-              onClick={removeEntry}>
+              onClick={(e) => removeEntry(e)}>
               Delete Entry
             </Button>
 
