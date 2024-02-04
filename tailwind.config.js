@@ -1,7 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 
-const { nextui } = require('@nextui-org/react');
-
 module.exports = {
   // important: true,
   darkMode: 'class',
@@ -9,7 +7,6 @@ module.exports = {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     // container: {
@@ -78,40 +75,5 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    nextui({
-      light: {
-        colors: {
-          themes: {
-            background: '#FFFFFF', // or DEFAULT
-            foreground: '#11181C', // or 50 to 900 DEFAULT
-            primary: {
-              //... 50 to 900
-              foreground: '#FFFFFF',
-              DEFAULT: '#006FEE',
-            },
-            // ... rest of the colors
-          },
-        },
-        dark: {
-          colors: {
-            background: '#000000', // or DEFAULT
-            foreground: '#ECEDEE', // or 50 to 900 DEFAULT
-            primary: {
-              //... 50 to 900
-              foreground: '#FFFFFF',
-              DEFAULT: '#006FEE',
-            },
-          },
-          // ... rest of the colors
-        },
-        mytheme: {
-          // custom theme
-          extend: 'dark',
-          colors: {},
-        },
-      },
-    }),
-    require('tailwindcss-animate'),
-  ],
+  plugins: [require('tailwindcss-animate')],
 };

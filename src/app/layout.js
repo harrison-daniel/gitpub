@@ -15,6 +15,14 @@ export const metadata = {
   description: 'Brewery Locator and Journal',
 };
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  // interactiveWidget: 'resizes-visual',
+};
+
 export default async function RootLayout({ children }) {
   // const session = getServerSession();
   const session = await auth();

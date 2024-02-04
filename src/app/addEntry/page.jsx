@@ -143,7 +143,7 @@ export default function AddEntry() {
                 value={title}
               />
             </div>
-            <div className='w-full'>
+            <div className='w-full text-base'>
               <Label
                 className='  rounded-md bg-amber-200 bg-opacity-80 p-0.5 font-bold text-black dark:bg-neutral-800 dark:text-white'
                 htmlFor='phoneNumber'>
@@ -151,7 +151,7 @@ export default function AddEntry() {
               </Label>
               <Textarea
                 label='phoneNumber'
-                type='text'
+                type='tel'
                 id='phoneNumber'
                 placeholder='Enter the phone number'
                 className='  resize-none '

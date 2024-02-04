@@ -5,7 +5,7 @@ import YearlyEntries from './YearlyEntries';
 import NoDateEntries from './NoDateEntries';
 import Loading from '../loading';
 
-export default function NewestEntryList() {
+export default function EntryList() {
   const { entries, isLoading, isError } = useUserEntries();
 
   if (isLoading) {

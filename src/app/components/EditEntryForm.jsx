@@ -143,7 +143,7 @@ export default function EditEntryForm({
               </Label>
               <Textarea
                 label='phoneNumber'
-                type='text'
+                type='tel'
                 id='phoneNumber'
                 placeholder='Enter the phone number'
                 className='  resize-none '
@@ -183,7 +183,7 @@ export default function EditEntryForm({
                 type='text'
                 id='street'
                 placeholder='Enter the street address'
-                className=' max-w-2xl resize-none bg-amber-200'
+                className=' resize-none bg-amber-200'
                 autoComplete='off'
                 rows={1}
                 onChange={(e) => setNewStreetAddress(e.target.value)}
@@ -201,7 +201,7 @@ export default function EditEntryForm({
                 type='text'
                 id='cityState'
                 placeholder='Enter the location'
-                className=' max-w-2xl resize-none bg-amber-200'
+                className='  resize-none bg-amber-200'
                 autoComplete='off'
                 rows={1}
                 onChange={(e) => setNewCityStateAddress(e.target.value)}
@@ -219,7 +219,7 @@ export default function EditEntryForm({
                 type='text'
                 id='webUrl'
                 placeholder='Enter the website url'
-                className=' max-w-2xl bg-amber-200'
+                className='  bg-amber-200'
                 autoComplete='off'
                 rows={1}
                 onChange={(e) => setNewWebsiteUrl(e.target.value)}
@@ -237,7 +237,7 @@ export default function EditEntryForm({
                 type='text'
                 id='notes'
                 placeholder='Enter your notes'
-                className='max-w-2xl bg-amber-200'
+                className=' bg-amber-200'
                 autoComplete='off'
                 onChange={(e) => setNewDescription(e.target.value)}
                 value={newDescription}

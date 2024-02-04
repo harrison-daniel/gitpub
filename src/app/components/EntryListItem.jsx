@@ -22,6 +22,26 @@ import {
 export default function EntryListItem({ entry }) {
   const [open, setOpen] = useState(false);
 
+  function formatPhoneNumber(phoneNumber) {
+    // Check if phoneNumber is null or undefined
+    if (!phoneNumber) {
+      return 'N/A';
+    }
+
+    // Remove all non-numeric characters
+    const digits = phoneNumber.replace(/\D/g, '');
+
+    if (digits.length === 10) {
+      return `(${digits.substring(0, 3)}) ${digits.substring(
+        3,
+        6,
+      )}-${digits.substring(6)}`;
+    }
+
+    // Return original string if it doesn't have 10 digits
+    return phoneNumber;
+  }
+
   return (
     <>
       <div className=' mb-4 rounded-lg border border-slate-900 bg-amber-400  p-2  dark:bg-neutral-800'>
@@ -67,6 +87,13 @@ export default function EntryListItem({ entry }) {
             <AccordionContent className='pl-3 '>
               <div className='mb-2 mt-0 flex flex-row items-center gap-9 '>
                 <div className='flex items-center'>{entry.streetAddress}</div>
+                <div
+                  href={`tel:${
+                    entry.phone ? entry.phone.replace(/\D/g, '') : ''
+                  }`}
+                  className=' cursor-pointer font-medium text-blue-600 underline hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300'>
+                  {entry.phone ? formatPhoneNumber(entry.phone) : ''}
+                </div>
                 <div className='flex items-center'>
                   {entry.websiteUrl && (
                     <div>

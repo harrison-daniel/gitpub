@@ -46,6 +46,7 @@ export default function RemoveBtn({ id, onClose }) {
 
       // Revalidate from the server
       mutate();
+      onClose();
       toast({ description: 'Entry Deleted' });
     } catch (error) {
       console.error('Failed to delete entry:', error);
@@ -54,16 +55,16 @@ export default function RemoveBtn({ id, onClose }) {
       mutate();
     }
   };
+
   return (
     <div className='flex  flex-col gap-2'>
       <Drawer className=''>
-        <DrawerTrigger asChild>
-          <button
-            // onClick={() => onOpenChange(true)}
-            className='flex flex-row items-center gap-2 text-red-700 hover:text-red-500 active:text-red-700'>
-            <HiOutlineTrash size={19} />
-            Delete
-          </button>
+        <DrawerTrigger className='flex flex-row items-center gap-2 text-red-700 hover:text-red-500 active:text-red-700'>
+          {/* <button
+            className='flex flex-row items-center gap-2 text-red-700 hover:text-red-500 active:text-red-700'> */}
+          <HiOutlineTrash size={19} />
+          Delete
+          {/* </button> */}
         </DrawerTrigger>
         <DrawerContent className='bg-amber-400 dark:bg-zinc-800'>
           <DrawerHeader className='mx-auto flex flex-col items-center'>
@@ -74,22 +75,20 @@ export default function RemoveBtn({ id, onClose }) {
               This action cannot be undone.
             </DrawerDescription>
           </DrawerHeader>
-          <DrawerFooter className='mx-auto'>
+          <div className='mx-auto mb-4 flex flex-col gap-2.5'>
             <Button
               className='bg-red-700 text-white hover:bg-red-500 dark:bg-red-700 dark:text-white  dark:hover:bg-red-600 '
               onClick={removeEntry}>
               Delete Entry
             </Button>
 
-            <DrawerClose asChild>
-              <Button
-                onClick={handleClose}
-                variant='sort'
-                className='bg-amber-200 text-black dark:bg-neutral-200 dark:text-black'>
-                No, Go Back
-              </Button>
-            </DrawerClose>
-          </DrawerFooter>
+            <Button
+              onClick={handleClose}
+              variant='sort'
+              className='bg-amber-200 text-black dark:bg-neutral-200 dark:text-black'>
+              No, Go Back
+            </Button>
+          </div>
         </DrawerContent>
       </Drawer>
     </div>

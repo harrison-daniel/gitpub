@@ -142,7 +142,9 @@ export default function Navbar() {
               ) : (
                 <>
                   <div>
-                    <div className='mb-2'>You are not logged in</div>
+                    <div className='mb-2    font-bold text-slate-300 dark:bg-none'>
+                      You are not logged in
+                    </div>
                     <button
                       onClick={() => signIn()}
                       className='mobile-navItem  mb-3 block  w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 dark:hover:bg-yellow-100'>
