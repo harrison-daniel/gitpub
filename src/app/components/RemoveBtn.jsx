@@ -27,6 +27,7 @@ export default function RemoveBtn({ id, onClose }) {
   };
 
   const removeEntry = async (event) => {
+    event.preventDefault();
     event.stopPropagation();
     await mutate((currentEntries) => {
       if (Array.isArray(currentEntries)) {
@@ -45,14 +46,13 @@ export default function RemoveBtn({ id, onClose }) {
         throw new Error(errorData.error || 'Failed to delete entry');
       }
 
-      // Revalidate from the server
-      mutate();
       onClose();
+      mutate();
       toast({ description: 'Entry Deleted' });
     } catch (error) {
       console.error('Failed to delete entry:', error);
       toast({ description: error.message, status: 'error' });
-      // Revert changes if error occurs
+
       mutate();
     }
   };

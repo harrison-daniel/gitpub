@@ -42,7 +42,7 @@ export default function AddEntry() {
     console.log('Selected Date:', date);
 
     if (!title) {
-      alert('One or more fields are required');
+      alert('Name of Entry or Brewery is requried');
       return;
     }
 
