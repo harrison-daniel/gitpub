@@ -135,7 +135,7 @@ export default function BrewerySearch() {
       description: breweryEntry.description,
       date: breweryEntry.date,
       websiteUrl: breweryEntry.websiteUrl,
-      phone: breweryEntry.phone,
+      phoneNumber: breweryEntry.phone,
     };
 
     try {
