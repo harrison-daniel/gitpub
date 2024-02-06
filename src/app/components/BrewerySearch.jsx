@@ -212,8 +212,8 @@ export default function BrewerySearch() {
           </div>
         )}
 
-        <Dialog open={open} onOpenChange={setOpen} className='h-auto'>
-          <DialogContent className=' bg-amber-400 bg-opacity-90 '>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogContent className='fixed left-1/2 top-1/2 w-full   bg-amber-400 bg-opacity-90 '>
             <DialogHeader>
               <DialogTitle className='sticky top-0 z-10 flex flex-col items-center rounded-lg bg-amber-400 py-2 text-lg font-medium leading-6 text-black shadow-xl dark:bg-neutral-800 dark:text-yellow-100'>
                 <div>
