@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { format } from 'date-fns';
-import RemoveBtn from './RemoveBtn';
 import { HiPencilAlt } from 'react-icons/hi';
 import Link from 'next/link';
 import {
@@ -11,25 +10,28 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '../components/ui/accordion';
-import { Link2, Settings, MoreVertical, MoreHorizontal } from 'lucide-react';
+import { Link2, MoreHorizontal } from 'lucide-react';
 
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '../components/ui/popover';
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '../components/ui/alert-dialog';
 import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-  DrawerPortal,
-} from '../components/ui/drawer';
-import { useToast } from '../components/ui/use-toast';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuPortal,
+} from '../components/ui/dropdown-menu';
+import { toast } from 'sonner';
+
 import { HiOutlineTrash } from 'react-icons/hi';
 import { useRouter } from 'next/navigation';
 import useUserEntries from '../lib/useUserEntries';
@@ -38,25 +40,18 @@ export default function EntryListItem({ entry }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const { mutate } = useUserEntries();
-  const { toast } = useToast();
 
   function formatPhoneNumber(phoneNumber) {
-    // Check if phoneNumber is null or undefined
     if (!phoneNumber) {
       return 'N/A';
     }
-
-    // Remove all non-numeric characters
     const digits = phoneNumber.replace(/\D/g, '');
-
     if (digits.length === 10) {
       return `(${digits.substring(0, 3)}) ${digits.substring(
         3,
         6,
       )}-${digits.substring(6)}`;
     }
-
-    // Return original string if it doesn't have 10 digits
     return phoneNumber;
   }
 
@@ -78,9 +73,15 @@ export default function EntryListItem({ entry }) {
         throw new Error(errorData.error || 'Failed to delete entry');
       }
 
-      // setOpen(false);
       mutate();
-      toast({ description: 'Entry Deleted' });
+      toast('Entry Deleted', {
+        style: {
+          // background: 'green',
+          // width: '90%',
+        },
+        className: 'class',
+        position: 'bottom-right',
+      });
     } catch (error) {
       console.error('Failed to delete entry:', error);
       toast({ description: error.message, status: 'error' });
@@ -92,65 +93,66 @@ export default function EntryListItem({ entry }) {
   return (
     <>
       <div className=' mb-4 rounded-lg border border-slate-900 bg-amber-400  p-2  dark:bg-neutral-800'>
-        {/* SETTINGS & DATE DIV  */}
         <div className='mb-2 ml-3 mr-2 flex  flex-row justify-between'>
           {/* DATE */}
-          <div className='flex  font-mono  text-xl font-semibold text-stone-800 dark:text-gray-400 '>
-            {entry.date && !isNaN(new Date(entry.date).getTime())
-              ? format(new Date(entry.date), 'MM/dd/yyyy')
-              : null}
+
+          <div className='flex flex-row justify-around gap-1'>
+            <div className='flex  font-mono  text-xl font-semibold text-stone-800 dark:text-gray-400 '>
+              {entry.date && !isNaN(new Date(entry.date).getTime())
+                ? format(new Date(entry.date), 'MM/dd/yyyy')
+                : null}
+            </div>
           </div>
-          {/* SETTING COG WHEEL */}
-          <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger>
-              <MoreHorizontal size={22} />
-            </PopoverTrigger>
-            <PopoverContent className='fixed -right-4  w-fit flex-col items-end gap-2 bg-amber-300 px-3 py-3 font-semibold dark:bg-zinc-950 '>
-              <Link
-                href={`/editEntry/${entry._id}`}
-                className='dark:active:white mb-2 flex flex-row  items-center gap-2 hover:text-stone-400 dark:text-neutral-300 dark:hover:text-white'>
-                <HiPencilAlt size={18} />
-                Edit
-              </Link>
-              {/* <RemoveBtn id={entry._id} onClose={() => setOpen(false)} /> */}
-              {/* --------   RemoveBtn Drawer --------- */}
-              <Drawer onOpenChange={setOpen}>
-                <DrawerTrigger className='flex flex-row items-center gap-2 text-red-700 hover:text-red-500 active:text-red-700'>
-                  <HiOutlineTrash size={19} />
+
+          <AlertDialog>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <MoreHorizontal size={22} />
+              </DropdownMenuTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuContent className='mr-2 flex  flex-col  items-center  bg-amber-300 text-center'>
+                  <DropdownMenuItem>
+                    <Link
+                      href={`/editEntry/${entry._id}`}
+                      className='flex flex-row  gap-2  text-black hover:text-stone-600 dark:text-neutral-300 dark:hover:text-white'>
+                      <HiPencilAlt size={18} />
+                      Edit
+                    </Link>
+                  </DropdownMenuItem>
+                  <AlertDialogTrigger>
+                    <DropdownMenuItem className=' flex flex-row gap-2  text-red-600 hover:text-red-800 dark:hover:text-red-500 '>
+                      <HiOutlineTrash size={19} />
+                      Delete
+                    </DropdownMenuItem>
+                  </AlertDialogTrigger>
+                </DropdownMenuContent>
+              </DropdownMenuPortal>
+            </DropdownMenu>
+
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone and will permanently delete this
+                  entry from your profile.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={removeEntry}
+                  className='   bg-red-700  text-white hover:bg-red-700 dark:bg-red-700  dark:text-white dark:hover:bg-red-800 '>
                   Delete
-                  {/* </button> */}
-                </DrawerTrigger>
-                <DrawerPortal>
-                  <DrawerContent className='flex flex-col gap-0 bg-amber-400 dark:bg-zinc-800'>
-                    <DrawerHeader className=''>
-                      <DrawerTitle className='text-lg font-bold'>
-                        Are you sure you want to delete this entry?
-                      </DrawerTitle>
-                      <DrawerDescription className='font-semibold text-amber-900 '>
-                        This action cannot be undone.
-                      </DrawerDescription>
-                    </DrawerHeader>
-                    <DrawerFooter className=' mx-auto flex justify-center  '>
-                      <button
-                        className='m-0  rounded-md bg-red-700  p-2  text-white hover:bg-red-500 dark:bg-red-700  dark:text-white dark:hover:bg-red-600 '
-                        onClick={removeEntry}>
-                        Delete Entry
-                      </button>
-                    </DrawerFooter>
-                    <DrawerClose className='m-2 mx-auto mb-4  rounded-md bg-slate-200 p-2 font-semibold text-black'>
-                      No, Go Back
-                    </DrawerClose>
-                  </DrawerContent>
-                </DrawerPortal>
-              </Drawer>
-            </PopoverContent>
-          </Popover>
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
 
         {/* rest of accordion / entry details */}
         <Accordion type='single' collapsible>
           <AccordionItem value='item-1'>
-            <AccordionTrigger className='text-md pointer-events-auto flex  flex-col items-start  gap-0  pl-3 pt-0'>
+            <AccordionTrigger className='text-md  flex  flex-col items-start  gap-0  pl-3 pt-0'>
               {/* TITLE */}
               <div className='entryListItem-header border-b-medium border-black pb-1.5  text-left text-lg font-extrabold'>
                 {entry.title}
@@ -161,15 +163,20 @@ export default function EntryListItem({ entry }) {
               </div>
             </AccordionTrigger>
 
-            <AccordionContent className='pl-3 '>
-              <div className='mb-2 mt-0 flex flex-row items-center gap-9 '>
+            <AccordionContent className='pl-6 '>
+              <div className='  mb-2  flex flex-row items-center justify-between gap-4'>
                 <div className='flex items-center'>{entry.streetAddress}</div>
+
                 <div
                   href={`tel:${
-                    entry.phone ? entry.phone.replace(/\D/g, '') : ''
+                    entry.phoneNumber
+                      ? entry.phoneNumber.replace(/\D/g, '')
+                      : ''
                   }`}
                   className=' cursor-pointer font-medium text-blue-600 underline hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300'>
-                  {entry.phone ? formatPhoneNumber(entry.phone) : ''}
+                  {entry.phoneNumber
+                    ? formatPhoneNumber(entry.phoneNumber)
+                    : ''}
                 </div>
                 <div className='flex items-center'>
                   {entry.websiteUrl && (

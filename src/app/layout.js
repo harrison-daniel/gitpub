@@ -1,6 +1,8 @@
 import Navbar from './components/Navbar';
 import './globals.css';
-import { Toaster } from './components/ui/toaster';
+// import { Toaster } from './components/ui/toaster';
+import { Toaster } from './components/ui/sonner';
+
 import ModeToggle from './lib/ModeToggle';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -76,7 +78,7 @@ export default async function RootLayout({ children }) {
             </div>
             <div>
               <Link
-                className='main-header flex justify-center pt-0.5 text-center font-serif text-7xl font-extrabold'
+                className='main-header flex justify-center pt-0.5 text-center font-serif text-7xl font-extrabold '
                 href='/'>
                 GitPub
               </Link>
@@ -86,7 +88,7 @@ export default async function RootLayout({ children }) {
             </div>
             <Navbar />
             {children}
-            {/* <Providers>{children}</Providers> */}
+
             <Toaster />
           </ThemeProviders>
         </SessionProvider>

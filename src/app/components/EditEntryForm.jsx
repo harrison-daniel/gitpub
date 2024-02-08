@@ -150,7 +150,7 @@ export default function EditEntryForm({
                 autoComplete='off'
                 rows={1}
                 onChange={(e) => setNewPhoneNumber(e.target.value)}
-                value={newPhoneNumber}
+                value={newPhoneNumber || ''}
               />
             </div>
             <div className='w-full'>
@@ -187,7 +187,7 @@ export default function EditEntryForm({
                 autoComplete='off'
                 rows={1}
                 onChange={(e) => setNewStreetAddress(e.target.value)}
-                value={newStreetAddress}
+                value={newStreetAddress || ''}
               />
             </div>
             <div className='w-full'>
@@ -205,7 +205,7 @@ export default function EditEntryForm({
                 autoComplete='off'
                 rows={1}
                 onChange={(e) => setNewCityStateAddress(e.target.value)}
-                value={newCityStateAddress}
+                value={newCityStateAddress || ''}
               />
             </div>
             <div className='w-full'>
@@ -223,7 +223,7 @@ export default function EditEntryForm({
                 autoComplete='off'
                 rows={1}
                 onChange={(e) => setNewWebsiteUrl(e.target.value)}
-                value={newWebsiteUrl}
+                value={newWebsiteUrl || ''}
               />
             </div>
             <div className='w-full'>
@@ -240,7 +240,7 @@ export default function EditEntryForm({
                 className=' bg-amber-200'
                 autoComplete='off'
                 onChange={(e) => setNewDescription(e.target.value)}
-                value={newDescription}
+                value={newDescription || ''}
               />
             </div>
           </div>

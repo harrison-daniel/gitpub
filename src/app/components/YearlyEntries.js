@@ -53,20 +53,29 @@ export default function YearlyEntries({ year, entries }) {
           {year}
         </AccordionTrigger>
         <AccordionContent>
-          <div className='  mb-3  flex justify-center gap-2 '>
-            <Button onClick={() => handleSort('title')} variant='sort'>
+          <div className='  mb-3  flex justify-between gap-2 '>
+            <Button
+              onClick={() => handleSort('title')}
+              variant='sort'
+              size='form'>
               Sort by Name
               {sortOption === 'title' && (
                 <HiOutlineSelector className=' h-5 w-5' />
               )}
             </Button>
-            <Button onClick={() => handleSort('address')} variant='sort'>
+            <Button
+              onClick={() => handleSort('address')}
+              variant='sort'
+              size='form'>
               Sort by Location
               {sortOption === 'address' && (
                 <HiOutlineSelector className=' h-5 w-5' />
               )}
             </Button>
-            <Button onClick={() => handleSort('date')} variant='sort'>
+            <Button
+              onClick={() => handleSort('date')}
+              variant='sort'
+              size='form'>
               Sort by Date{' '}
               {sortOption === 'date' && (
                 <HiOutlineSelector className=' h-5 w-5' />
