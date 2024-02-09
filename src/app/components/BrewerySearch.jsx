@@ -9,6 +9,8 @@ import {
   DialogOverlay,
   DialogContent,
   DialogPortal,
+  DialogHeader,
+  DialogTitle,
 } from '../components/ui/dialog';
 import { ScrollArea } from '../components/ui/scroll-area';
 import StateComboBox from './StateComboBox';
@@ -90,12 +92,10 @@ export default function BrewerySearch() {
       .join(' ');
 
   function formatPhoneNumber(phoneNumber) {
-    // Check if phoneNumber is null or undefined
     if (!phoneNumber) {
       return 'N/A';
     }
 
-    // Remove all non-numeric characters
     const digits = phoneNumber.replace(/\D/g, '');
 
     if (digits.length === 10) {
@@ -105,7 +105,6 @@ export default function BrewerySearch() {
       )}-${digits.substring(6)}`;
     }
 
-    // Return original string if it doesn't have 10 digits
     return phoneNumber;
   }
 
@@ -164,7 +163,6 @@ export default function BrewerySearch() {
   };
 
   useEffect(() => {
-    // When state changes, reset city
     setCity('');
   }, [state]);
 
@@ -205,98 +203,103 @@ export default function BrewerySearch() {
             />
           </div>
         )}
-        <Dialog open={open} onOpenChange={setOpen}>
-          {/* <DialogTrigger /> */}
-          <DialogPortal>
-            <DialogOverlay className='DialogOverlay'>
-              <DialogContent className='DialogContent flex h-auto flex-col  bg-amber-200'>
-                <div className='flex flex-col items-center justify-center  font-semibold'>
-                  <h1>Breweries in:</h1>
+      </div>
 
-                  <div className=' flex text-lg font-bold'>
-                    {city}, {capitalizeState(state.replace(/_/g, ' '))}
-                  </div>
-                  {session?.user ? (
-                    <></>
-                  ) : (
-                    <div className='mt-2 text-xs italic text-white'>
-                      Sign into an account to save Entries
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogPortal className>
+          <DialogOverlay>
+            <DialogContent className='max-h-[86vh] overflow-hidden bg-gray-900 p-2 dark:bg-slate-950'>
+              <DialogHeader>
+                <DialogTitle>
+                  <div className='text-center  font-semibold text-white '>
+                    <h1>Breweries in:</h1>
+
+                    <div className=' text-center text-lg font-bold'>
+                      {city}, {capitalizeState(state.replace(/_/g, ' '))}
                     </div>
-                  )}
-                </div>
+                    {session?.user ? (
+                      <></>
+                    ) : (
+                      <div className='mt-2 text-xs italic text-white'>
+                        Sign into an account to save Entries
+                      </div>
+                    )}
+                  </div>
+                </DialogTitle>
+              </DialogHeader>
 
-                <ScrollArea className=' m-2 flex max-h-[45rem] flex-col overflow-hidden  '>
-                  {filteredBreweries.map((brewery) => (
-                    <form
-                      key={brewery.id}
-                      type='submit'
-                      className='flex flex-col '
-                      onSubmit={handleModalSubmit}>
-                      <div
-                        className='m-4 rounded-lg bg-amber-400 p-2 shadow-2xl dark:bg-neutral-800  '
-                        key={brewery.id}>
-                        <div className='text-lg font-bold dark:bg-neutral-800 dark:text-yellow-100'>
-                          {brewery.name}
-                        </div>
+              <ScrollArea className='h-[74vh] '>
+                {filteredBreweries.map((brewery) => (
+                  <form
+                    key={brewery.id}
+                    type='submit'
+                    className=' '
+                    onSubmit={handleModalSubmit}>
+                    <div
+                      className='m-4 rounded-lg bg-amber-400 p-2 shadow-2xl dark:bg-neutral-800  '
+                      key={brewery.id}>
+                      <div className='text-lg font-bold dark:bg-neutral-800 dark:text-yellow-100'>
+                        {brewery.name}
+                      </div>
+                      <div>
+                        <div>{`${brewery.address_1}`}</div>
                         <div>
-                          <div>{`${brewery.address_1}`}</div>
-                          <div>
-                            <div
-                              href={`tel:${
-                                brewery.phone
-                                  ? brewery.phone.replace(/\D/g, '')
-                                  : ''
-                              }`}
-                              className=' cursor-pointer font-medium text-blue-600 underline hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300'>
-                              {brewery.phone
-                                ? formatPhoneNumber(brewery.phone)
-                                : ''}
-                            </div>
-                            {brewery.website_url && (
-                              <div>
-                                <div
-                                  href={
-                                    brewery.website_url.startsWith('http')
-                                      ? brewery.website_url
-                                      : `http://${brewery.website_url}`
-                                  }
-                                  target='_blank'
-                                  rel='noopener noreferrer'
-                                  className='  flex w-24 flex-row items-center gap-2 py-1  text-blue-600 visited:text-purple-600 hover:text-blue-800'>
-                                  <Link2 />
-                                  Website
-                                </div>
-                              </div>
-                            )}
+                          <div
+                            href={`tel:${
+                              brewery.phone
+                                ? brewery.phone.replace(/\D/g, '')
+                                : ''
+                            }`}
+                            className=' cursor-pointer font-medium text-blue-600 underline hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300'>
+                            {brewery.phone
+                              ? formatPhoneNumber(brewery.phone)
+                              : ''}
                           </div>
-                        </div>
 
-                        <div className=' flex justify-center '>
-                          {session ? (
+                          {brewery.website_url && (
                             <div>
-                              <Button
-                                color='primary'
-                                size='sm'
-                                className='m-2 rounded-lg bg-amber-700 px-4  font-semibold text-amber-100  shadow hover:bg-amber-500 active:bg-amber-600 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-200 dark:hover:text-black'
-                                onClick={(e) => {
-                                  addBreweryInfoToEntry(brewery);
-                                }}>
-                                Add Brewery to Entries
-                              </Button>
+                              <a
+                                href={
+                                  brewery.website_url.startsWith('http')
+                                    ? brewery.website_url
+                                    : `http://${brewery.website_url}`
+                                }
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                className='flex w-24 flex-row items-center gap-2 py-1  text-blue-600 visited:text-purple-600 hover:text-blue-800'>
+                                <Link2 />
+                                Website
+                              </a>
                             </div>
-                          ) : (
-                            <></>
                           )}
                         </div>
                       </div>
-                    </form>
-                  ))}
-                </ScrollArea>
-              </DialogContent>
-            </DialogOverlay>
-          </DialogPortal>
-        </Dialog>
-      </div>
+
+                      <div className=' flex justify-center '>
+                        {session ? (
+                          <div>
+                            <Button
+                              color='primary'
+                              size='sm'
+                              className='m-2 rounded-lg bg-amber-700 px-4  font-semibold text-amber-100  shadow hover:bg-amber-500 active:bg-amber-600 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-200 dark:hover:text-black'
+                              onClick={(e) => {
+                                addBreweryInfoToEntry(brewery);
+                              }}>
+                              Add Brewery to Entries
+                            </Button>
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    </div>
+                  </form>
+                ))}
+              </ScrollArea>
+            </DialogContent>
+          </DialogOverlay>
+        </DialogPortal>
+      </Dialog>
     </>
   );
 }
