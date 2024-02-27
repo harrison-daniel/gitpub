@@ -11,6 +11,7 @@ import {
   DialogPortal,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from '../components/ui/dialog';
 import { ScrollArea } from '../components/ui/scroll-area';
 import StateComboBox from './StateComboBox';
@@ -19,6 +20,7 @@ import { Button } from '../components/ui/button';
 import { Search, X, RotateCcw } from 'lucide-react';
 import useUserEntries from '../lib/useUserEntries';
 import { Link2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function BrewerySearch() {
   const { data: session } = useSession();
@@ -56,8 +58,9 @@ export default function BrewerySearch() {
         const response = await fetch(
           `https://api.openbrewerydb.org/breweries?by_state=${state}&page=${page}&per_page=200`,
         );
+        console.log('fetching breweries');
         const data = await response.json();
-
+        // console.log('fetching breweries');
         if (data.length === 0) break;
 
         fetchedBreweries = [...fetchedBreweries, ...data];
@@ -118,6 +121,14 @@ export default function BrewerySearch() {
       websiteUrl: brewery.website_url,
       phoneNumber: brewery.phone,
     });
+
+    toast(`${brewery.name}  Added!`, {
+      style: {
+        background: 'green',
+      },
+
+      position: 'bottom-right',
+    });
   }
 
   const handleModalSubmit = async (e) => {
@@ -153,7 +164,7 @@ export default function BrewerySearch() {
         }, true); // false to not revalidate immediately
 
         console.log('Entry added successfully');
-        setOpen(false);
+        // setOpen(false);
       } else {
         throw new Error('Failed to create an entry');
       }
@@ -173,6 +184,21 @@ export default function BrewerySearch() {
           Find Your Next Brewery <br />
         </h1>
         <div className='m-2 flex flex-col items-center gap-0.5'>
+          {/* OLD COMBOBOXES */}
+          {/* <StateComboBox
+            onStateSelect={(selectedState) => setState(selectedState)}
+            value={state}
+          />
+
+          {state && (
+            <CityComboBox
+              cities={cities}
+              onCitySelect={(selectedCity) => setCity(selectedCity)}
+              value={city}
+            />
+          )} */}
+
+          {/* <NewestComboBox /> */}
           <StateComboBox
             onStateSelect={(selectedState) => setState(selectedState)}
             value={state}
@@ -281,7 +307,7 @@ export default function BrewerySearch() {
                             <Button
                               color='primary'
                               size='sm'
-                              className='m-2 rounded-lg bg-amber-700 px-4  font-semibold text-amber-100  shadow hover:bg-amber-500 active:bg-amber-600 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-200 dark:hover:text-black'
+                              className='m-2 rounded-lg bg-amber-700 px-4  font-semibold text-amber-100  shadow hover:bg-amber-500 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-200 dark:hover:text-black'
                               onClick={(e) => {
                                 addBreweryInfoToEntry(brewery);
                               }}>
