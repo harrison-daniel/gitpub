@@ -74,10 +74,6 @@ export default function EntryListItem({ entry }) {
 
       mutate();
       toast('Entry Deleted', {
-        style: {
-          // background: 'green',
-          // width: '90%',
-        },
         className: 'class',
         position: 'bottom-right',
       });

@@ -11,19 +11,14 @@ html {
     rgba(255, 212, 19, 1) 31%,
     rgba(255, 186, 2, 1) 73%
   );
-  /* height: 100vh;
-  width: 100vw; */
-  /* overflow-y: scroll; */
-  /* scrollbar-width: none; */
-  /* -ms-overflow-style: none; */
 
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   /* --removed-body-scroll-bar-size: 17px; */
 }
 body {
-  /* width: 100vw; */
   margin: 0;
   padding: 0;
-  /* height: 100vh; */
 }
 
 html.dark {
@@ -42,21 +37,6 @@ html.dark {
   place-items: center;
   overflow-y: auto;
 }
-
-/* .DialogContent {
-  background: white;
-
-  min-width: 300px;
-  padding: 10px;
-  border-radius: 4px;
-} */
-/* .dark .DialogContent {
-  background: slategray;
-
-  min-width: 300px;
-  padding: 10px;
-  border-radius: 4px;
-} */
 
 .imgDark {
   display: none;
@@ -123,9 +103,6 @@ html.dark {
   bottom: 0;
   width: 100vw;
   height: 100vh;
-  /* background-color: rgba(0, 0, 0, 0.5);
-  z-index: 10; */
   background-color: rgba(0, 0, 0, 0.8);
   z-index: 50;
-  /* box-sizing: border-box; */
 }

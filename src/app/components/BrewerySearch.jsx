@@ -17,9 +17,8 @@ import { ScrollArea } from '../components/ui/scroll-area';
 import StateComboBox from './StateComboBox';
 import CityComboBox from '../components/CityComboBox';
 import { Button } from '../components/ui/button';
-import { Search, X, RotateCcw } from 'lucide-react';
+import { Search, X, RotateCcw, Link2, Check } from 'lucide-react';
 import useUserEntries from '../lib/useUserEntries';
-import { Link2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function BrewerySearch() {
@@ -60,7 +59,6 @@ export default function BrewerySearch() {
         );
         console.log('fetching breweries');
         const data = await response.json();
-        // console.log('fetching breweries');
         if (data.length === 0) break;
 
         fetchedBreweries = [...fetchedBreweries, ...data];
@@ -123,6 +121,7 @@ export default function BrewerySearch() {
     });
 
     toast(`${brewery.name}  Added!`, {
+      icon: <Check />,
       style: {
         background: 'green',
       },
@@ -184,21 +183,6 @@ export default function BrewerySearch() {
           Find Your Next Brewery <br />
         </h1>
         <div className='m-2 flex flex-col items-center gap-0.5'>
-          {/* OLD COMBOBOXES */}
-          {/* <StateComboBox
-            onStateSelect={(selectedState) => setState(selectedState)}
-            value={state}
-          />
-
-          {state && (
-            <CityComboBox
-              cities={cities}
-              onCitySelect={(selectedCity) => setCity(selectedCity)}
-              value={city}
-            />
-          )} */}
-
-          {/* <NewestComboBox /> */}
           <StateComboBox
             onStateSelect={(selectedState) => setState(selectedState)}
             value={state}
@@ -254,7 +238,7 @@ export default function BrewerySearch() {
                 </DialogTitle>
               </DialogHeader>
 
-              <ScrollArea className='h-[74vh] '>
+              <ScrollArea className='max-h-[74vh] '>
                 {filteredBreweries.map((brewery) => (
                   <form
                     key={brewery.id}
