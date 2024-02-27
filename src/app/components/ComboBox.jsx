@@ -32,75 +32,80 @@ export default function ComboBox({ dataList, onSelect, placeholder, value }) {
     setLocalValue(value || '');
   }, [value]);
 
-  if (isDesktop) {
-    return (
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button variant='outline' className='w-[150px] justify-start'>
-            {value
-              ? dataList.find((dataItem) => dataItem.value === localValue)
-                  ?.label
-              : placeholder}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className='w-[200px] p-0' align='start'>
-          <Command>
-            <CommandInput placeholder={`Search or ${placeholder}`} />
-            <CommandList>
-              <CommandEmpty>{`No ${placeholder
-                .replace('Select a ', '')
-                .replace('...', '')} found.`}</CommandEmpty>
-
-              <CommandGroup>
-                {dataList.map((dataItem) => (
-                  <CommandItem
-                    key={dataItem.value}
-                    value={dataItem.value}
-                    onSelect={() => handleSelect(dataItem.value)}>
-                    {dataItem.label}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
-    );
-  }
-
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
-        <Button variant='outline' className='w-[150px] justify-start'>
-          {value
-            ? dataList.find((dataItem) => dataItem.value === localValue)?.label
-            : placeholder}
-        </Button>
-      </DrawerTrigger>
-      <DrawerContent>
-        <div className='mt-4 border-t'>
-          <Command>
-            <CommandInput placeholder={`Search or ${placeholder}`} />
-            <CommandList>
-              <CommandEmpty>{`No ${placeholder
-                .replace('Select a ', '')
-                .replace('...', '')} found.`}</CommandEmpty>
+    <div>
+      {isDesktop ? (
+        <div>
+          <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+              <Button variant='outline' className='w-[150px] justify-start'>
+                {value
+                  ? dataList.find((dataItem) => dataItem.value === localValue)
+                      ?.label
+                  : placeholder}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className='w-[200px] p-0' align='start'>
+              <Command>
+                <CommandInput placeholder={`Search or ${placeholder}`} />
+                <CommandList>
+                  <CommandEmpty>{`No ${placeholder
+                    .replace('Select a ', '')
+                    .replace('...', '')} found.`}</CommandEmpty>
 
-              <CommandGroup>
-                {dataList.map((dataItem) => (
-                  <CommandItem
-                    key={dataItem.value}
-                    value={dataItem.value}
-                    onSelect={() => handleSelect(dataItem.value)}>
-                    {dataItem.label}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </CommandList>
-          </Command>
+                  <CommandGroup>
+                    {dataList.map((dataItem) => (
+                      <CommandItem
+                        key={dataItem.value}
+                        value={dataItem.value}
+                        onSelect={() => handleSelect(dataItem.value)}>
+                        {dataItem.label}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
         </div>
-      </DrawerContent>
-    </Drawer>
+      ) : (
+        <div>
+          <Drawer open={open} onOpenChange={setOpen}>
+            <DrawerTrigger asChild>
+              <Button variant='outline' className='w-[150px] justify-start'>
+                {value
+                  ? dataList.find((dataItem) => dataItem.value === localValue)
+                      ?.label
+                  : placeholder}
+              </Button>
+            </DrawerTrigger>
+            <DrawerContent>
+              <div className='mt-4 border-t'>
+                <Command>
+                  <CommandInput placeholder={`Search or ${placeholder}`} />
+                  <CommandList>
+                    <CommandEmpty>{`No ${placeholder
+                      .replace('Select a ', '')
+                      .replace('...', '')} found.`}</CommandEmpty>
+
+                    <CommandGroup>
+                      {dataList.map((dataItem) => (
+                        <CommandItem
+                          key={dataItem.value}
+                          value={dataItem.value}
+                          onSelect={() => handleSelect(dataItem.value)}>
+                          {dataItem.label}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </div>
+            </DrawerContent>
+          </Drawer>
+        </div>
+      )}
+    </div>
   );
 }
 
