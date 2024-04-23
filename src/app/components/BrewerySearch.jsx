@@ -218,7 +218,7 @@ export default function BrewerySearch() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogPortal className>
           <DialogOverlay>
-            <DialogContent className='max-h-[86vh] overflow-hidden bg-gray-900 p-2 dark:bg-slate-950'>
+            <DialogContent className='max-h-[86vh] overflow-hidden  p-2 dark:bg-slate-950'>
               <DialogHeader>
                 <DialogTitle>
                   <div className='text-center  font-semibold text-white '>

@@ -5,8 +5,8 @@
 html {
   padding: 0px !important;
   margin: 0;
-  background: rgb(255, 212, 19);
-  background: radial-gradient(
+  background-color: rgb(255, 212, 19);
+  background-color: radial-gradient(
     circle,
     rgba(255, 212, 19, 1) 31%,
     rgba(255, 186, 2, 1) 73%
@@ -14,8 +14,9 @@ html {
 
   scrollbar-width: none;
   -ms-overflow-style: none;
-  /* --removed-body-scroll-bar-size: 17px; */
 }
+/* --removed-body-scroll-bar-size: 17px; */
+
 body {
   margin: 0;
   padding: 0;
