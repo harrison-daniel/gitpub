@@ -2,8 +2,6 @@
 import { FiSun, FiMoon } from 'react-icons/fi';
 import { useTheme } from 'next-themes';
 import { useState, useEffect } from 'react';
-// import { SunMoon } from 'lucide-react';
-import Image from 'next/image';
 
 export default function ModeToggle() {
   const [mounted, setMounted] = useState(false);

@@ -55,7 +55,7 @@ export default function BrewerySearch() {
 
       while (true) {
         const response = await fetch(
-          `https://api.openbrewerydb.org/breweries?by_state=${state}&page=${page}&per_page=200`,
+          `https://api.openbrewerydb.org/v1/breweries?by_state=${state}&page=${page}&per_page=200`,
         );
         console.log('fetching breweries');
         const data = await response.json();
