@@ -22,7 +22,7 @@
     "eslint": "8.46.0",
     "eslint-config-next": "^14.2.3",
     "framer-motion": "^10.16.4",
-    "lucide-react": "^0.279.0",
+    "lucide-react": "latest",
     "mongodb": "^6.3.0",
     "mongoose": "^7.6.7",
     "next": "^16.1.6",
