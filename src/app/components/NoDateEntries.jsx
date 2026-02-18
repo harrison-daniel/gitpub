@@ -11,7 +11,7 @@ import {
 import { Button } from '../components/ui/button';
 import { HiOutlineSelector } from 'react-icons/hi';
 
-export default function NoDateEntries({ entries }) {
+export default function NoDateEntries({ entries, onDelete }) {
   const [sortOption, setSortOption] = useState('title');
   const [sortDirection, setSortDirection] = useState('asc');
 
@@ -22,18 +22,11 @@ export default function NoDateEntries({ entries }) {
     );
   };
 
-  const sortedEntries = entries.sort((a, b) => {
+  const sortedEntries = [...entries].sort((a, b) => {
     let valueA = a[sortOption];
     let valueB = b[sortOption];
 
-    if (valueA == null || valueB == null) {
-      return 0;
-    }
-
-    if (sortOption === 'date') {
-      valueA = new Date(valueA);
-      valueB = new Date(valueB);
-    }
+    if (valueA == null || valueB == null) return 0;
 
     if (typeof valueA === 'string' && typeof valueB === 'string') {
       return sortDirection === 'asc'
@@ -49,34 +42,39 @@ export default function NoDateEntries({ entries }) {
       key='no-date'
       type='single'
       collapsible
-      className='my-2 border border-black'>
-      <AccordionItem value='no-date ' className='mx-4'>
-        <AccordionTrigger className='entryList-header flex justify-center text-3xl font-extrabold'>
-          No Date
+      className='mb-3 overflow-hidden rounded-xl border border-amber-200/60 bg-white/50 shadow-sm backdrop-blur-sm dark:border-neutral-700/60 dark:bg-neutral-900/70'>
+      <AccordionItem value='no-date' className='border-none'>
+        <AccordionTrigger className='entryList-header px-4 py-3 text-2xl font-extrabold hover:no-underline'>
+          <span className='flex items-baseline gap-2'>
+            No Date
+            <span className='text-sm font-normal text-stone-500 dark:text-gray-400'>
+              · {entries.length} {entries.length === 1 ? 'trip' : 'trips'}
+            </span>
+          </span>
         </AccordionTrigger>
-        <AccordionContent>
-          <div className='mb-4 flex justify-around gap-4 '>
+        <AccordionContent className='px-3 pb-3'>
+          <div className='mb-3 flex justify-between gap-2'>
             <Button
               onClick={() => handleSort('title')}
               variant='sort'
-              size='sm'>
-              Sort by Name
+              size='form'>
+              Name
               {sortOption === 'title' && (
-                <HiOutlineSelector className=' h-5 w-5' />
+                <HiOutlineSelector className='h-4 w-4' />
               )}
             </Button>
             <Button
               onClick={() => handleSort('cityStateAddress')}
               variant='sort'
-              size='sm'>
-              Sort by Location
+              size='form'>
+              Location
               {sortOption === 'cityStateAddress' && (
-                <HiOutlineSelector className=' h-5 w-5' />
+                <HiOutlineSelector className='h-4 w-4' />
               )}
             </Button>
           </div>
           {sortedEntries.map((entry) => (
-            <EntryListItem key={entry._id} entry={entry} />
+            <EntryListItem key={entry._id} entry={entry} onDelete={onDelete} />
           ))}
         </AccordionContent>
       </AccordionItem>

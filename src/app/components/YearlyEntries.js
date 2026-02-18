@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import EntryListItem from './EntryListItem';
 import {
   Accordion,
@@ -11,15 +11,13 @@ import {
 import { Button } from '../components/ui/button';
 import { HiOutlineSelector } from 'react-icons/hi';
 
-export default function YearlyEntries({ year, entries }) {
+export default function YearlyEntries({ year, entries, onDelete }) {
   const [sortOption, setSortOption] = useState('date');
   const [sortDirection, setSortDirection] = useState('desc');
 
   const handleSort = (option) => {
     if (sortOption === option) {
-      setSortDirection((prevDirection) =>
-        prevDirection === 'desc' ? 'asc' : 'desc',
-      );
+      setSortDirection((prev) => (prev === 'desc' ? 'asc' : 'desc'));
     } else {
       setSortOption(option);
       setSortDirection('desc');
@@ -28,9 +26,9 @@ export default function YearlyEntries({ year, entries }) {
 
   const sortedEntries = [...entries].sort((a, b) => {
     if (sortOption === 'date') {
-      const dateA = new Date(a.date);
-      const dateB = new Date(b.date);
-      return sortDirection === 'desc' ? dateB - dateA : dateA - dateB;
+      return sortDirection === 'desc'
+        ? new Date(b.date) - new Date(a.date)
+        : new Date(a.date) - new Date(b.date);
     } else if (sortOption === 'title') {
       return sortDirection === 'asc'
         ? b.title.localeCompare(a.title)
@@ -44,46 +42,50 @@ export default function YearlyEntries({ year, entries }) {
 
   return (
     <Accordion
-      key={year}
       type='single'
       collapsible
-      className='my-2 border border-black'>
-      <AccordionItem value={`year-${year}`} className='mx-2'>
-        <AccordionTrigger className='entryList-header flex justify-center text-3xl font-extrabold'>
-          {year}
+      className='mb-3 overflow-hidden rounded-xl border border-amber-200/60 bg-white/50 shadow-sm backdrop-blur-sm dark:border-neutral-700/60 dark:bg-neutral-900/70'>
+      <AccordionItem value={`year-${year}`} className='border-none'>
+        <AccordionTrigger className='entryList-header px-4 py-3 text-2xl font-extrabold hover:no-underline'>
+          <span className='flex items-baseline gap-2'>
+            {year}
+            <span className='text-sm font-normal text-stone-500 dark:text-gray-400'>
+              · {entries.length} {entries.length === 1 ? 'trip' : 'trips'}
+            </span>
+          </span>
         </AccordionTrigger>
-        <AccordionContent>
-          <div className='  mb-3  flex justify-between gap-2 '>
+        <AccordionContent className='px-3 pb-3'>
+          <div className='mb-3 flex justify-between gap-2'>
             <Button
               onClick={() => handleSort('title')}
               variant='sort'
               size='form'>
-              Sort by Name
+              Name
               {sortOption === 'title' && (
-                <HiOutlineSelector className=' h-5 w-5' />
+                <HiOutlineSelector className='h-4 w-4' />
               )}
             </Button>
             <Button
               onClick={() => handleSort('address')}
               variant='sort'
               size='form'>
-              Sort by Location
+              Location
               {sortOption === 'address' && (
-                <HiOutlineSelector className=' h-5 w-5' />
+                <HiOutlineSelector className='h-4 w-4' />
               )}
             </Button>
             <Button
               onClick={() => handleSort('date')}
               variant='sort'
               size='form'>
-              Sort by Date{' '}
+              Date
               {sortOption === 'date' && (
-                <HiOutlineSelector className=' h-5 w-5' />
+                <HiOutlineSelector className='h-4 w-4' />
               )}
             </Button>
           </div>
           {sortedEntries.map((entry) => (
-            <EntryListItem key={entry._id} entry={entry} />
+            <EntryListItem key={entry._id} entry={entry} onDelete={onDelete} />
           ))}
         </AccordionContent>
       </AccordionItem>

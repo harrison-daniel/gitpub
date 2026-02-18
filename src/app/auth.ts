@@ -10,9 +10,12 @@ export const {
   providers: [GitHub, Google],
 
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.sub = user.id;
+    async jwt({ token, account }) {
+      // account is only present on initial sign-in; providerAccountId is the
+      // stable OAuth user ID (Google sub, GitHub numeric ID). Without this,
+      // NextAuth v5 may use an ephemeral user.id that changes each sign-in.
+      if (account) {
+        token.sub = account.providerAccountId;
       }
       return token;
     },

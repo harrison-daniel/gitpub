@@ -8,7 +8,7 @@ export async function PUT(request, { params }) {
 
   if (session) {
     try {
-      const { id } = params;
+      const { id } = await params;
       const {
         newTitle: title,
         newStreetAddress: streetAddress,
@@ -42,7 +42,7 @@ export async function PUT(request, { params }) {
 
 export async function GET(request, { params }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     await dbConnect();
     const entry = await Entry.findOne({ _id: id }).lean();
     if (entry) {

@@ -29,61 +29,58 @@ function Field({ label, htmlFor, children }) {
   );
 }
 
-export default function EditEntryForm({
-  id,
-  title,
-  streetAddress,
-  cityStateAddress,
-  description,
-  date,
-  websiteUrl,
-  phoneNumber,
-}) {
-  const [newTitle, setNewTitle] = useState(title ?? '');
-  const [newDescription, setNewDescription] = useState(description ?? '');
-  const [newStreetAddress, setNewStreetAddress] = useState(streetAddress ?? '');
-  const [newCityStateAddress, setNewCityStateAddress] = useState(
-    cityStateAddress ?? '',
-  );
-  const [newDate, setNewDate] = useState(date ? new Date(date) : null);
-  const [newWebsiteUrl, setNewWebsiteUrl] = useState(websiteUrl ?? '');
-  const [newPhoneNumber, setNewPhoneNumber] = useState(phoneNumber ?? '');
+export default function AddEntryForm() {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [streetAddress, setStreetAddress] = useState('');
+  const [cityStateAddress, setCityStateAddress] = useState('');
+  const [date, setDate] = useState(new Date());
+  const [websiteUrl, setWebsiteUrl] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const router = useRouter();
 
   const handleDateSelection = (selected) => {
-    setNewDate(selected);
+    setDate(selected);
     setIsCalendarOpen(false);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!title) {
+      toast('Brewery or entry name is required.', {
+        style: { background: 'red' },
+        position: 'bottom-right',
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     try {
-      const res = await fetch(`/api/entries/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch('/api/entries', {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({
-          newTitle,
-          newStreetAddress,
-          newCityStateAddress,
-          newDescription,
-          newDate: newDate ?? null,
-          newWebsiteUrl,
-          newPhoneNumber,
+          title,
+          streetAddress,
+          cityStateAddress,
+          description,
+          date,
+          websiteUrl,
+          phoneNumber,
         }),
       });
 
-      if (!res.ok) {
-        throw new Error('Failed to update entry');
+      if (res.ok) {
+        router.push('/');
+        router.refresh();
+      } else {
+        throw new Error('Failed to create entry');
       }
-      router.push('/');
-      router.refresh();
     } catch {
-      toast('Failed to update entry. Please try again.', {
+      toast('Failed to save entry. Please try again.', {
         style: { background: 'red' },
         position: 'bottom-right',
       });
@@ -95,7 +92,7 @@ export default function EditEntryForm({
   return (
     <div className='mx-auto w-full max-w-md px-4 pb-12 pt-6'>
       <h1 className='entryList-header mb-6 text-center text-3xl font-extrabold'>
-        Edit Entry
+        Add Entry
       </h1>
 
       <div className='rounded-2xl border border-amber-200/60 bg-white/80 shadow-sm backdrop-blur-sm dark:border-neutral-700/60 dark:bg-neutral-900/80'>
@@ -109,26 +106,26 @@ export default function EditEntryForm({
                   variant='outline'
                   className={cn(
                     'w-[175px] justify-start border-amber-200 text-left font-normal dark:border-neutral-700',
-                    !newDate && 'text-muted-foreground',
+                    !date && 'text-muted-foreground',
                   )}>
                   <CalendarIcon className='mr-2 h-4 w-4' />
-                  {newDate ? format(newDate, 'MM/dd/yyyy') : 'Pick a date'}
+                  {date ? format(date, 'MM/dd/yyyy') : 'Pick a date'}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className='w-auto rounded-xl p-0'>
                 <Calendar
                   mode='single'
-                  selected={newDate}
+                  selected={date}
                   onSelect={handleDateSelection}
                   initialFocus
                 />
               </PopoverContent>
             </Popover>
 
-            {newDate && (
+            {date && (
               <button
                 type='button'
-                onClick={() => setNewDate(null)}
+                onClick={() => setDate(null)}
                 className='flex items-center gap-1 text-xs font-semibold text-red-600 hover:text-red-400'>
                 Clear <X size={14} />
               </button>
@@ -140,8 +137,8 @@ export default function EditEntryForm({
               id='title'
               placeholder='e.g. Bell&apos;s Brewery'
               autoComplete='off'
-              value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
             />
           </Field>
 
@@ -151,8 +148,8 @@ export default function EditEntryForm({
               type='tel'
               placeholder='(555) 555-5555'
               autoComplete='off'
-              value={newPhoneNumber}
-              onChange={(e) => setNewPhoneNumber(e.target.value)}
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
             />
           </Field>
 
@@ -161,8 +158,8 @@ export default function EditEntryForm({
               id='street'
               placeholder='123 Main St'
               autoComplete='off'
-              value={newStreetAddress}
-              onChange={(e) => setNewStreetAddress(e.target.value)}
+              value={streetAddress}
+              onChange={(e) => setStreetAddress(e.target.value)}
             />
           </Field>
 
@@ -171,8 +168,8 @@ export default function EditEntryForm({
               id='cityState'
               placeholder='Grand Rapids, MI'
               autoComplete='off'
-              value={newCityStateAddress}
-              onChange={(e) => setNewCityStateAddress(e.target.value)}
+              value={cityStateAddress}
+              onChange={(e) => setCityStateAddress(e.target.value)}
             />
           </Field>
 
@@ -182,8 +179,8 @@ export default function EditEntryForm({
               type='url'
               placeholder='https://example.com'
               autoComplete='off'
-              value={newWebsiteUrl}
-              onChange={(e) => setNewWebsiteUrl(e.target.value)}
+              value={websiteUrl}
+              onChange={(e) => setWebsiteUrl(e.target.value)}
             />
           </Field>
 
@@ -192,8 +189,8 @@ export default function EditEntryForm({
               id='notes'
               placeholder='Tasting notes, what you tried, how it was...'
               autoComplete='off'
-              value={newDescription}
-              onChange={(e) => setNewDescription(e.target.value)}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
           </Field>
 
@@ -202,7 +199,7 @@ export default function EditEntryForm({
             variant='formAction'
             disabled={isSubmitting}
             className='mt-2 w-full'>
-            {isSubmitting ? 'Saving...' : 'Update Entry'}
+            {isSubmitting ? 'Saving...' : 'Add Entry'}
           </Button>
         </form>
       </div>

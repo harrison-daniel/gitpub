@@ -34,7 +34,7 @@ export default async function RootLayout({ children }) {
       name: session.user.name,
       email: session.user.email,
       image: session.user.image,
-      userId: session.user.id,
+      id: session.user.id,
     };
   }
 

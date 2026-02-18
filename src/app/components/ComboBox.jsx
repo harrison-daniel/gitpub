@@ -15,15 +15,28 @@ import {
 import { Drawer, DrawerContent, DrawerTrigger } from './ui/drawer';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 
-export default function ComboBox({ dataList, onSelect, placeholder, value }) {
+export default function ComboBox({
+  dataList,
+  onSelect,
+  placeholder,
+  value,
+  externalOpen,
+  onExternalOpenChange,
+}) {
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery('(min-width: 768px)');
-
   const [localValue, setLocalValue] = useState(value || '');
+
+  // Allow external control of open state (e.g. triggered from Navbar Search)
+  const isOpen = externalOpen !== undefined ? externalOpen : open;
+  const handleOpenChange = (val) => {
+    setOpen(val);
+    onExternalOpenChange?.(val);
+  };
 
   const handleSelect = (currentValue) => {
     setLocalValue(currentValue === localValue ? '' : currentValue);
-    setOpen(false);
+    handleOpenChange(false);
     onSelect(currentValue);
   };
 
@@ -35,7 +48,7 @@ export default function ComboBox({ dataList, onSelect, placeholder, value }) {
     <div>
       {isDesktop ? (
         <div>
-          <Popover open={open} onOpenChange={setOpen}>
+          <Popover open={isOpen} onOpenChange={handleOpenChange}>
             <PopoverTrigger asChild>
               <Button variant='outline' className='w-[150px] justify-start'>
                 {value
@@ -69,7 +82,7 @@ export default function ComboBox({ dataList, onSelect, placeholder, value }) {
         </div>
       ) : (
         <div>
-          <Drawer open={open} onOpenChange={setOpen}>
+          <Drawer open={isOpen} onOpenChange={handleOpenChange}>
             <DrawerTrigger asChild>
               <Button variant='outline' className='w-[150px] justify-start'>
                 {value

@@ -82,10 +82,22 @@ export async function GET(request) {
 }
 
 export async function DELETE(request) {
+  const session = await auth();
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const id = request.nextUrl.searchParams.get('id');
     await dbConnect();
-    await Entry.findByIdAndDelete(id);
+    const entry = await Entry.findById(id);
+    if (!entry) {
+      return NextResponse.json({ error: 'Entry not found' }, { status: 404 });
+    }
+    if (entry.userId !== session.user.id) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+    await entry.deleteOne();
     return NextResponse.json({ message: 'Entry deleted' }, { status: 200 });
   } catch (error) {
     return NextResponse.json(

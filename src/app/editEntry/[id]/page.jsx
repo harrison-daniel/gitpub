@@ -27,7 +27,7 @@ const getEntryById = async (id) => {
 };
 
 export default async function EditEntry({ params }) {
-  const { id } = params;
+  const { id } = await params;
   const { entry } = await getEntryById(id);
   const {
     title,
@@ -36,6 +36,7 @@ export default async function EditEntry({ params }) {
     description,
     date,
     websiteUrl,
+    phoneNumber,
   } = entry;
 
   return (
@@ -47,6 +48,7 @@ export default async function EditEntry({ params }) {
       description={description}
       date={date}
       websiteUrl={websiteUrl}
+      phoneNumber={phoneNumber}
     />
   );
 }
