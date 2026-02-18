@@ -9,6 +9,10 @@ export const {
 } = NextAuth({
   providers: [GitHub, Google],
 
+  pages: {
+    signIn: '/signin',
+  },
+
   callbacks: {
     async jwt({ token, account }) {
       // account is only present on initial sign-in; providerAccountId is the

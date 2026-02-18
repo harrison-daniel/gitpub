@@ -18,7 +18,7 @@ import {
   AlertDialogTrigger,
 } from './ui/alert-dialog';
 import { Skeleton } from './ui/skeleton';
-import { MapPin, Beer, Calendar, TrendingUp } from 'lucide-react';
+import { MapPin, Beer, Calendar, TrendingUp, ChevronLeft } from 'lucide-react';
 
 function StatCard({ value, label, icon: Icon }) {
   return (
@@ -122,6 +122,12 @@ export default function UserInfo() {
 
   return (
     <div className='mx-auto w-full max-w-md px-4 pb-12 pt-6'>
+      <button
+        onClick={() => router.back()}
+        className='mb-4 -ml-1.5 inline-flex items-center gap-1 rounded-md px-1.5 py-1 text-sm font-semibold text-amber-700 hover:bg-amber-50 hover:text-amber-600 dark:text-amber-400 dark:hover:bg-amber-950/30 dark:hover:text-amber-300'>
+        <ChevronLeft size={16} />
+        Back
+      </button>
       <h1 className='entryList-header mb-6 text-center text-3xl font-extrabold'>
         Dashboard
       </h1>

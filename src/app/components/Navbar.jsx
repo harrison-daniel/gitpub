@@ -48,7 +48,7 @@ export default function Navbar() {
   };
 
   const navLinkClass =
-    'rounded border border-zinc-950 bg-black px-4 py-1 font-extrabold text-white hover:bg-zinc-800 dark:bg-zinc-300 dark:text-black dark:hover:bg-zinc-200';
+    'rounded bg-amber-700 px-4 py-1 font-extrabold text-amber-100 hover:bg-amber-600 dark:bg-zinc-300 dark:text-black dark:hover:bg-zinc-200';
 
   return (
     <>

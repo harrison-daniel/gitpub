@@ -44,12 +44,12 @@ export default function YearlyEntries({ year, entries, onDelete }) {
     <Accordion
       type='single'
       collapsible
-      className='mb-3 overflow-hidden rounded-xl border border-amber-200/60 bg-white/50 shadow-sm backdrop-blur-sm dark:border-neutral-700/60 dark:bg-neutral-900/70'>
+      className='mb-3 overflow-hidden rounded-xl border border-amber-200/70 bg-white/80 shadow-sm backdrop-blur-sm dark:border-neutral-700/60 dark:bg-neutral-900/80'>
       <AccordionItem value={`year-${year}`} className='border-none'>
         <AccordionTrigger className='entryList-header px-4 py-3 text-2xl font-extrabold hover:no-underline'>
           <span className='flex items-baseline gap-2'>
             {year}
-            <span className='text-sm font-normal text-stone-500 dark:text-gray-400'>
+            <span className='text-sm font-medium text-stone-600 dark:text-gray-400'>
               · {entries.length} {entries.length === 1 ? 'trip' : 'trips'}
             </span>
           </span>

@@ -44,7 +44,6 @@ export async function POST(request) {
       return new Response(
         JSON.stringify({
           error: 'Failed to create entry',
-          details: error.message,
         }),
         {
           status: 500,

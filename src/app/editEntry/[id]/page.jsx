@@ -1,43 +1,27 @@
 import EditEntryForm from '../../components/EditEntryForm';
 import { auth } from '../../auth';
-
-const getEntryById = async (id) => {
-  const session = await auth();
-
-  if (session) {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/entries/${id}`,
-        {
-          cache: 'no-store',
-        },
-      );
-
-      if (!res.ok) {
-        throw new Error('Failed to fetch entry');
-      }
-      return res.json();
-    } catch (error) {
-      console.log(error);
-      return {};
-    }
-  } else {
-    console.log('no session');
-  }
-};
+import dbConnect from '../../db/dbConnect';
+import Entry from '../../models/entry';
 
 export default async function EditEntry({ params }) {
   const { id } = await params;
-  const { entry } = await getEntryById(id);
-  const {
-    title,
-    streetAddress,
-    cityStateAddress,
-    description,
-    date,
-    websiteUrl,
-    phoneNumber,
-  } = entry;
+  const session = await auth();
+
+  if (!session) {
+    return <div>Not authorized</div>;
+  }
+
+  await dbConnect();
+  const raw = await Entry.findOne({ _id: id, userId: session.user.id }).lean();
+
+  if (!raw) {
+    return <div>Entry not found</div>;
+  }
+
+  // Serialize MongoDB types (ObjectId, Date) so they're safe to pass to client components
+  const entry = JSON.parse(JSON.stringify(raw));
+
+  const { title, streetAddress, cityStateAddress, description, date, websiteUrl, phoneNumber } = entry;
 
   return (
     <EditEntryForm

@@ -10,20 +10,20 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
     <DayPicker
       showOutsideDays={showOutsideDays}
       fixedWeeks
-      className={cn('p-3', className)}
+      className={cn('px-8 py-3', className)}
       classNames={{
         months: 'flex flex-col sm:flex-row gap-y-4 sm:gap-x-4 sm:gap-y-0',
         month: 'flex flex-col gap-y-4',
         month_caption: 'relative flex h-9 items-center justify-center',
         caption_label: 'text-sm font-medium',
-        nav: 'absolute inset-0 flex items-center justify-between pointer-events-none',
+        nav: 'absolute  inset-0 flex items-center justify-between pointer-events-none',
         button_previous: cn(
           buttonVariants({ variant: 'outline' }),
-          'h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 pointer-events-auto',
+          'h-7 w-7 bg-transparent p-0 mx-1.5 opacity-50 hover:opacity-100 pointer-events-auto',
         ),
         button_next: cn(
           buttonVariants({ variant: 'outline' }),
-          'h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 pointer-events-auto',
+          'h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 pointer-events-auto mx-1.5',
         ),
         month_grid: 'w-full border-collapse space-y-1',
         weekdays: 'flex',
@@ -37,7 +37,8 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
         ),
         selected:
           'bg-amber-600 text-slate-50 hover:bg-amber-600 hover:text-slate-50 focus:bg-amber-600 focus:text-slate-50 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50 dark:hover:text-slate-900 dark:focus:bg-slate-50 dark:focus:text-slate-900',
-        today: 'bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-50',
+        today:
+          'bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-50',
         outside: 'text-slate-500 opacity-50 dark:text-slate-400',
         disabled: 'text-slate-500 opacity-50 dark:text-slate-400',
         range_middle:

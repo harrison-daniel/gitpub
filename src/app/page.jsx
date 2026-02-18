@@ -8,16 +8,7 @@ export default async function Home() {
   return (
     <>
       <BrewerySearch />
-      {session ? (
-        <EntryList />
-      ) : (
-        <div className='dark: m-auto flex w-72 justify-center text-xl font-bold text-black dark:text-white'>
-          <p>
-            Search for a brewery above or sign in and add them to your saved
-            trips!
-          </p>
-        </div>
-      )}
+      {session ? <EntryList /> : null}
     </>
   );
 }

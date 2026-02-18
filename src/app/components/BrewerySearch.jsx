@@ -4,9 +4,7 @@ import { useSession, signIn } from 'next-auth/react';
 import React, { useState, useEffect, useRef } from 'react';
 import {
   Dialog,
-  DialogOverlay,
   DialogContent,
-  DialogPortal,
   DialogHeader,
   DialogTitle,
 } from '../components/ui/dialog';
@@ -38,7 +36,7 @@ function BreweryCard({ brewery, session, addingBreweryId, onAdd }) {
   const isAdding = addingBreweryId === brewery.id;
 
   return (
-    <div className='overflow-hidden rounded-xl border border-white/20 bg-white/90 shadow-sm dark:border-neutral-700/60 dark:bg-neutral-800/90'>
+    <div className='overflow-hidden rounded-xl border border-stone-200 bg-white shadow dark:border-neutral-700/60 dark:bg-neutral-800/90'>
       <div className='flex'>
         {/* Left accent bar — amber for open, red for closed */}
         <div className={`w-1 flex-shrink-0 ${brewery.brewery_type === 'closed' ? 'bg-red-500' : 'bg-amber-500'}`} />
@@ -58,7 +56,7 @@ function BreweryCard({ brewery, session, addingBreweryId, onAdd }) {
 
           {/* Address */}
           {brewery.address_1 && (
-            <p className='font-mono text-xs text-stone-500 dark:text-gray-400'>
+            <p className='font-mono text-xs text-stone-600 dark:text-gray-400'>
               {brewery.address_1}
             </p>
           )}
@@ -98,7 +96,7 @@ function BreweryCard({ brewery, session, addingBreweryId, onAdd }) {
                 size='sm'
                 disabled={isAdding}
                 className='rounded-lg bg-amber-700 px-4 text-xs font-semibold text-amber-100 shadow hover:bg-amber-500 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-200 dark:hover:text-black'
-                onClick={() => onAdd(brewery)}>
+                onClick={(e) => { e.currentTarget.blur(); onAdd(brewery); }}>
                 {isAdding ? (
                   <>
                     <Loader2 className='mr-1.5 h-3 w-3 animate-spin' />
@@ -297,7 +295,12 @@ export default function BrewerySearch() {
         <h1 className='search-header mb-1 flex justify-center text-center text-2xl font-extrabold lg:text-4xl'>
           Find Your Next Brewery
         </h1>
-        <div className='m-2 flex flex-col items-center gap-0.5'>
+        {!session && (
+          <p className='mb-2 w-fit mx-auto rounded-full bg-white/50 px-3 py-0.5 text-center text-sm font-medium text-stone-700 backdrop-blur-sm dark:bg-black/40 dark:text-stone-200'>
+            Sign in to save your discoveries
+          </p>
+        )}
+        <div className='m-2 flex flex-col items-center'>
           <StateComboBox
             onStateSelect={(selectedState) => setState(selectedState)}
             value={state}
@@ -305,77 +308,79 @@ export default function BrewerySearch() {
             onExternalOpenChange={setStateComboOpen}
           />
 
-          {state &&
-            (isLoadingBreweries ? (
-              <div className='mt-1 flex items-center gap-2 text-sm text-muted-foreground'>
-                <Loader2 className='h-4 w-4 animate-spin text-amber-600' />
-                <span>Finding breweries...</span>
-              </div>
-            ) : (
-              <CityComboBox
-                cities={cities}
-                onCitySelect={(selectedCity) => setCity(selectedCity)}
-                value={city}
-              />
-            ))}
-        </div>
-        {city && !isLoadingBreweries && (
-          <div className='flex flex-row items-center justify-center gap-6'>
-            <Button
-              className='bg-amber-700 text-white hover:bg-amber-600 dark:bg-slate-950 dark:text-yellow-100'
-              onClick={handleCityFilter}>
-              <Search className='mr-2 h-4 w-4' />
-              Search
-            </Button>
-
-            <RotateCcw
-              size={24}
-              onClick={handleClearSearch}
-              title='Clear Search'
-              className='cursor-pointer text-red-600 hover:text-red-400 dark:text-red-600 dark:hover:text-red-400'
-            />
+          {/* City / loading — slides in when state is selected, no layout jump */}
+          <div className={`overflow-hidden transition-all duration-300 ease-in-out ${state ? 'max-h-16 opacity-100' : 'max-h-0 opacity-0'}`}>
+            <div className='pt-1.5'>
+              {isLoadingBreweries ? (
+                <div className='flex h-10 items-center gap-2 text-sm text-muted-foreground'>
+                  <Loader2 className='h-4 w-4 animate-spin text-amber-600' />
+                  <span>Finding breweries...</span>
+                </div>
+              ) : (
+                <CityComboBox
+                  cities={cities}
+                  onCitySelect={(selectedCity) => setCity(selectedCity)}
+                  value={city}
+                />
+              )}
+            </div>
           </div>
-        )}
+
+          {/* Search row — slides in when city is selected */}
+          <div className={`overflow-hidden transition-all duration-300 ease-in-out ${city && !isLoadingBreweries ? 'max-h-16 opacity-100' : 'max-h-0 opacity-0'}`}>
+            <div className='flex flex-row items-center justify-center gap-6 pt-2.5'>
+              <Button
+                className='bg-amber-700 text-white hover:bg-amber-600 dark:bg-slate-950 dark:text-yellow-100'
+                onClick={(e) => { e.currentTarget.blur(); handleCityFilter(); }}>
+                <Search className='mr-2 h-4 w-4' />
+                Search
+              </Button>
+              <RotateCcw
+                size={22}
+                onClick={handleClearSearch}
+                title='Clear Search'
+                className='cursor-pointer text-red-600 hover:text-red-400 dark:text-red-600 dark:hover:text-red-400'
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogPortal>
-          <DialogOverlay>
-            <DialogContent className='max-h-[86vh] overflow-hidden p-2 dark:bg-slate-950'>
-              <DialogHeader>
-                <DialogTitle>
-                  <div className='text-center font-semibold text-white'>
-                    <h1>Breweries in:</h1>
-                    <div className='text-center text-lg font-bold'>
-                      {city}, {capitalizeState(state.replace(/_/g, ' '))}
-                    </div>
-                    <div className='mt-0.5 text-xs font-normal text-amber-200'>
-                      {filteredBreweries.length}{' '}
-                      {filteredBreweries.length === 1
-                        ? 'brewery'
-                        : 'breweries'}{' '}
-                      found
-                    </div>
-                  </div>
-                </DialogTitle>
-              </DialogHeader>
+      <Dialog open={open} onOpenChange={(val) => {
+        setOpen(val);
+        if (!val) document.activeElement?.blur();
+      }}>
+        <DialogContent className='max-h-[78vh] overflow-hidden p-0 bg-white dark:bg-zinc-950'>
+          <DialogHeader className='rounded-t-lg bg-amber-700 px-4 py-3 dark:bg-zinc-800'>
+            <DialogTitle>
+              <div className='text-center'>
+                <p className='text-sm font-semibold text-amber-100 dark:text-amber-200'>Breweries in:</p>
+                <p className='text-lg font-bold text-white'>
+                  {city}, {capitalizeState(state.replace(/_/g, ' '))}
+                </p>
+                <p className='mt-0.5 text-xs font-normal text-amber-200'>
+                  {filteredBreweries.length}{' '}
+                  {filteredBreweries.length === 1 ? 'brewery' : 'breweries'}{' '}
+                  found
+                </p>
+              </div>
+            </DialogTitle>
+          </DialogHeader>
 
-              <ScrollArea className='max-h-[74vh]'>
-                <div className='flex flex-col gap-3 p-3'>
-                  {filteredBreweries.map((brewery) => (
-                    <BreweryCard
-                      key={brewery.id}
-                      brewery={brewery}
-                      session={session}
-                      addingBreweryId={addingBreweryId}
-                      onAdd={handleAddBrewery}
-                    />
-                  ))}
-                </div>
-              </ScrollArea>
-            </DialogContent>
-          </DialogOverlay>
-        </DialogPortal>
+          <ScrollArea className='max-h-[62vh]'>
+            <div className='flex flex-col gap-2.5 p-3'>
+              {filteredBreweries.map((brewery) => (
+                <BreweryCard
+                  key={brewery.id}
+                  brewery={brewery}
+                  session={session}
+                  addingBreweryId={addingBreweryId}
+                  onAdd={handleAddBrewery}
+                />
+              ))}
+            </div>
+          </ScrollArea>
+        </DialogContent>
       </Dialog>
     </>
   );

@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Textarea } from '../components/ui/textarea';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
-import { X, Calendar as CalendarIcon } from 'lucide-react';
+import { X, Calendar as CalendarIcon, ChevronLeft } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '../lib/utils';
 import { Button } from '../components/ui/button';
@@ -74,6 +74,7 @@ export default function AddEntryForm() {
       });
 
       if (res.ok) {
+        toast('Entry saved!', { position: 'bottom-right' });
         router.push('/');
         router.refresh();
       } else {
@@ -91,6 +92,13 @@ export default function AddEntryForm() {
 
   return (
     <div className='mx-auto w-full max-w-md px-4 pb-12 pt-6'>
+      <button
+        type='button'
+        onClick={() => router.back()}
+        className='mb-4 -ml-1.5 inline-flex items-center gap-1 rounded-md px-1.5 py-1 text-sm font-semibold text-amber-700 hover:bg-amber-50 hover:text-amber-600 dark:text-amber-400 dark:hover:bg-amber-950/30 dark:hover:text-amber-300'>
+        <ChevronLeft size={16} />
+        Back
+      </button>
       <h1 className='entryList-header mb-6 text-center text-3xl font-extrabold'>
         Add Entry
       </h1>
@@ -135,7 +143,7 @@ export default function AddEntryForm() {
           <Field label='Brewery / Entry Name *' htmlFor='title'>
             <Input
               id='title'
-              placeholder='e.g. Bell&apos;s Brewery'
+              placeholder="e.g. Bell's Brewery"
               autoComplete='off'
               value={title}
               onChange={(e) => setTitle(e.target.value)}

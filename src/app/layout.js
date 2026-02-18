@@ -13,8 +13,24 @@ import { auth } from './auth';
 import { ThemeProviders } from './themeProviders';
 
 export const metadata = {
-  title: 'gitpub',
+  title: 'GitPub',
   description: 'Brewery Locator and Journal',
+  icons: {
+    icon: [
+      {
+        url: '/assets/images/icon-192.png',
+        sizes: '192x192',
+        type: 'image/png',
+      },
+      {
+        url: '/assets/images/icon-512.png',
+        sizes: '512x512',
+        type: 'image/png',
+      },
+    ],
+    apple: [{ url: '/assets/images/apple-touch-icon.png' }],
+    shortcut: '/assets/images/icon-192.png',
+  },
 };
 
 export const viewport = {
@@ -22,6 +38,10 @@ export const viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#b45309' },
+    { media: '(prefers-color-scheme: dark)', color: '#09090b' },
+  ],
   // interactiveWidget: 'resizes-visual',
 };
 
@@ -45,7 +65,7 @@ export default async function RootLayout({ children }) {
           <ThemeProviders>
             {/* backgorund Image */}
             <div>
-              <div className='imgLight absolute  top-[2vh] -z-20 mx-auto h-[100vh]  w-[100vw] md:top-[4vh] '>
+              <div className='imgLight absolute top-[2vh] -z-20 mx-auto h-[100vh] w-[100vw] md:top-[4vh]'>
                 <Image
                   src={beerLight}
                   alt='Light Theme Beer'
@@ -60,12 +80,12 @@ export default async function RootLayout({ children }) {
                   }}
                 />
               </div>
-              <div className='imgDark absolute  top-[3.5vh] -z-20 h-[100vh] w-[100vw] md:top-[4.5vh] '>
+              <div className='imgDark absolute top-[3.5vh] -z-20 h-[100vh] w-[100vw] md:top-[4.5vh]'>
                 <Image
                   src={beerDark}
                   alt='Dark Theme Beer'
                   placeholder='empty'
-                  className='imgDark '
+                  className='imgDark'
                   quality={75}
                   priority
                   sizes='100% '
@@ -76,9 +96,9 @@ export default async function RootLayout({ children }) {
                 />
               </div>
             </div>
-            <div>
+            <div className='main-header mx-auto flex justify-center'>
               <Link
-                className='main-header flex justify-center pt-0.5 text-center font-serif text-7xl font-extrabold '
+                className='pt-0.5 text-center font-serif text-7xl font-extrabold'
                 href='/'>
                 GitPub
               </Link>

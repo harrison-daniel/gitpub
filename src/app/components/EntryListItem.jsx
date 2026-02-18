@@ -35,7 +35,7 @@ export default function EntryListItem({ entry, onDelete }) {
     (entry.description && entry.description !== 'Edit entry to add notes');
 
   return (
-    <div className='mb-3 overflow-hidden rounded-xl border border-amber-200/60 bg-white shadow-sm transition-shadow hover:shadow-md dark:border-neutral-700/60 dark:bg-neutral-900'>
+    <div className='mb-3 overflow-hidden rounded-xl border border-amber-200/60 bg-white/85 shadow-sm backdrop-blur-sm transition-shadow hover:shadow-md dark:border-neutral-700/60 dark:bg-neutral-900/85'>
       <div className='flex'>
         {/* Left amber accent */}
         <div className='w-1 flex-shrink-0 bg-amber-500' />
