@@ -23,6 +23,8 @@ const entrySchema = new Schema(
   },
 );
 
+entrySchema.index({ userId: 1 });
+
 const Entry = mongoose.models.Entry || mongoose.model('Entry', entrySchema);
 
 export default Entry;

@@ -3,6 +3,11 @@ import { auth } from '../../auth';
 import dbConnect from '../../db/dbConnect';
 import Entry from '../../models/entry';
 
+export const metadata = {
+  title: 'Edit Entry | GitPub',
+  description: 'Edit your brewery journal entry',
+};
+
 export default async function EditEntry({ params }) {
   const { id } = await params;
   const session = await auth();

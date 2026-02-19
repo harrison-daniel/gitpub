@@ -67,7 +67,9 @@ export default function EntryListItem({ entry, onDelete }) {
             {/* Actions */}
             <AlertDialog>
               <DropdownMenu>
-                <DropdownMenuTrigger className='mt-0.5 rounded p-0.5 text-stone-400 hover:text-stone-600 dark:text-gray-500 dark:hover:text-gray-300'>
+                <DropdownMenuTrigger
+                  aria-label='Entry actions'
+                  className='mt-0.5 rounded p-0.5 text-stone-400 hover:text-stone-600 dark:text-gray-500 dark:hover:text-gray-300'>
                   <MoreHorizontal size={19} />
                 </DropdownMenuTrigger>
                 <DropdownMenuPortal>

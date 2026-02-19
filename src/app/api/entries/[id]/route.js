@@ -2,6 +2,7 @@ import Entry from '../../../models/entry';
 import dbConnect from '../../../db/dbConnect';
 import { NextResponse } from 'next/server';
 import { auth } from '../../../auth';
+import { entrySchema } from '../../../lib/validations';
 
 export async function PUT(request, { params }) {
   const session = await auth();
@@ -13,34 +14,38 @@ export async function PUT(request, { params }) {
     const { id } = await params;
     await dbConnect();
 
-    const existing = await Entry.findById(id).lean();
-    if (!existing) {
-      return NextResponse.json({ error: 'Entry not found' }, { status: 404 });
-    }
-    if (existing.userId !== session.user.id) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
-
-    const {
-      newTitle: title,
-      newStreetAddress: streetAddress,
-      newCityStateAddress: cityStateAddress,
-      newDescription: description,
-      newDate: date,
-      newWebsiteUrl: websiteUrl,
-      newPhoneNumber: phoneNumber,
-    } = await request.json();
-
-    await Entry.findByIdAndUpdate(id, {
-      title,
-      streetAddress,
-      cityStateAddress,
-      description,
-      date,
-      websiteUrl,
-      phoneNumber,
+    const body = await request.json();
+    const result = entrySchema.safeParse({
+      title: body.newTitle,
+      streetAddress: body.newStreetAddress,
+      cityStateAddress: body.newCityStateAddress,
+      description: body.newDescription,
+      date: body.newDate,
+      websiteUrl: body.newWebsiteUrl,
+      phoneNumber: body.newPhoneNumber,
     });
-    return NextResponse.json({ message: 'Entry updated' }, { status: 200 });
+
+    if (!result.success) {
+      return NextResponse.json(
+        { error: 'Validation failed', details: result.error.flatten().fieldErrors },
+        { status: 400 },
+      );
+    }
+
+    const updated = await Entry.findOneAndUpdate(
+      { _id: id, userId: session.user.id },
+      result.data,
+      { new: true },
+    );
+
+    if (!updated) {
+      return NextResponse.json(
+        { error: 'Entry not found or forbidden' },
+        { status: 404 },
+      );
+    }
+
+    return NextResponse.json({ message: 'Entry updated' });
   } catch (error) {
     return NextResponse.json(
       { error: 'Failed to update entry' },
@@ -58,12 +63,16 @@ export async function GET(request, { params }) {
   try {
     const { id } = await params;
     await dbConnect();
-    const entry = await Entry.findOne({ _id: id, userId: session.user.id }).lean();
-    if (entry) {
-      return NextResponse.json({ entry }, { status: 200 });
-    } else {
+    const entry = await Entry.findOne({
+      _id: id,
+      userId: session.user.id,
+    }).lean();
+
+    if (!entry) {
       return NextResponse.json({ error: 'Entry not found' }, { status: 404 });
     }
+
+    return NextResponse.json({ entry });
   } catch (error) {
     return NextResponse.json(
       { error: 'Failed to fetch entry' },

@@ -63,7 +63,7 @@ export default async function RootLayout({ children }) {
       <body>
         <SessionProvider session={session}>
           <ThemeProviders>
-            {/* backgorund Image */}
+            {/* Background Image */}
             <div>
               <div className='imgLight absolute top-[2vh] -z-20 mx-auto h-[100vh] w-[100vw] md:top-[4vh]'>
                 <Image

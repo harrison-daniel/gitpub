@@ -2,81 +2,60 @@ import dbConnect from '../../db/dbConnect';
 import Entry from '../../models/entry';
 import { NextResponse } from 'next/server';
 import { auth } from '../../auth';
+import { entrySchema } from '../../lib/validations';
 
 export async function POST(request) {
   const session = await auth();
-  if (session) {
-    try {
-      await dbConnect();
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
 
-      const {
-        title,
-        streetAddress,
-        cityStateAddress,
-        description,
-        date,
-        websiteUrl,
-        phoneNumber,
-      } = await request.json();
+  try {
+    await dbConnect();
 
-      const newEntry = await Entry.create({
-        title,
-        streetAddress,
-        cityStateAddress,
-        description,
-        date,
-        websiteUrl,
-        phoneNumber,
-        userId: session.user.id,
-      });
+    const body = await request.json();
+    const result = entrySchema.safeParse(body);
 
-      return new Response(
-        JSON.stringify({ message: 'Entry created', entry: newEntry }),
-        {
-          status: 201,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      );
-    } catch (error) {
-      console.error(error);
-      return new Response(
-        JSON.stringify({
-          error: 'Failed to create entry',
-        }),
-        {
-          status: 500,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
+    if (!result.success) {
+      return NextResponse.json(
+        { error: 'Validation failed', details: result.error.flatten().fieldErrors },
+        { status: 400 },
       );
     }
-  } else {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-      status: 401,
+
+    const newEntry = await Entry.create({
+      ...result.data,
+      userId: session.user.id,
     });
+
+    return NextResponse.json(
+      { message: 'Entry created', entry: newEntry },
+      { status: 201 },
+    );
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { error: 'Failed to create entry' },
+      { status: 500 },
+    );
   }
 }
 
-export async function GET(request) {
+export async function GET() {
   const session = await auth();
-  if (session) {
-    try {
-      await dbConnect();
-      const userEntries = await Entry.find({ userId: session.user.id });
-      return new Response(JSON.stringify({ userEntries }));
-    } catch (error) {
-      return new Response(
-        JSON.stringify({ message: 'Error fetching entries' }),
-        { status: 500 },
-      );
-    }
-  } else {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-      status: 401,
-    });
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  try {
+    await dbConnect();
+    const userEntries = await Entry.find({ userId: session.user.id }).lean();
+    return NextResponse.json({ userEntries });
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Error fetching entries' },
+      { status: 500 },
+    );
   }
 }
 
@@ -89,15 +68,20 @@ export async function DELETE(request) {
   try {
     const id = request.nextUrl.searchParams.get('id');
     await dbConnect();
-    const entry = await Entry.findById(id);
+
+    const entry = await Entry.findOneAndDelete({
+      _id: id,
+      userId: session.user.id,
+    });
+
     if (!entry) {
-      return NextResponse.json({ error: 'Entry not found' }, { status: 404 });
+      return NextResponse.json(
+        { error: 'Entry not found or forbidden' },
+        { status: 404 },
+      );
     }
-    if (entry.userId !== session.user.id) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
-    await entry.deleteOne();
-    return NextResponse.json({ message: 'Entry deleted' }, { status: 200 });
+
+    return NextResponse.json({ message: 'Entry deleted' });
   } catch (error) {
     return NextResponse.json(
       { error: 'Failed to delete entry' },

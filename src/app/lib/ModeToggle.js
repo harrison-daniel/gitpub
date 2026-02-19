@@ -11,24 +11,28 @@ export default function ModeToggle() {
 
   if (!mounted)
     return (
-      <div className='absolute right-1 top-0 cursor-pointer px-1 py-1 text-4xl' />
+      <div className='absolute right-1 top-0 px-1 py-1 text-4xl' />
     );
 
   if (resolvedTheme === 'dark') {
     return (
-      <FiSun
+      <button
         onClick={() => setTheme('light')}
-        className='absolute right-1 top-0 cursor-pointer px-1 py-1 text-4xl'
-      />
+        aria-label='Switch to light mode'
+        className='absolute right-1 top-0 cursor-pointer px-1 py-1 text-4xl'>
+        <FiSun />
+      </button>
     );
   }
 
   if (resolvedTheme === 'light') {
     return (
-      <FiMoon
+      <button
         onClick={() => setTheme('dark')}
-        className='absolute right-1 top-0 cursor-pointer px-1 py-1 text-4xl'
-      />
+        aria-label='Switch to dark mode'
+        className='absolute right-1 top-0 cursor-pointer px-1 py-1 text-4xl'>
+        <FiMoon />
+      </button>
     );
   }
 }

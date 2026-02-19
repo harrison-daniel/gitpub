@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSession, signIn, signOut } from 'next-auth/react';
@@ -10,6 +10,11 @@ export default function Navbar() {
   const { status, data: session } = useSession();
   const router = useRouter();
   const pathname = usePathname();
+
+  // Close mobile menu on route change (covers auth redirects, Link navigation, etc.)
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   const handleSearchClick = () => {
     setIsOpen(false);
@@ -90,7 +95,7 @@ export default function Navbar() {
             exit='hidden'
             variants={overlayVariants}
             transition={{ ease: 'easeOut', duration: 0.2 }}
-            className='fixed inset-0 z-40 min-h-[100vh] min-w-[100vw] bg-black/80'
+            className='fixed inset-0 z-40 bg-black/80'
             onClick={() => setIsOpen(false)}
           />
         )}
@@ -113,25 +118,28 @@ export default function Navbar() {
                     {session?.user?.name}
                   </div>
                   <button
-                    onClick={() => signOut()}
-                    className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 dark:hover:bg-yellow-100'>
+                    onClick={() => {
+                      setIsOpen(false);
+                      signOut();
+                    }}
+                    className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
                     Sign Out
                   </button>
                   <Link
                     href='/userDash'
                     onClick={() => setIsOpen(false)}
-                    className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 dark:hover:bg-yellow-100'>
+                    className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
                     Dashboard
                   </Link>
                   <Link
                     href='/addEntry'
                     onClick={() => setIsOpen(false)}
-                    className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 dark:hover:bg-yellow-100'>
+                    className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
                     Add Entry
                   </Link>
                   <button
                     onClick={handleSearchClick}
-                    className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 dark:hover:bg-yellow-100'>
+                    className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
                     Search
                   </button>
                 </div>
@@ -141,13 +149,16 @@ export default function Navbar() {
                     You are not logged in
                   </div>
                   <button
-                    onClick={() => signIn()}
-                    className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 dark:hover:bg-yellow-100'>
+                    onClick={() => {
+                      setIsOpen(false);
+                      signIn();
+                    }}
+                    className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
                     Sign In
                   </button>
                   <button
                     onClick={handleSearchClick}
-                    className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 dark:hover:bg-yellow-100'>
+                    className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
                     Search
                   </button>
                 </div>
@@ -158,7 +169,7 @@ export default function Navbar() {
               <Link
                 href='/'
                 passHref
-                className='mobile-navItem block rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 dark:hover:bg-yellow-100'
+                className='mobile-navItem block rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'
                 onClick={() => setIsOpen(false)}>
                 Home
               </Link>
@@ -167,6 +178,7 @@ export default function Navbar() {
 
           <motion.button
             onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? 'Close menu' : 'Open menu'}
             className='mobile-nav flex items-center justify-center rounded-full bg-amber-700 p-3.5 text-amber-200'>
             <svg width='23.5' height='23.5' viewBox='0 0 23.5 23.5' fill='none'>
               <motion.path
