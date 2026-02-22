@@ -11,7 +11,6 @@ export default function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Close mobile menu on route change (covers auth redirects, Link navigation, etc.)
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
@@ -107,74 +106,83 @@ export default function Navbar() {
           className='menu-container'
           initial={false}
           animate={isOpen ? 'open' : 'closed'}>
-          <motion.ul
-            className={`absolute bottom-16 right-1 mb-2 w-32 text-center ${
-              isOpen ? 'pointer-events-auto' : 'pointer-events-none'
-            }`}>
-            <motion.li variants={menuItemVariants}>
-              {status === 'authenticated' ? (
-                <div>
-                  <div className='flex flex-row justify-center pb-4 font-bold text-amber-100 dark:text-white'>
-                    {session?.user?.name}
-                  </div>
-                  <button
-                    onClick={() => {
-                      setIsOpen(false);
-                      signOut();
-                    }}
-                    className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
-                    Sign Out
-                  </button>
-                  <Link
-                    href='/userDash'
-                    onClick={() => setIsOpen(false)}
-                    className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
-                    Dashboard
-                  </Link>
-                  <Link
-                    href='/addEntry'
-                    onClick={() => setIsOpen(false)}
-                    className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
-                    Add Entry
-                  </Link>
-                  <button
-                    onClick={handleSearchClick}
-                    className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
-                    Search
-                  </button>
-                </div>
-              ) : (
-                <div>
-                  <div className='mb-2 font-bold text-slate-300 dark:bg-none'>
-                    You are not logged in
-                  </div>
-                  <button
-                    onClick={() => {
-                      setIsOpen(false);
-                      signIn();
-                    }}
-                    className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
-                    Sign In
-                  </button>
-                  <button
-                    onClick={handleSearchClick}
-                    className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
-                    Search
-                  </button>
-                </div>
-              )}
-            </motion.li>
+          <AnimatePresence>
+            {isOpen && (
+              <motion.ul
+                initial='closed'
+                animate='open'
+                exit='closed'
+                variants={{
+                  open: { transition: { staggerChildren: 0.05 } },
+                  closed: { transition: { staggerChildren: 0.02, staggerDirection: -1 } },
+                }}
+                className='absolute bottom-16 right-1 mb-2 w-32 text-center'>
+                <motion.li variants={menuItemVariants}>
+                  {status === 'authenticated' ? (
+                    <div>
+                      <div className='flex flex-row justify-center pb-4 font-bold text-amber-100 dark:text-white'>
+                        {session?.user?.name}
+                      </div>
+                      <button
+                        onClick={() => {
+                          setIsOpen(false);
+                          signOut();
+                        }}
+                        className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
+                        Sign Out
+                      </button>
+                      <Link
+                        href='/userDash'
+                        onClick={() => setIsOpen(false)}
+                        className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
+                        Dashboard
+                      </Link>
+                      <Link
+                        href='/addEntry'
+                        onClick={() => setIsOpen(false)}
+                        className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
+                        Add Entry
+                      </Link>
+                      <button
+                        onClick={handleSearchClick}
+                        className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
+                        Search
+                      </button>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className='mb-2 font-bold text-slate-300 dark:bg-none'>
+                        You are not logged in
+                      </div>
+                      <button
+                        onClick={() => {
+                          setIsOpen(false);
+                          signIn();
+                        }}
+                        className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
+                        Sign In
+                      </button>
+                      <button
+                        onClick={handleSearchClick}
+                        className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
+                        Search
+                      </button>
+                    </div>
+                  )}
+                </motion.li>
 
-            <motion.li variants={menuItemVariants}>
-              <Link
-                href='/'
-                passHref
-                className='mobile-navItem block rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'
-                onClick={() => setIsOpen(false)}>
-                Home
-              </Link>
-            </motion.li>
-          </motion.ul>
+                <motion.li variants={menuItemVariants}>
+                  <Link
+                    href='/'
+                    passHref
+                    className='mobile-navItem block rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'
+                    onClick={() => setIsOpen(false)}>
+                    Home
+                  </Link>
+                </motion.li>
+              </motion.ul>
+            )}
+          </AnimatePresence>
 
           <motion.button
             onClick={() => setIsOpen(!isOpen)}
