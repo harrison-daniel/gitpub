@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { format } from 'date-fns';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { HiPencilAlt, HiOutlineTrash } from 'react-icons/hi';
 import { Link2, MoreHorizontal, Phone, ChevronDown } from 'lucide-react';
 import {
@@ -26,8 +26,9 @@ import {
 } from '../components/ui/dropdown-menu';
 import { formatPhoneNumber } from '../lib/utils';
 
-export default function EntryListItem({ entry, onDelete }) {
+export default function EntryListItem({ entry, onDelete, onEdit }) {
   const [expanded, setExpanded] = useState(false);
+  const router = useRouter();
 
   const hasDetails =
     entry.phoneNumber ||
@@ -71,13 +72,15 @@ export default function EntryListItem({ entry, onDelete }) {
                 </DropdownMenuTrigger>
                 <DropdownMenuPortal>
                   <DropdownMenuContent className='mr-4 mt-1 flex flex-col items-start bg-white shadow-lg dark:bg-neutral-800'>
-                    <DropdownMenuItem>
-                      <Link
-                        href={`/editEntry/${entry._id}`}
-                        className='flex flex-row items-center gap-2 font-semibold text-stone-700 hover:text-stone-900 dark:text-neutral-300 dark:hover:text-white'>
-                        <HiPencilAlt size={16} />
-                        Edit
-                      </Link>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        onEdit
+                          ? onEdit(entry)
+                          : router.push(`/editEntry/${entry._id}`)
+                      }
+                      className='flex cursor-pointer flex-row items-center gap-2 font-semibold text-stone-700 hover:text-stone-900 dark:text-neutral-300 dark:hover:text-white'>
+                      <HiPencilAlt size={16} />
+                      Edit
                     </DropdownMenuItem>
                     <AlertDialogTrigger asChild>
                       <DropdownMenuItem className='flex cursor-pointer flex-row items-center gap-2 font-semibold text-red-600 hover:text-red-800 dark:hover:text-red-400'>
@@ -115,7 +118,7 @@ export default function EntryListItem({ entry, onDelete }) {
               className='mt-2 flex items-center gap-1 text-xs font-semibold text-amber-700 hover:text-amber-500 dark:text-amber-400 dark:hover:text-amber-300'>
               <motion.span
                 animate={{ rotate: expanded ? 180 : 0 }}
-                transition={{ duration: 0.2 }}>
+                transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}>
                 <ChevronDown size={13} />
               </motion.span>
               {expanded ? 'Hide details' : 'Show details'}
@@ -128,7 +131,7 @@ export default function EntryListItem({ entry, onDelete }) {
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.2, ease: 'easeInOut' }}
+                transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
                 className='overflow-hidden'>
                 <div className='mt-2.5 flex flex-col gap-2 border-t border-amber-100 pt-2.5 dark:border-neutral-700'>
                   {entry.phoneNumber && (

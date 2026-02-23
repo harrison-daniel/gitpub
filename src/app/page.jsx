@@ -1,14 +1,5 @@
-import BrewerySearch from './components/BrewerySearch';
-import EntryList from './components/EntryList';
-import { auth } from './auth';
+import HomeContent from './components/HomeContent';
 
-export default async function Home() {
-  const session = await auth();
-
-  return (
-    <>
-      <BrewerySearch />
-      {session ? <EntryList /> : null}
-    </>
-  );
+export default function Home() {
+  return <HomeContent />;
 }

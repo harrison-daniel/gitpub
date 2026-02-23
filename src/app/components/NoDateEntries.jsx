@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import EntryListItem from './EntryListItem';
 import {
   Accordion,
@@ -11,7 +12,13 @@ import {
 import { Button } from '../components/ui/button';
 import { HiOutlineSelector } from 'react-icons/hi';
 
-export default function NoDateEntries({ entries, onDelete }) {
+const itemVariants = {
+  initial: { opacity: 0, height: 0 },
+  animate: { opacity: 1, height: 'auto' },
+  exit: { opacity: 0, height: 0, transition: { duration: 0.2, ease: 'easeInOut' } },
+};
+
+export default function NoDateEntries({ entries, onDelete, onEdit }) {
   const [sortOption, setSortOption] = useState('title');
   const [sortDirection, setSortDirection] = useState('asc');
 
@@ -73,9 +80,20 @@ export default function NoDateEntries({ entries, onDelete }) {
               )}
             </Button>
           </div>
-          {sortedEntries.map((entry) => (
-            <EntryListItem key={entry._id} entry={entry} onDelete={onDelete} />
-          ))}
+          <AnimatePresence initial={false}>
+            {sortedEntries.map((entry) => (
+              <motion.div
+                key={entry._id}
+                layout
+                variants={itemVariants}
+                initial='initial'
+                animate='animate'
+                exit='exit'
+                transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}>
+                <EntryListItem entry={entry} onDelete={onDelete} onEdit={onEdit} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </AccordionContent>
       </AccordionItem>
     </Accordion>

@@ -31,14 +31,14 @@ export default function SignIn() {
         <div className='flex flex-col gap-3'>
           <button
             onClick={() => signIn('google', { callbackUrl: '/' })}
-            className='flex w-full items-center justify-center gap-3 rounded-xl border border-stone-200 bg-white px-4 py-3.5 text-sm font-semibold text-stone-700 shadow-sm transition-colors hover:bg-stone-50 active:bg-stone-100 dark:border-neutral-600 dark:bg-neutral-800 dark:text-stone-200 dark:hover:bg-neutral-700'>
+            className='flex w-full items-center justify-center gap-3 rounded-xl border border-stone-200 bg-white px-4 py-3.5 text-sm font-semibold text-stone-700 transition-colors hover:bg-stone-50 active:bg-stone-100 dark:border-neutral-600 dark:bg-neutral-800 dark:text-stone-200 dark:hover:bg-neutral-700'>
             <FaGoogle size={17} className='text-red-500' />
             Continue with Google
           </button>
 
           <button
             onClick={() => signIn('github', { callbackUrl: '/' })}
-            className='flex w-full items-center justify-center gap-3 rounded-xl bg-neutral-900 px-4 py-3.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-neutral-700 active:bg-neutral-600 dark:bg-neutral-700 dark:hover:bg-neutral-600'>
+            className='flex w-full items-center justify-center gap-3 rounded-xl border border-stone-200 bg-white px-4 py-3.5 text-sm font-semibold text-stone-700 transition-colors hover:bg-stone-50 active:bg-stone-100 dark:border-neutral-600 dark:bg-neutral-800 dark:text-stone-200 dark:hover:bg-neutral-700'>
             <FaGithub size={18} />
             Continue with GitHub
           </button>

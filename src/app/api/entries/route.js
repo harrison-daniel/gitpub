@@ -3,6 +3,7 @@ import Entry from '../../models/entry';
 import { NextResponse } from 'next/server';
 import { auth } from '../../auth';
 import { entrySchema } from '../../lib/validations';
+import mongoose from 'mongoose';
 
 export async function POST(request) {
   const session = await auth();
@@ -33,7 +34,7 @@ export async function POST(request) {
       { status: 201 },
     );
   } catch (error) {
-    console.error(error);
+    console.error('POST /api/entries:', error);
     return NextResponse.json(
       { error: 'Failed to create entry' },
       { status: 500 },
@@ -49,9 +50,12 @@ export async function GET() {
 
   try {
     await dbConnect();
-    const userEntries = await Entry.find({ userId: session.user.id }).lean();
+    const userEntries = await Entry.find({ userId: session.user.id })
+      .sort({ date: -1, createdAt: -1 })
+      .lean();
     return NextResponse.json({ userEntries });
   } catch (error) {
+    console.error('GET /api/entries:', error);
     return NextResponse.json(
       { error: 'Error fetching entries' },
       { status: 500 },
@@ -67,6 +71,11 @@ export async function DELETE(request) {
 
   try {
     const id = request.nextUrl.searchParams.get('id');
+
+    if (!id || !mongoose.isValidObjectId(id)) {
+      return NextResponse.json({ error: 'Invalid entry ID' }, { status: 400 });
+    }
+
     await dbConnect();
 
     const entry = await Entry.findOneAndDelete({
@@ -83,6 +92,7 @@ export async function DELETE(request) {
 
     return NextResponse.json({ message: 'Entry deleted' });
   } catch (error) {
+    console.error('DELETE /api/entries:', error);
     return NextResponse.json(
       { error: 'Failed to delete entry' },
       { status: 500 },

@@ -2,7 +2,11 @@
 import useSWR from 'swr';
 import { useSession } from 'next-auth/react';
 
-const fetcher = (url) => fetch(url).then((res) => res.json());
+const fetcher = (url) =>
+  fetch(url).then((res) => {
+    if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+    return res.json();
+  });
 
 export default function useUserEntries() {
   const { data: session } = useSession();

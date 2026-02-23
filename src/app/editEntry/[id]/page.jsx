@@ -1,5 +1,7 @@
 import EditEntryForm from '../../components/EditEntryForm';
 import { auth } from '../../auth';
+import { redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import dbConnect from '../../db/dbConnect';
 import Entry from '../../models/entry';
 
@@ -13,14 +15,14 @@ export default async function EditEntry({ params }) {
   const session = await auth();
 
   if (!session) {
-    return <div>Not authorized</div>;
+    redirect('/');
   }
 
   await dbConnect();
   const raw = await Entry.findOne({ _id: id, userId: session.user.id }).lean();
 
   if (!raw) {
-    return <div>Entry not found</div>;
+    notFound();
   }
 
   const entry = JSON.parse(JSON.stringify(raw));

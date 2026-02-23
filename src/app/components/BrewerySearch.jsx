@@ -1,7 +1,7 @@
 'use client';
 
 import { useSession, signIn } from 'next-auth/react';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -182,6 +182,7 @@ export default function BrewerySearch() {
   const [isLoadingBreweries, setIsLoadingBreweries] = useState(false);
   const [addingBreweryId, setAddingBreweryId] = useState(null);
   const [stateComboOpen, setStateComboOpen] = useState(false);
+  const [dialogSearch, setDialogSearch] = useState('');
 
   // Cache breweries per state in sessionStorage (survives page reload, resets on tab close)
   const breweryCacheRef = useRef({});
@@ -270,6 +271,7 @@ export default function BrewerySearch() {
       (brewery) => brewery.city.toLowerCase() === city.toLowerCase(),
     );
     setFilteredBreweries(matchingBreweries);
+    setDialogSearch('');
     setOpen(true);
   };
 
@@ -283,6 +285,17 @@ export default function BrewerySearch() {
       .split('_')
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
+
+  const visibleBreweries = useMemo(() => {
+    if (!dialogSearch.trim()) return filteredBreweries;
+    const q = dialogSearch.toLowerCase();
+    return filteredBreweries.filter(
+      (b) =>
+        b.name?.toLowerCase().includes(q) ||
+        b.brewery_type?.toLowerCase().includes(q) ||
+        b.address_1?.toLowerCase().includes(q),
+    );
+  }, [filteredBreweries, dialogSearch]);
 
   async function handleAddBrewery(brewery) {
     setAddingBreweryId(brewery.id);
@@ -403,7 +416,10 @@ export default function BrewerySearch() {
         open={open}
         onOpenChange={(val) => {
           setOpen(val);
-          if (!val) document.activeElement?.blur();
+          if (!val) {
+            setDialogSearch('');
+            document.activeElement?.blur();
+          }
         }}>
         <DialogContent className='max-h-[78vh] overflow-hidden bg-white p-0 dark:bg-zinc-950'>
           <DialogHeader className='rounded-t-lg bg-amber-700 px-4 py-3 dark:bg-zinc-800'>
@@ -416,25 +432,47 @@ export default function BrewerySearch() {
                   {city}, {capitalizeState(state.replace(/_/g, ' '))}
                 </p>
                 <p className='mt-0.5 text-xs font-normal text-amber-200'>
-                  {filteredBreweries.length}{' '}
-                  {filteredBreweries.length === 1 ? 'brewery' : 'breweries'}{' '}
-                  found
+                  {visibleBreweries.length}{' '}
+                  {visibleBreweries.length === 1 ? 'brewery' : 'breweries'}{' '}
+                  {dialogSearch ? 'matching' : 'found'}
                 </p>
               </div>
             </DialogTitle>
           </DialogHeader>
 
+          {/* Search within results */}
+          {filteredBreweries.length > 3 && (
+            <div className='px-3 pt-2'>
+              <div className='relative'>
+                <Search className='absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground' />
+                <input
+                  type='text'
+                  placeholder='Filter results...'
+                  value={dialogSearch}
+                  onChange={(e) => setDialogSearch(e.target.value)}
+                  className='w-full rounded-lg border border-stone-200 bg-stone-50 py-1.5 pl-9 pr-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-amber-400 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:ring-amber-600'
+                />
+              </div>
+            </div>
+          )}
+
           <ScrollArea className='max-h-[62vh]'>
             <div className='flex flex-col gap-2.5 p-3'>
-              {filteredBreweries.map((brewery) => (
-                <BreweryCard
-                  key={brewery.id}
-                  brewery={brewery}
-                  session={session}
-                  addingBreweryId={addingBreweryId}
-                  onAdd={handleAddBrewery}
-                />
-              ))}
+              {visibleBreweries.length === 0 && dialogSearch ? (
+                <p className='py-6 text-center text-sm text-muted-foreground'>
+                  No breweries match &ldquo;{dialogSearch}&rdquo;
+                </p>
+              ) : (
+                visibleBreweries.map((brewery) => (
+                  <BreweryCard
+                    key={brewery.id}
+                    brewery={brewery}
+                    session={session}
+                    addingBreweryId={addingBreweryId}
+                    onAdd={handleAddBrewery}
+                  />
+                ))
+              )}
             </div>
           </ScrollArea>
         </DialogContent>

@@ -49,10 +49,6 @@ html.dark {
   display: block;
 }
 
-.menu {
-  filter: drop-shadow(1px 1px 1px #5116a9);
-}
-
 .dark .main-header,
 .dark .entryListItem-header {
   color: #d5cea3;
@@ -65,10 +61,6 @@ html.dark {
     -1px -1px 0 white,
     1px -1px 0 white,
     -1px 1px 0 white;
-}
-
-.dark .mode-toggle {
-  background-color: #d5cea3;
 }
 
 .dark .mobile-nav {
@@ -102,20 +94,4 @@ html.dark {
     -1px -1px 0 white,
     1px -1px 0 white,
     -1px 1px 0 white;
-}
-
-.displayNone {
-  display: none;
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.8);
-  z-index: 50;
 }

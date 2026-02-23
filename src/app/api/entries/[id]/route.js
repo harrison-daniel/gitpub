@@ -3,6 +3,7 @@ import dbConnect from '../../../db/dbConnect';
 import { NextResponse } from 'next/server';
 import { auth } from '../../../auth';
 import { entrySchema } from '../../../lib/validations';
+import mongoose from 'mongoose';
 
 export async function PUT(request, { params }) {
   const session = await auth();
@@ -12,18 +13,15 @@ export async function PUT(request, { params }) {
 
   try {
     const { id } = await params;
+
+    if (!mongoose.isValidObjectId(id)) {
+      return NextResponse.json({ error: 'Invalid entry ID' }, { status: 400 });
+    }
+
     await dbConnect();
 
     const body = await request.json();
-    const result = entrySchema.safeParse({
-      title: body.newTitle,
-      streetAddress: body.newStreetAddress,
-      cityStateAddress: body.newCityStateAddress,
-      description: body.newDescription,
-      date: body.newDate,
-      websiteUrl: body.newWebsiteUrl,
-      phoneNumber: body.newPhoneNumber,
-    });
+    const result = entrySchema.safeParse(body);
 
     if (!result.success) {
       return NextResponse.json(
@@ -45,8 +43,9 @@ export async function PUT(request, { params }) {
       );
     }
 
-    return NextResponse.json({ message: 'Entry updated' });
+    return NextResponse.json({ message: 'Entry updated', entry: updated });
   } catch (error) {
+    console.error('PUT /api/entries/[id]:', error);
     return NextResponse.json(
       { error: 'Failed to update entry' },
       { status: 500 },
@@ -62,6 +61,11 @@ export async function GET(request, { params }) {
 
   try {
     const { id } = await params;
+
+    if (!mongoose.isValidObjectId(id)) {
+      return NextResponse.json({ error: 'Invalid entry ID' }, { status: 400 });
+    }
+
     await dbConnect();
     const entry = await Entry.findOne({
       _id: id,
@@ -74,6 +78,7 @@ export async function GET(request, { params }) {
 
     return NextResponse.json({ entry });
   } catch (error) {
+    console.error('GET /api/entries/[id]:', error);
     return NextResponse.json(
       { error: 'Failed to fetch entry' },
       { status: 500 },

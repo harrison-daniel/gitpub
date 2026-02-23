@@ -1,13 +1,26 @@
-'use client';
-import React from 'react';
+import { Skeleton } from './components/ui/skeleton';
 
 export default function Loading() {
   return (
-    <div className='mt-48 flex items-center justify-center space-x-2'>
-      <div className='h-8 w-8 animate-spin rounded-full border-b-2 border-t-2  border-blue-500'></div>
-      {/* <div class='h-8 w-8 animate-spin rounded-full   border-2 border-t-2 border-amber-500 '></div> */}
+    <div>
+      {/* Brewery search skeleton */}
+      <div className='mx-12 mb-12 mt-3 flex flex-col items-center lg:mt-5'>
+        <Skeleton className='mb-3 h-8 w-64 rounded-lg lg:h-10 lg:w-80' />
+        <Skeleton className='mt-2 h-10 w-48 rounded-xl' />
+      </div>
 
-      <div className='text-xl font-semibold '>Loading ...</div>
+      {/* Entry list skeleton */}
+      <div className='mx-auto max-w-md px-3 pb-12 md:max-w-xl'>
+        <Skeleton className='mb-4 h-10 w-32 rounded-lg' />
+        {[0, 1].map((i) => (
+          <div key={i} className='mb-3'>
+            <Skeleton className='mb-2 h-14 w-full rounded-xl' />
+            {[0, 1, 2].map((j) => (
+              <Skeleton key={j} className='mb-2 h-[72px] w-full rounded-xl' />
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

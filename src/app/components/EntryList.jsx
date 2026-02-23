@@ -26,7 +26,7 @@ function EntryListSkeleton() {
   );
 }
 
-export default function EntryList() {
+export default function EntryList({ onEdit }) {
   const { entries, isLoading, isError, mutate } = useUserEntries();
   const [filterText, setFilterText] = useState('');
   const [showFilter, setShowFilter] = useState(false);
@@ -163,10 +163,11 @@ export default function EntryList() {
               year={year}
               entries={datedEntries[year]}
               onDelete={handleDelete}
+              onEdit={onEdit}
             />
           ))}
           {noDateEntries.length > 0 && (
-            <NoDateEntries entries={noDateEntries} onDelete={handleDelete} />
+            <NoDateEntries entries={noDateEntries} onDelete={handleDelete} onEdit={onEdit} />
           )}
         </>
       )}

@@ -69,6 +69,19 @@ export default function Navbar() {
     }
   };
 
+  const handleAddEntryClick = () => {
+    close();
+    if (pathname !== '/') {
+      router.push('/');
+      setTimeout(
+        () => window.dispatchEvent(new CustomEvent('open-add-entry')),
+        500,
+      );
+    } else {
+      window.dispatchEvent(new CustomEvent('open-add-entry'));
+    }
+  };
+
   const navLinkClass =
     'nav-link rounded bg-amber-700 px-4 py-1 font-extrabold text-amber-100 hover:bg-amber-600 dark:bg-zinc-300 dark:text-black dark:hover:bg-zinc-200';
 
@@ -105,13 +118,12 @@ export default function Navbar() {
       </Link>,
     );
     menuItems.push(
-      <Link
+      <button
         key='add'
-        href='/addEntry'
-        onClick={close}
+        onClick={handleAddEntryClick}
         className={mobileItemClass}>
         Add Entry
-      </Link>,
+      </button>,
     );
   } else {
     menuItems.push(
@@ -157,9 +169,9 @@ export default function Navbar() {
 
             {status === 'authenticated' ? (
               <>
-                <Link href='/addEntry' className={navLinkClass}>
+                <button onClick={handleAddEntryClick} className={navLinkClass}>
                   Add Entry
-                </Link>
+                </button>
                 <Link href='/userDash' className={navLinkClass}>
                   Dashboard
                 </Link>
