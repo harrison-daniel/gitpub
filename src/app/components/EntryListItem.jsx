@@ -35,13 +35,11 @@ export default function EntryListItem({ entry, onDelete }) {
     (entry.description && entry.description !== 'Edit entry to add notes');
 
   return (
-    <div className='mb-3 overflow-hidden rounded-xl border border-amber-200/60 bg-white/85 shadow-sm backdrop-blur-sm transition-shadow hover:shadow-md dark:border-neutral-700/60 dark:bg-neutral-900/85'>
+    <div className='bg-white/85 dark:bg-neutral-900/85 mb-3 overflow-hidden rounded-xl border border-amber-200/60 shadow-sm backdrop-blur-sm transition-shadow hover:shadow-md dark:border-neutral-700/60'>
       <div className='flex'>
-        {/* Left amber accent */}
         <div className='w-1 flex-shrink-0 bg-amber-500' />
 
         <div className='flex-1 px-3 py-2.5'>
-          {/* Top row: date chip + title + menu */}
           <div className='flex items-start justify-between gap-2'>
             <div className='min-w-0 flex-1'>
               {entry.date && !isNaN(new Date(entry.date).getTime()) && (
@@ -64,7 +62,6 @@ export default function EntryListItem({ entry, onDelete }) {
               )}
             </div>
 
-            {/* Actions */}
             <AlertDialog>
               <DropdownMenu>
                 <DropdownMenuTrigger
@@ -112,7 +109,6 @@ export default function EntryListItem({ entry, onDelete }) {
             </AlertDialog>
           </div>
 
-          {/* Expand toggle — only if there's something to show */}
           {hasDetails && (
             <button
               onClick={() => setExpanded((v) => !v)}

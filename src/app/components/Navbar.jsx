@@ -1,9 +1,47 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useRouter, usePathname } from 'next/navigation';
+
+const springSnap = { type: 'spring', stiffness: 400, damping: 28 };
+
+const topBarVariants = {
+  closed: { d: 'M 3 4 L 21 4' },
+  open: { d: 'M 3 4 L 21 20' },
+};
+const middleBarVariants = {
+  closed: { scaleY: 1, opacity: 1, transition: { duration: 0.1 } },
+  open: { scaleY: 0, opacity: 0, transition: { duration: 0.1 } },
+};
+const bottomBarVariants = {
+  closed: { d: 'M 3 20 L 21 20' },
+  open: { d: 'M 21 4 L 3 20' },
+};
+
+const navVariants = {
+  open: {
+    transition: { staggerChildren: 0.03, delayChildren: 0.04, staggerDirection: -1 },
+  },
+  closed: {
+    transition: { staggerChildren: 0.02, staggerDirection: 1 },
+  },
+};
+
+// Single unified transition per state — one JS animation track per element
+const itemVariants = {
+  open: {
+    y: 0,
+    opacity: 1,
+    transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] },
+  },
+  closed: {
+    y: 20,
+    opacity: 0,
+    transition: { duration: 0.15, ease: [0.42, 0, 1, 1] },
+  },
+};
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,8 +53,11 @@ export default function Navbar() {
     setIsOpen(false);
   }, [pathname]);
 
+  const toggle = useCallback(() => setIsOpen((prev) => !prev), []);
+  const close = useCallback(() => setIsOpen(false), []);
+
   const handleSearchClick = () => {
-    setIsOpen(false);
+    close();
     if (pathname !== '/') {
       router.push('/');
       setTimeout(
@@ -28,31 +69,81 @@ export default function Navbar() {
     }
   };
 
-  const menuItemVariants = {
-    open: { y: 0, opacity: 1 },
-    closed: { y: 5, opacity: 0 },
-  };
-
-  const overlayVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 0.75 },
-  };
-
-  const topBarVariants = {
-    closed: { d: 'M 3 4 L 21 4' },
-    open: { d: 'M 3 4 L 21 20' },
-  };
-  const middleBarVariants = {
-    closed: { scaleY: 1, opacity: 1, transition: { duration: 0.1 } },
-    open: { scaleY: 0, opacity: 0, transition: { duration: 0.1 } },
-  };
-  const bottomBarVariants = {
-    closed: { d: 'M 3 20 L 21 20' },
-    open: { d: 'M 21 4 L 3 20' },
-  };
-
   const navLinkClass =
-    'rounded bg-amber-700 px-4 py-1 font-extrabold text-amber-100 hover:bg-amber-600 dark:bg-zinc-300 dark:text-black dark:hover:bg-zinc-200';
+    'nav-link rounded bg-amber-700 px-4 py-1 font-extrabold text-amber-100 hover:bg-amber-600 dark:bg-zinc-300 dark:text-black dark:hover:bg-zinc-200';
+
+  const mobileItemClass =
+    'mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100';
+
+  const menuItems = [];
+  if (status === 'authenticated') {
+    menuItems.push(
+      <span
+        key='user'
+        className='block pb-1 font-bold text-amber-100 dark:text-white'>
+        {session?.user?.name}
+      </span>,
+    );
+    menuItems.push(
+      <button
+        key='signout'
+        onClick={() => {
+          close();
+          signOut();
+        }}
+        className={mobileItemClass}>
+        Sign Out
+      </button>,
+    );
+    menuItems.push(
+      <Link
+        key='dash'
+        href='/userDash'
+        onClick={close}
+        className={mobileItemClass}>
+        Dashboard
+      </Link>,
+    );
+    menuItems.push(
+      <Link
+        key='add'
+        href='/addEntry'
+        onClick={close}
+        className={mobileItemClass}>
+        Add Entry
+      </Link>,
+    );
+  } else {
+    menuItems.push(
+      <span key='guest' className='mb-2 block font-bold text-slate-300'>
+        You are not logged in
+      </span>,
+    );
+    menuItems.push(
+      <button
+        key='signin'
+        onClick={() => {
+          close();
+          signIn();
+        }}
+        className={mobileItemClass}>
+        Sign In
+      </button>,
+    );
+  }
+  menuItems.push(
+    <button
+      key='search'
+      onClick={handleSearchClick}
+      className={mobileItemClass}>
+      Search
+    </button>,
+  );
+  menuItems.push(
+    <Link key='home' href='/' onClick={close} className={mobileItemClass}>
+      Home
+    </Link>,
+  );
 
   return (
     <>
@@ -89,13 +180,15 @@ export default function Navbar() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial='hidden'
-            animate='visible'
-            exit='hidden'
-            variants={overlayVariants}
-            transition={{ ease: 'easeOut', duration: 0.2 }}
-            className='fixed inset-0 z-40 bg-black/80'
-            onClick={() => setIsOpen(false)}
+            key='nav-overlay'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            className='fixed inset-0 z-40 bg-black/60'
+            style={{ WebkitTapHighlightColor: 'transparent' }}
+            onClick={close}
+            aria-hidden
           />
         )}
       </AnimatePresence>
@@ -106,89 +199,36 @@ export default function Navbar() {
           className='menu-container'
           initial={false}
           animate={isOpen ? 'open' : 'closed'}>
-          <AnimatePresence>
-            {isOpen && (
-              <motion.ul
-                initial='closed'
-                animate='open'
-                exit='closed'
-                variants={{
-                  open: { transition: { staggerChildren: 0.05 } },
-                  closed: { transition: { staggerChildren: 0.02, staggerDirection: -1 } },
-                }}
-                className='absolute bottom-16 right-1 mb-2 w-32 text-center'>
-                <motion.li variants={menuItemVariants}>
-                  {status === 'authenticated' ? (
-                    <div>
-                      <div className='flex flex-row justify-center pb-4 font-bold text-amber-100 dark:text-white'>
-                        {session?.user?.name}
-                      </div>
-                      <button
-                        onClick={() => {
-                          setIsOpen(false);
-                          signOut();
-                        }}
-                        className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
-                        Sign Out
-                      </button>
-                      <Link
-                        href='/userDash'
-                        onClick={() => setIsOpen(false)}
-                        className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
-                        Dashboard
-                      </Link>
-                      <Link
-                        href='/addEntry'
-                        onClick={() => setIsOpen(false)}
-                        className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
-                        Add Entry
-                      </Link>
-                      <button
-                        onClick={handleSearchClick}
-                        className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
-                        Search
-                      </button>
-                    </div>
-                  ) : (
-                    <div>
-                      <div className='mb-2 font-bold text-slate-300 dark:bg-none'>
-                        You are not logged in
-                      </div>
-                      <button
-                        onClick={() => {
-                          setIsOpen(false);
-                          signIn();
-                        }}
-                        className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
-                        Sign In
-                      </button>
-                      <button
-                        onClick={handleSearchClick}
-                        className='mobile-navItem mb-3 block w-32 rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'>
-                        Search
-                      </button>
-                    </div>
-                  )}
-                </motion.li>
+          {/* Always-mounted menu — variants handle open/closed */}
+          <motion.ul
+            className='absolute bottom-16 right-1 mb-2 w-32 list-none text-center'
+            variants={navVariants}
+            style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
+            aria-hidden={!isOpen}>
+            {menuItems.map((item) => (
+              <motion.li
+                key={item.key}
+                variants={itemVariants}
+                style={{ willChange: 'transform, opacity', backfaceVisibility: 'hidden' }}>
+                {item}
+              </motion.li>
+            ))}
+          </motion.ul>
 
-                <motion.li variants={menuItemVariants}>
-                  <Link
-                    href='/'
-                    passHref
-                    className='mobile-navItem block rounded bg-amber-700 py-3 text-amber-100 hover:bg-amber-600 active:bg-amber-600 dark:hover:bg-yellow-100 dark:active:bg-yellow-100'
-                    onClick={() => setIsOpen(false)}>
-                    Home
-                  </Link>
-                </motion.li>
-              </motion.ul>
-            )}
-          </AnimatePresence>
-
+          {/* Hamburger */}
           <motion.button
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={toggle}
+            whileTap={{ scale: 0.9 }}
+            transition={springSnap}
             aria-label={isOpen ? 'Close menu' : 'Open menu'}
-            className='mobile-nav flex items-center justify-center rounded-full bg-amber-700 p-3.5 text-amber-200'>
-            <svg width='23.5' height='23.5' viewBox='0 0 23.5 23.5' fill='none'>
+            aria-expanded={isOpen}
+            className='mobile-nav flex items-center justify-center rounded-full bg-amber-700 p-3.5 text-amber-200'
+            style={{ WebkitTapHighlightColor: 'transparent' }}>
+            <svg
+              width='23.5'
+              height='23.5'
+              viewBox='0 0 23.5 23.5'
+              fill='none'>
               <motion.path
                 fill='none'
                 strokeWidth='3'
@@ -196,6 +236,7 @@ export default function Navbar() {
                 stroke='currentColor'
                 initial={{ d: 'M 3 4 L 21 4' }}
                 variants={topBarVariants}
+                transition={springSnap}
               />
               <motion.path
                 fill='none'
@@ -212,6 +253,7 @@ export default function Navbar() {
                 stroke='currentColor'
                 initial={{ d: 'M 3 20 L 21 20' }}
                 variants={bottomBarVariants}
+                transition={springSnap}
               />
             </svg>
           </motion.button>

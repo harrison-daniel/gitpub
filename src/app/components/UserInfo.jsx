@@ -83,7 +83,6 @@ export default function UserInfo() {
     }
   };
 
-  // Compute stats from entries
   const currentYear = new Date().getFullYear();
 
   const totalTrips = entries.length;
@@ -104,7 +103,6 @@ export default function UserInfo() {
       .filter(Boolean),
   ).size;
 
-  // Top state by visit count
   const stateCounts = entries.reduce((acc, e) => {
     const state = e.cityStateAddress?.split(',').pop()?.trim();
     if (state) acc[state] = (acc[state] || 0) + 1;
@@ -112,7 +110,6 @@ export default function UserInfo() {
   }, {});
   const topState = Object.entries(stateCounts).sort((a, b) => b[1] - a[1])[0];
 
-  // Member since — earliest entry's createdAt
   const memberSince =
     entries.length > 0
       ? new Date(
@@ -124,7 +121,7 @@ export default function UserInfo() {
     <div className='mx-auto w-full max-w-md px-4 pb-12 pt-6'>
       <button
         onClick={() => router.back()}
-        className='mb-4 -ml-1.5 inline-flex items-center gap-1 rounded-md px-1.5 py-1 text-sm font-semibold text-amber-700 hover:bg-amber-50 hover:text-amber-600 dark:text-amber-400 dark:hover:bg-amber-950/30 dark:hover:text-amber-300'>
+        className='-ml-1.5 mb-4 inline-flex items-center gap-1 rounded-md px-1.5 py-1 text-sm font-semibold text-amber-700 hover:bg-amber-50 hover:text-amber-600 dark:text-amber-400 dark:hover:bg-amber-950/30 dark:hover:text-amber-300'>
         <ChevronLeft size={16} />
         Back
       </button>
@@ -133,7 +130,6 @@ export default function UserInfo() {
       </h1>
 
       <div className='flex flex-col gap-4'>
-        {/* Profile card */}
         <div className='rounded-2xl border border-amber-200/60 bg-white/80 p-5 shadow-sm backdrop-blur-sm dark:border-neutral-700/60 dark:bg-neutral-900/80'>
           <div className='flex items-center gap-4'>
             <AvatarOrInitials
@@ -156,7 +152,6 @@ export default function UserInfo() {
           </div>
         </div>
 
-        {/* Stats grid */}
         {isLoading ? (
           <div className='grid grid-cols-2 gap-3'>
             {[0, 1, 2, 3].map((i) => (
@@ -171,12 +166,19 @@ export default function UserInfo() {
               label={`${currentYear} Trips`}
               icon={TrendingUp}
             />
-            <StatCard value={uniqueStates} label='States Visited' icon={MapPin} />
-            <StatCard value={uniqueCities} label='Cities Visited' icon={Calendar} />
+            <StatCard
+              value={uniqueStates}
+              label='States Visited'
+              icon={MapPin}
+            />
+            <StatCard
+              value={uniqueCities}
+              label='Cities Visited'
+              icon={Calendar}
+            />
           </div>
         )}
 
-        {/* Top state insight */}
         {topState && topState[1] > 1 && (
           <div className='rounded-xl border border-amber-200/60 bg-amber-50/80 px-4 py-3 text-sm dark:border-amber-900/40 dark:bg-amber-900/10'>
             <span className='text-stone-500 dark:text-gray-400'>
@@ -192,7 +194,6 @@ export default function UserInfo() {
           </div>
         )}
 
-        {/* Actions */}
         <div className='flex flex-col gap-2 pt-1'>
           <Button
             onClick={() => signOut({ callbackUrl: '/' })}

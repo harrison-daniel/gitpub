@@ -18,17 +18,60 @@ import { toast } from 'sonner';
 import { formatPhoneNumber } from '../lib/utils';
 
 const BREWERY_TYPE_META = {
-  micro: { label: 'Micro', className: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300' },
-  nano: { label: 'Nano', className: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' },
-  brewpub: { label: 'Brewpub', className: 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300' },
-  large: { label: 'Large', className: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300' },
-  regional: { label: 'Regional', className: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300' },
-  bar: { label: 'Bar', className: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300' },
-  planning: { label: 'Planning', className: 'bg-stone-100 text-stone-600 dark:bg-neutral-800 dark:text-gray-400' },
-  taproom: { label: 'Taproom', className: 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300' },
-  contract: { label: 'Contract', className: 'bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300' },
-  proprietor: { label: 'Proprietor', className: 'bg-teal-100 text-teal-800 dark:bg-teal-900/40 dark:text-teal-300' },
-  closed: { label: 'Closed', className: 'bg-red-200 text-red-700 line-through dark:bg-red-900/40 dark:text-red-400' },
+  micro: {
+    label: 'Micro',
+    className:
+      'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
+  },
+  nano: {
+    label: 'Nano',
+    className:
+      'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300',
+  },
+  brewpub: {
+    label: 'Brewpub',
+    className:
+      'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300',
+  },
+  large: {
+    label: 'Large',
+    className:
+      'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
+  },
+  regional: {
+    label: 'Regional',
+    className:
+      'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300',
+  },
+  bar: {
+    label: 'Bar',
+    className: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
+  },
+  planning: {
+    label: 'Planning',
+    className:
+      'bg-stone-100 text-stone-600 dark:bg-neutral-800 dark:text-gray-400',
+  },
+  taproom: {
+    label: 'Taproom',
+    className:
+      'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300',
+  },
+  contract: {
+    label: 'Contract',
+    className:
+      'bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300',
+  },
+  proprietor: {
+    label: 'Proprietor',
+    className:
+      'bg-teal-100 text-teal-800 dark:bg-teal-900/40 dark:text-teal-300',
+  },
+  closed: {
+    label: 'Closed',
+    className:
+      'bg-red-200 text-red-700 line-through dark:bg-red-900/40 dark:text-red-400',
+  },
 };
 
 function BreweryCard({ brewery, session, addingBreweryId, onAdd }) {
@@ -38,17 +81,20 @@ function BreweryCard({ brewery, session, addingBreweryId, onAdd }) {
   return (
     <div className='overflow-hidden rounded-xl border border-stone-200 bg-white shadow dark:border-neutral-700/60 dark:bg-neutral-800/90'>
       <div className='flex'>
-        {/* Left accent bar — amber for open, red for closed */}
-        <div className={`w-1 flex-shrink-0 ${brewery.brewery_type === 'closed' ? 'bg-red-500' : 'bg-amber-500'}`} />
+        <div
+          className={`w-1 flex-shrink-0 ${
+            brewery.brewery_type === 'closed' ? 'bg-red-500' : 'bg-amber-500'
+          }`}
+        />
 
         <div className='flex-1 px-3 py-3'>
-          {/* Name row + badge */}
           <div className='mb-1 flex flex-wrap items-start gap-2'>
             <h3 className='flex-1 text-base font-extrabold leading-snug text-stone-900 dark:text-[#d5cea3]'>
               {brewery.name}
             </h3>
             {typeMeta && (
-              <span className={`flex-shrink-0 rounded-full px-2 py-0.5 font-mono text-xs font-semibold ${typeMeta.className}`}>
+              <span
+                className={`flex-shrink-0 rounded-full px-2 py-0.5 font-mono text-xs font-semibold ${typeMeta.className}`}>
                 {typeMeta.label}
               </span>
             )}
@@ -89,14 +135,16 @@ function BreweryCard({ brewery, session, addingBreweryId, onAdd }) {
             </div>
           )}
 
-          {/* Action */}
           <div className='mt-3 flex justify-end'>
             {session ? (
               <Button
                 size='sm'
                 disabled={isAdding}
                 className='rounded-lg bg-amber-700 px-4 text-xs font-semibold text-amber-100 shadow hover:bg-amber-500 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-200 dark:hover:text-black'
-                onClick={(e) => { e.currentTarget.blur(); onAdd(brewery); }}>
+                onClick={(e) => {
+                  e.currentTarget.blur();
+                  onAdd(brewery);
+                }}>
                 {isAdding ? (
                   <>
                     <Loader2 className='mr-1.5 h-3 w-3 animate-spin' />
@@ -138,7 +186,6 @@ export default function BrewerySearch() {
   // Cache breweries per state in sessionStorage (survives page reload, resets on tab close)
   const breweryCacheRef = useRef({});
 
-  // Listen for the 'open-state-search' event dispatched by the Navbar Search button
   useEffect(() => {
     const handleOpenSearch = () => {
       document
@@ -160,7 +207,7 @@ export default function BrewerySearch() {
 
     const sessionKey = `breweries_${state}`;
 
-    // 1. Check in-memory cache (fastest — same component mount)
+    // 1. Check in-memory cache
     if (breweryCacheRef.current[state]) {
       const cached = breweryCacheRef.current[state];
       setBreweries(cached);
@@ -168,7 +215,6 @@ export default function BrewerySearch() {
       return;
     }
 
-    // 2. Check sessionStorage (survives page reload within the same tab)
     try {
       const stored = sessionStorage.getItem(sessionKey);
       if (stored) {
@@ -178,9 +224,7 @@ export default function BrewerySearch() {
         setCities([...new Set(cached.map((b) => b.city))].sort());
         return;
       }
-    } catch {
-      // sessionStorage unavailable (SSR guard) — fall through to fetch
-    }
+    } catch {}
 
     const fetchBreweries = async () => {
       setIsLoadingBreweries(true);
@@ -201,9 +245,7 @@ export default function BrewerySearch() {
         breweryCacheRef.current[state] = fetchedBreweries;
         try {
           sessionStorage.setItem(sessionKey, JSON.stringify(fetchedBreweries));
-        } catch {
-          // sessionStorage full or unavailable — in-memory cache still works
-        }
+        } catch {}
         setBreweries(fetchedBreweries);
         setCities([...new Set(fetchedBreweries.map((b) => b.city))].sort());
       } catch {
@@ -291,12 +333,14 @@ export default function BrewerySearch() {
 
   return (
     <>
-      <div id='brewery-search' className='mx-12 mb-12 mt-3 flex flex-col lg:mt-5'>
+      <div
+        id='brewery-search'
+        className='mx-12 mb-12 mt-3 flex flex-col lg:mt-5'>
         <h1 className='search-header mb-1 flex justify-center text-center text-2xl font-extrabold lg:text-4xl'>
           Find Your Next Brewery
         </h1>
         {!session && (
-          <p className='mb-2 w-fit mx-auto rounded-full bg-white/50 px-3 py-0.5 text-center text-sm font-medium text-stone-700 backdrop-blur-sm dark:bg-black/40 dark:text-stone-200'>
+          <p className='mx-auto mb-2 w-fit rounded-full bg-white/50 px-3 py-0.5 text-center text-sm font-medium text-stone-700 backdrop-blur-sm dark:bg-black/40 dark:text-stone-200'>
             Sign in to save your discoveries
           </p>
         )}
@@ -308,8 +352,10 @@ export default function BrewerySearch() {
             onExternalOpenChange={setStateComboOpen}
           />
 
-          {/* City / loading — slides in when state is selected, no layout jump */}
-          <div className={`overflow-hidden transition-all duration-300 ease-in-out ${state ? 'max-h-16 opacity-100' : 'max-h-0 opacity-0'}`}>
+          <div
+            className={`overflow-hidden transition-all duration-300 ease-in-out ${
+              state ? 'max-h-16 opacity-100' : 'max-h-0 opacity-0'
+            }`}>
             <div className='pt-1.5'>
               {isLoadingBreweries ? (
                 <div className='flex h-10 items-center gap-2 text-sm text-muted-foreground'>
@@ -326,12 +372,19 @@ export default function BrewerySearch() {
             </div>
           </div>
 
-          {/* Search row — slides in when city is selected */}
-          <div className={`overflow-hidden transition-all duration-300 ease-in-out ${city && !isLoadingBreweries ? 'max-h-16 opacity-100' : 'max-h-0 opacity-0'}`}>
+          <div
+            className={`overflow-hidden transition-all duration-300 ease-in-out ${
+              city && !isLoadingBreweries
+                ? 'max-h-16 opacity-100'
+                : 'max-h-0 opacity-0'
+            }`}>
             <div className='flex flex-row items-center justify-center gap-6 pt-2.5'>
               <Button
                 className='bg-amber-700 text-white hover:bg-amber-600 dark:bg-slate-950 dark:text-yellow-100'
-                onClick={(e) => { e.currentTarget.blur(); handleCityFilter(); }}>
+                onClick={(e) => {
+                  e.currentTarget.blur();
+                  handleCityFilter();
+                }}>
                 <Search className='mr-2 h-4 w-4' />
                 Search
               </Button>
@@ -346,15 +399,19 @@ export default function BrewerySearch() {
         </div>
       </div>
 
-      <Dialog open={open} onOpenChange={(val) => {
-        setOpen(val);
-        if (!val) document.activeElement?.blur();
-      }}>
-        <DialogContent className='max-h-[78vh] overflow-hidden p-0 bg-white dark:bg-zinc-950'>
+      <Dialog
+        open={open}
+        onOpenChange={(val) => {
+          setOpen(val);
+          if (!val) document.activeElement?.blur();
+        }}>
+        <DialogContent className='max-h-[78vh] overflow-hidden bg-white p-0 dark:bg-zinc-950'>
           <DialogHeader className='rounded-t-lg bg-amber-700 px-4 py-3 dark:bg-zinc-800'>
             <DialogTitle>
               <div className='text-center'>
-                <p className='text-sm font-semibold text-amber-100 dark:text-amber-200'>Breweries in:</p>
+                <p className='text-sm font-semibold text-amber-100 dark:text-amber-200'>
+                  Breweries in:
+                </p>
                 <p className='text-lg font-bold text-white'>
                   {city}, {capitalizeState(state.replace(/_/g, ' '))}
                 </p>

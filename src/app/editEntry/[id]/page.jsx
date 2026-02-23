@@ -23,10 +23,17 @@ export default async function EditEntry({ params }) {
     return <div>Entry not found</div>;
   }
 
-  // Serialize MongoDB types (ObjectId, Date) so they're safe to pass to client components
   const entry = JSON.parse(JSON.stringify(raw));
 
-  const { title, streetAddress, cityStateAddress, description, date, websiteUrl, phoneNumber } = entry;
+  const {
+    title,
+    streetAddress,
+    cityStateAddress,
+    description,
+    date,
+    websiteUrl,
+    phoneNumber,
+  } = entry;
 
   return (
     <EditEntryForm

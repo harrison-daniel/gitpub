@@ -1,6 +1,5 @@
 import Navbar from './components/Navbar';
 import './globals.css';
-// import { Toaster } from './components/ui/toaster';
 import { Toaster } from './components/ui/sonner';
 
 import ModeToggle from './lib/ModeToggle';
@@ -42,11 +41,9 @@ export const viewport = {
     { media: '(prefers-color-scheme: light)', color: '#b45309' },
     { media: '(prefers-color-scheme: dark)', color: '#09090b' },
   ],
-  // interactiveWidget: 'resizes-visual',
 };
 
 export default async function RootLayout({ children }) {
-  // const session = getServerSession();
   const session = await auth();
 
   if (session?.user) {
@@ -63,7 +60,6 @@ export default async function RootLayout({ children }) {
       <body>
         <SessionProvider session={session}>
           <ThemeProviders>
-            {/* Background Image */}
             <div>
               <div className='imgLight absolute top-[2vh] -z-20 mx-auto h-[100vh] w-[100vw] md:top-[4vh]'>
                 <Image

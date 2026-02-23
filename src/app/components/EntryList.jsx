@@ -1,5 +1,5 @@
 'use client';
-import React, { useOptimistic, startTransition, useState } from 'react';
+import { useOptimistic, startTransition, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import useUserEntries from '../lib/useUserEntries';
 import YearlyEntries from './YearlyEntries';
@@ -79,7 +79,9 @@ export default function EntryList() {
     ? optimisticEntries.filter(
         (e) =>
           e.title?.toLowerCase().includes(filterText.toLowerCase()) ||
-          e.cityStateAddress?.toLowerCase().includes(filterText.toLowerCase()) ||
+          e.cityStateAddress
+            ?.toLowerCase()
+            .includes(filterText.toLowerCase()) ||
           e.streetAddress?.toLowerCase().includes(filterText.toLowerCase()),
       )
     : optimisticEntries;

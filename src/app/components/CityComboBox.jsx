@@ -1,4 +1,3 @@
-import React from 'react';
 import ComboBox from '../components/ComboBox';
 
 export default function NewCityComboBox({ cities, onCitySelect, value }) {

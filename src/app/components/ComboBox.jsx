@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronsUpDown } from 'lucide-react';
 import useMediaQuery from '../lib/useMediaQuery';
 import { Button } from './ui/button';
@@ -29,7 +29,6 @@ export default function ComboBox({
   const [keyboardOffset, setKeyboardOffset] = useState(0);
   const [availableHeight, setAvailableHeight] = useState(0);
 
-  // Allow external control of open state (e.g. triggered from Navbar Search)
   const isOpen = externalOpen !== undefined ? externalOpen : open;
   const handleOpenChange = (val) => {
     setOpen(val);
@@ -46,7 +45,6 @@ export default function ComboBox({
     setLocalValue(value || '');
   }, [value]);
 
-  // Reposition drawer above iOS keyboard on smaller screens
   useEffect(() => {
     if (isDesktop || !isOpen) {
       setKeyboardOffset(0);
@@ -73,16 +71,22 @@ export default function ComboBox({
     return () => vv.removeEventListener('resize', updateLayout);
   }, [isDesktop, isOpen]);
 
-  const drawerStyle = keyboardOffset > 0 ? {
-    bottom: `${keyboardOffset}px`,
-    maxHeight: `${availableHeight - 40}px`,
-    minHeight: 'auto',
-    transition: 'bottom 0.15s ease-out, max-height 0.15s ease-out',
-  } : undefined;
+  const drawerStyle =
+    keyboardOffset > 0
+      ? {
+          bottom: `${keyboardOffset}px`,
+          maxHeight: `${availableHeight - 40}px`,
+          minHeight: 'auto',
+          transition: 'bottom 0.15s ease-out, max-height 0.15s ease-out',
+        }
+      : undefined;
 
-  const listStyle = keyboardOffset > 0 ? {
-    maxHeight: `${availableHeight - 150}px`,
-  } : undefined;
+  const listStyle =
+    keyboardOffset > 0
+      ? {
+          maxHeight: `${availableHeight - 150}px`,
+        }
+      : undefined;
 
   return (
     <div>
@@ -93,7 +97,8 @@ export default function ComboBox({
               <Button variant='outline' className='w-[180px] justify-between'>
                 <span className='truncate'>
                   {value
-                    ? dataList.find((dataItem) => dataItem.value === localValue)?.label
+                    ? dataList.find((dataItem) => dataItem.value === localValue)
+                        ?.label
                     : placeholder}
                 </span>
                 <ChevronsUpDown className='ml-2 h-3.5 w-3.5 shrink-0 opacity-50' />
@@ -129,7 +134,8 @@ export default function ComboBox({
               <Button variant='outline' className='w-[180px] justify-between'>
                 <span className='truncate'>
                   {value
-                    ? dataList.find((dataItem) => dataItem.value === localValue)?.label
+                    ? dataList.find((dataItem) => dataItem.value === localValue)
+                        ?.label
                     : placeholder}
                 </span>
                 <ChevronsUpDown className='ml-2 h-3.5 w-3.5 shrink-0 opacity-50' />
@@ -139,7 +145,9 @@ export default function ComboBox({
               <div className='mt-2 border-t'>
                 <Command>
                   <CommandInput
-                    placeholder={`Search ${placeholder.replace('Select a ', '').replace('...', '')}...`}
+                    placeholder={`Search ${placeholder
+                      .replace('Select a ', '')
+                      .replace('...', '')}...`}
                     className='h-12 text-base'
                   />
                   <CommandList className='max-h-[42vh]' style={listStyle}>

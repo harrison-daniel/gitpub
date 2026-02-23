@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft } from 'lucide-react';
@@ -17,18 +18,16 @@ export default function SignIn() {
         Back
       </button>
 
-      <div className='rounded-2xl border border-amber-200/60 bg-white/85 p-8 shadow-sm backdrop-blur-sm dark:border-neutral-700/60 dark:bg-neutral-900/85'>
-        {/* Branding */}
+      <div className='bg-white/85 dark:bg-neutral-900/85 rounded-2xl border border-amber-200/60 p-8 shadow-sm backdrop-blur-sm dark:border-neutral-700/60'>
         <div className='mb-8 text-center'>
-          <p className='font-serif text-5xl font-extrabold tracking-tight'>
+          {/* <p className='font-serif text-5xl font-extrabold tracking-tight'>
             GitPub
-          </p>
+          </p> */}
           <p className='mt-2 text-sm text-stone-500 dark:text-stone-400'>
-            Save your brewery discoveries
+            Sign in to save your brewery discoveries
           </p>
         </div>
 
-        {/* Providers */}
         <div className='flex flex-col gap-3'>
           <button
             onClick={() => signIn('google', { callbackUrl: '/' })}
@@ -48,6 +47,12 @@ export default function SignIn() {
         <p className='mt-6 text-center text-xs text-stone-400 dark:text-stone-500'>
           No password needed — secure sign-in via Google or GitHub
         </p>
+
+        <Link
+          href='/privacy'
+          className='mt-10 block text-center text-xs text-stone-400 hover:text-stone-500 dark:text-stone-500 dark:hover:text-stone-400'>
+          Privacy policy
+        </Link>
       </div>
     </div>
   );
