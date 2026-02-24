@@ -52,6 +52,15 @@ export default function EntryModal({ open, onOpenChange, mode, entry, onSuccess 
     onOpenChange(false);
   };
 
+  // Wrap onSuccess to reset dirty state before closing — prevents discard alert
+  const handleSuccess = useCallback(
+    (data) => {
+      setIsDirty(false);
+      onSuccess(data);
+    },
+    [onSuccess],
+  );
+
   const title = mode === 'edit' ? 'Edit Entry' : 'Add Entry';
   const formKey = entry?._id ?? 'add';
   const initialValues = entry
@@ -108,7 +117,7 @@ export default function EntryModal({ open, onOpenChange, mode, entry, onSuccess 
                 id={entry?._id}
                 initialValues={initialValues}
                 isModal
-                onSuccess={onSuccess}
+                onSuccess={handleSuccess}
                 onDirtyChange={handleDirtyChange}
               />
             </ScrollArea>
@@ -134,17 +143,17 @@ export default function EntryModal({ open, onOpenChange, mode, entry, onSuccess 
               {mode === 'edit' ? 'Edit your brewery journal entry' : 'Add a new brewery to your journal'}
             </DrawerDescription>
           </DrawerHeader>
-          <ScrollArea className='max-h-[calc(90vh-80px)] overflow-auto'>
+          <div className='overflow-y-auto overscroll-contain pb-safe'>
             <EntryForm
               key={formKey}
               mode={mode}
               id={entry?._id}
               initialValues={initialValues}
               isModal
-              onSuccess={onSuccess}
+              onSuccess={handleSuccess}
               onDirtyChange={handleDirtyChange}
             />
-          </ScrollArea>
+          </div>
         </DrawerContent>
       </Drawer>
       {discardAlert}

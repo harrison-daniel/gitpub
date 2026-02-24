@@ -38,9 +38,11 @@ export default function EntryForm({
   onDirtyChange,
 }) {
   const [title, setTitle] = useState(initialValues.title ?? '');
-  const [description, setDescription] = useState(
-    initialValues.description ?? '',
-  );
+  const initDescription =
+    initialValues.description === 'Edit entry to add notes'
+      ? ''
+      : (initialValues.description ?? '');
+  const [description, setDescription] = useState(initDescription);
   const [streetAddress, setStreetAddress] = useState(
     initialValues.streetAddress ?? '',
   );
@@ -63,7 +65,7 @@ export default function EntryForm({
   // Track dirty state for unsaved changes detection
   const isDirty =
     title !== (initialValues.title ?? '') ||
-    description !== (initialValues.description ?? '') ||
+    description !== initDescription ||
     streetAddress !== (initialValues.streetAddress ?? '') ||
     cityStateAddress !== (initialValues.cityStateAddress ?? '') ||
     websiteUrl !== (initialValues.websiteUrl ?? '') ||

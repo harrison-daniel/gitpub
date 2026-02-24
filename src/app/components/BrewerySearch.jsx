@@ -302,12 +302,12 @@ export default function BrewerySearch() {
 
     const entryData = {
       title: brewery.name,
-      streetAddress: brewery.address_1,
+      streetAddress: brewery.address_1 ?? '',
       cityStateAddress: `${brewery.city}, ${brewery.state}`,
-      description: 'Edit entry to add notes',
+      description: '',
       date: new Date().toISOString(),
-      websiteUrl: brewery.website_url,
-      phoneNumber: brewery.phone,
+      websiteUrl: brewery.website_url ?? '',
+      phoneNumber: brewery.phone ?? '',
     };
 
     try {
