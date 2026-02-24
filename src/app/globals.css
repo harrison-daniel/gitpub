@@ -95,3 +95,9 @@ html.dark {
     1px -1px 0 white,
     -1px 1px 0 white;
 }
+
+@layer utilities {
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}

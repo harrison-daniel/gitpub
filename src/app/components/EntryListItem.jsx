@@ -147,7 +147,7 @@ export default function EntryListItem({ entry, onDelete, onEdit }) {
                       href={
                         entry.websiteUrl.startsWith('http')
                           ? entry.websiteUrl
-                          : `http://${entry.websiteUrl}`
+                          : `https://${entry.websiteUrl}`
                       }
                       target='_blank'
                       rel='noopener noreferrer'

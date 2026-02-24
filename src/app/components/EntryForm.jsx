@@ -1,12 +1,12 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Textarea } from '../components/ui/textarea';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { X, Calendar as CalendarIcon, ChevronLeft } from 'lucide-react';
 import { format } from 'date-fns';
-import { cn } from '../lib/utils';
+import { cn, formatPhoneInput, isValidUrl, normalizeUrl } from '../lib/utils';
 import { Button } from '../components/ui/button';
 import { Calendar } from '../components/ui/calendar';
 import {
@@ -62,6 +62,39 @@ export default function EntryForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
+  // Refs for field-to-field keyboard navigation
+  const titleRef = useRef(null);
+  const phoneRef = useRef(null);
+  const streetRef = useRef(null);
+  const cityStateRef = useRef(null);
+  const websiteRef = useRef(null);
+  const notesRef = useRef(null);
+
+  const fieldRefs = [titleRef, phoneRef, streetRef, cityStateRef, websiteRef, notesRef];
+
+  const handleInputKeyDown = useCallback((e, currentIndex) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const nextRef = fieldRefs[currentIndex + 1];
+      nextRef?.current?.focus();
+    }
+  }, []);
+
+  const handleFieldFocus = useCallback((e) => {
+    setTimeout(() => {
+      e.target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }, 300);
+  }, []);
+
+  // Auto-expand textarea on mount if pre-filled
+  useEffect(() => {
+    const el = notesRef.current;
+    if (el && description) {
+      el.style.height = 'auto';
+      el.style.height = `${el.scrollHeight}px`;
+    }
+  }, []);
+
   // Track dirty state for unsaved changes detection
   const isDirty =
     title !== (initialValues.title ?? '') ||
@@ -93,6 +126,17 @@ export default function EntryForm({
       return;
     }
 
+    if (!isValidUrl(websiteUrl)) {
+      toast('Website doesn\u2019t look like a valid URL (e.g. beer.com).', {
+        style: { background: 'red' },
+        position: 'bottom-right',
+      });
+      websiteRef.current?.focus();
+      return;
+    }
+
+    const normalizedUrl = normalizeUrl(websiteUrl);
+
     setIsSubmitting(true);
     try {
       const payload = {
@@ -101,7 +145,7 @@ export default function EntryForm({
         cityStateAddress,
         description,
         date: date ?? null,
-        websiteUrl,
+        websiteUrl: normalizedUrl,
         phoneNumber,
       };
 
@@ -177,63 +221,91 @@ export default function EntryForm({
 
           <Field label='Brewery / Entry Name *' htmlFor='title'>
             <Input
+              ref={titleRef}
               id='title'
               placeholder="e.g. Bell's Brewery"
               autoComplete='off'
+              enterKeyHint='next'
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              onKeyDown={(e) => handleInputKeyDown(e, 0)}
+              onFocus={handleFieldFocus}
             />
           </Field>
 
           <Field label='Phone' htmlFor='phone'>
             <Input
+              ref={phoneRef}
               id='phone'
               type='tel'
+              inputMode='numeric'
               placeholder='(555) 555-5555'
               autoComplete='off'
+              enterKeyHint='next'
               value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              onChange={(e) => setPhoneNumber(formatPhoneInput(e.target.value))}
+              onKeyDown={(e) => handleInputKeyDown(e, 1)}
+              onFocus={handleFieldFocus}
             />
           </Field>
 
           <Field label='Street Address' htmlFor='street'>
             <Input
+              ref={streetRef}
               id='street'
               placeholder='123 Main St'
               autoComplete='off'
+              enterKeyHint='next'
               value={streetAddress}
               onChange={(e) => setStreetAddress(e.target.value)}
+              onKeyDown={(e) => handleInputKeyDown(e, 2)}
+              onFocus={handleFieldFocus}
             />
           </Field>
 
           <Field label='City / State' htmlFor='cityState'>
             <Input
+              ref={cityStateRef}
               id='cityState'
               placeholder='Grand Rapids, MI'
               autoComplete='off'
+              enterKeyHint='next'
               value={cityStateAddress}
               onChange={(e) => setCityStateAddress(e.target.value)}
+              onKeyDown={(e) => handleInputKeyDown(e, 3)}
+              onFocus={handleFieldFocus}
             />
           </Field>
 
           <Field label='Website' htmlFor='website'>
             <Input
+              ref={websiteRef}
               id='website'
-              type='url'
-              placeholder='https://example.com'
+              placeholder='example.com'
               autoComplete='off'
+              enterKeyHint='next'
               value={websiteUrl}
               onChange={(e) => setWebsiteUrl(e.target.value)}
+              onKeyDown={(e) => handleInputKeyDown(e, 4)}
+              onFocus={handleFieldFocus}
             />
           </Field>
 
           <Field label='Notes' htmlFor='notes'>
             <Textarea
+              ref={notesRef}
               id='notes'
+              rows={3}
+              className='resize-none'
               placeholder='Tasting notes, what you tried, how it was...'
               autoComplete='off'
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => {
+                setDescription(e.target.value);
+                e.target.style.height = 'auto';
+                e.target.style.height = `${e.target.scrollHeight}px`;
+              }}
+              onFocus={handleFieldFocus}
             />
           </Field>
 
