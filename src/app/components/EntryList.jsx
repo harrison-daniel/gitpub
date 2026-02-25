@@ -119,7 +119,7 @@ export default function EntryList({ onEdit }) {
             if (showFilter) setFilterText('');
           }}
           title='Filter entries'
-          className={`rounded-lg p-2 transition-colors ${
+          className={`rounded-lg p-2 transition-[color,background-color,transform] active:scale-[0.90] ${
             showFilter
               ? 'bg-amber-600 text-white'
               : 'text-stone-500 hover:bg-amber-100 hover:text-amber-700 dark:text-gray-400 dark:hover:bg-neutral-800 dark:hover:text-amber-400'

@@ -342,6 +342,7 @@ export default function BrewerySearch() {
       });
     } finally {
       setAddingBreweryId(null);
+      document.activeElement?.blur();
     }
   }
 
@@ -406,7 +407,7 @@ export default function BrewerySearch() {
                 size={22}
                 onClick={handleClearSearch}
                 title='Clear Search'
-                className='cursor-pointer text-red-600 hover:text-red-400 dark:text-red-600 dark:hover:text-red-400'
+                className='cursor-pointer text-red-600 transition-transform active:scale-[0.85] active:rotate-[-45deg] hover:text-red-400 dark:text-red-600 dark:hover:text-red-400'
               />
             </div>
           </div>

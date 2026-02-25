@@ -238,7 +238,7 @@ export default function EntryForm({
               <button
                 type='button'
                 onClick={() => setDate(null)}
-                className='flex items-center gap-1 text-xs font-semibold text-red-600 hover:text-red-400'>
+                className='flex items-center gap-1 text-xs font-semibold text-red-600 transition-transform active:scale-[0.90] hover:text-red-400'>
                 Clear <X size={14} />
               </button>
             )}
@@ -365,7 +365,7 @@ export default function EntryForm({
       <button
         type='button'
         onClick={() => router.back()}
-        className='mb-4 -ml-1.5 inline-flex items-center gap-1 rounded-md px-1.5 py-1 text-sm font-semibold text-amber-700 hover:bg-amber-50 hover:text-amber-600 dark:text-amber-400 dark:hover:bg-amber-950/30 dark:hover:text-amber-300'>
+        className='mb-4 -ml-1.5 inline-flex items-center gap-1 rounded-md px-1.5 py-1 text-sm font-semibold text-amber-700 transition-transform active:scale-[0.95] hover:bg-amber-50 hover:text-amber-600 dark:text-amber-400 dark:hover:bg-amber-950/30 dark:hover:text-amber-300'>
         <ChevronLeft size={16} />
         Back
       </button>

@@ -4,7 +4,7 @@ import { useTheme } from 'next-themes';
 import { useState, useEffect } from 'react';
 
 const toggleClass =
-  'absolute right-1 top-0 cursor-pointer px-1 py-1 text-4xl';
+  'absolute right-1 top-0 cursor-pointer px-1 py-1 text-4xl transition-transform active:scale-[0.85]';
 
 export default function ModeToggle() {
   const [mounted, setMounted] = useState(false);

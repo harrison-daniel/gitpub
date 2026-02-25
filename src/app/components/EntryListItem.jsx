@@ -67,7 +67,7 @@ export default function EntryListItem({ entry, onDelete, onEdit }) {
               <DropdownMenu>
                 <DropdownMenuTrigger
                   aria-label='Entry actions'
-                  className='mt-0.5 rounded p-0.5 text-stone-400 hover:text-stone-600 dark:text-gray-500 dark:hover:text-gray-300'>
+                  className='mt-0.5 rounded p-0.5 text-stone-400 transition-transform active:scale-[0.90] hover:text-stone-600 dark:text-gray-500 dark:hover:text-gray-300'>
                   <MoreHorizontal size={19} />
                 </DropdownMenuTrigger>
                 <DropdownMenuPortal>
@@ -115,7 +115,7 @@ export default function EntryListItem({ entry, onDelete, onEdit }) {
           {hasDetails && (
             <button
               onClick={() => setExpanded((v) => !v)}
-              className='mt-2 flex items-center gap-1 text-xs font-semibold text-amber-700 hover:text-amber-500 dark:text-amber-400 dark:hover:text-amber-300'>
+              className='mt-2 flex items-center gap-1 text-xs font-semibold text-amber-700 transition-transform active:scale-[0.95] hover:text-amber-500 dark:text-amber-400 dark:hover:text-amber-300'>
               <motion.span
                 animate={{ rotate: expanded ? 180 : 0 }}
                 transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}>

@@ -18,6 +18,10 @@ body {
   padding: 0;
 }
 
+button, a, [role="button"], input, select, textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
 body > main {
   scrollbar-width: none;
   -ms-overflow-style: none;
