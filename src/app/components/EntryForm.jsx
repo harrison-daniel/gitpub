@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 import { Textarea } from '../components/ui/textarea';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -60,6 +61,8 @@ export default function EntryForm({
   );
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formShake, setFormShake] = useState(false);
+  const [errorField, setErrorField] = useState(null);
   const router = useRouter();
 
   // Refs for field-to-field keyboard navigation
@@ -69,6 +72,7 @@ export default function EntryForm({
   const cityStateRef = useRef(null);
   const websiteRef = useRef(null);
   const notesRef = useRef(null);
+  const isTapping = useRef(false);
 
   const fieldRefs = [titleRef, phoneRef, streetRef, cityStateRef, websiteRef, notesRef];
 
@@ -80,7 +84,13 @@ export default function EntryForm({
     }
   }, []);
 
+  const handleFieldPointerDown = useCallback(() => {
+    isTapping.current = true;
+    setTimeout(() => { isTapping.current = false; }, 400);
+  }, []);
+
   const handleFieldFocus = useCallback((e) => {
+    if (!isTapping.current) return;
     setTimeout(() => {
       e.target.scrollIntoView({ block: 'center', behavior: 'smooth' });
     }, 300);
@@ -115,6 +125,11 @@ export default function EntryForm({
     setIsCalendarOpen(false);
   };
 
+  const triggerShake = useCallback(() => {
+    setFormShake(true);
+    setTimeout(() => setFormShake(false), 500);
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -123,6 +138,9 @@ export default function EntryForm({
         style: { background: 'red' },
         position: 'bottom-right',
       });
+      setErrorField('title');
+      titleRef.current?.focus();
+      triggerShake();
       return;
     }
 
@@ -131,7 +149,9 @@ export default function EntryForm({
         style: { background: 'red' },
         position: 'bottom-right',
       });
+      setErrorField('website');
       websiteRef.current?.focus();
+      triggerShake();
       return;
     }
 
@@ -183,7 +203,12 @@ export default function EntryForm({
   };
 
   const formContent = (
-    <form onSubmit={handleSubmit} className='flex flex-col gap-4 p-6'>
+    <motion.form
+      onSubmit={handleSubmit}
+      className='flex flex-col gap-4 p-6'
+      animate={formShake ? { x: [0, -8, 8, -6, 6, -3, 3, 0] } : {}}
+      transition={{ duration: 0.4 }}
+    >
           {/* Date picker */}
           <div className='flex items-center gap-3'>
             <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
@@ -223,12 +248,17 @@ export default function EntryForm({
             <Input
               ref={titleRef}
               id='title'
+              className={errorField === 'title' ? 'ring-2 ring-red-500' : ''}
               placeholder="e.g. Bell's Brewery"
               autoComplete='off'
               enterKeyHint='next'
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => {
+                setTitle(e.target.value);
+                if (errorField === 'title') setErrorField(null);
+              }}
               onKeyDown={(e) => handleInputKeyDown(e, 0)}
+              onPointerDown={handleFieldPointerDown}
               onFocus={handleFieldFocus}
             />
           </Field>
@@ -245,6 +275,7 @@ export default function EntryForm({
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(formatPhoneInput(e.target.value))}
               onKeyDown={(e) => handleInputKeyDown(e, 1)}
+              onPointerDown={handleFieldPointerDown}
               onFocus={handleFieldFocus}
             />
           </Field>
@@ -259,6 +290,7 @@ export default function EntryForm({
               value={streetAddress}
               onChange={(e) => setStreetAddress(e.target.value)}
               onKeyDown={(e) => handleInputKeyDown(e, 2)}
+              onPointerDown={handleFieldPointerDown}
               onFocus={handleFieldFocus}
             />
           </Field>
@@ -273,6 +305,7 @@ export default function EntryForm({
               value={cityStateAddress}
               onChange={(e) => setCityStateAddress(e.target.value)}
               onKeyDown={(e) => handleInputKeyDown(e, 3)}
+              onPointerDown={handleFieldPointerDown}
               onFocus={handleFieldFocus}
             />
           </Field>
@@ -281,12 +314,17 @@ export default function EntryForm({
             <Input
               ref={websiteRef}
               id='website'
+              className={errorField === 'website' ? 'ring-2 ring-red-500' : ''}
               placeholder='example.com'
               autoComplete='off'
               enterKeyHint='next'
               value={websiteUrl}
-              onChange={(e) => setWebsiteUrl(e.target.value)}
+              onChange={(e) => {
+                setWebsiteUrl(e.target.value);
+                if (errorField === 'website') setErrorField(null);
+              }}
               onKeyDown={(e) => handleInputKeyDown(e, 4)}
+              onPointerDown={handleFieldPointerDown}
               onFocus={handleFieldFocus}
             />
           </Field>
@@ -305,6 +343,7 @@ export default function EntryForm({
                 e.target.style.height = 'auto';
                 e.target.style.height = `${e.target.scrollHeight}px`;
               }}
+              onPointerDown={handleFieldPointerDown}
               onFocus={handleFieldFocus}
             />
           </Field>
@@ -316,7 +355,7 @@ export default function EntryForm({
             className='mt-2 w-full'>
             {isSubmitting ? 'Saving...' : isEdit ? 'Update Entry' : 'Add Entry'}
           </Button>
-    </form>
+    </motion.form>
   );
 
   if (isModal) return formContent;

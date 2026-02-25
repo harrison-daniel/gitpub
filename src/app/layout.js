@@ -12,8 +12,22 @@ import { auth } from './auth';
 import { ThemeProviders } from './themeProviders';
 
 export const metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
+  ),
   title: 'GitPub',
   description: 'Brewery Locator and Journal',
+  openGraph: {
+    title: 'GitPub',
+    description: 'Discover and track your favorite breweries',
+    images: [{ url: '/assets/images/icon-512.png', width: 512, height: 512 }],
+  },
+  twitter: {
+    card: 'summary',
+    title: 'GitPub',
+    description: 'Discover and track your favorite breweries',
+    images: ['/assets/images/icon-512.png'],
+  },
   icons: {
     icon: [
       {
@@ -58,11 +72,11 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang='en' suppressHydrationWarning>
-      <body>
+      <body className='flex h-[100dvh] flex-col overflow-hidden'>
         <SessionProvider session={session}>
           <ThemeProviders>
             <div>
-              <div className='imgLight absolute top-[2vh] -z-20 mx-auto h-[100vh] w-[100vw] md:top-[4vh]'>
+              <div className='imgLight fixed top-[2vh] -z-20 mx-auto h-[100dvh] w-[100vw] md:top-[4vh]'>
                 <Image
                   src={beerLight}
                   alt='Light Theme Beer'
@@ -77,7 +91,7 @@ export default async function RootLayout({ children }) {
                   }}
                 />
               </div>
-              <div className='imgDark absolute top-[3.5vh] -z-20 h-[100vh] w-[100vw] md:top-[4.5vh]'>
+              <div className='imgDark fixed top-[3.5vh] -z-20 h-[100dvh] w-[100vw] md:top-[4.5vh]'>
                 <Image
                   src={beerDark}
                   alt='Dark Theme Beer'
@@ -104,7 +118,9 @@ export default async function RootLayout({ children }) {
               <ModeToggle />
             </div>
             <Navbar />
-            {children}
+            <main className='flex-1 overflow-y-auto'>
+              {children}
+            </main>
 
             <Toaster />
           </ThemeProviders>

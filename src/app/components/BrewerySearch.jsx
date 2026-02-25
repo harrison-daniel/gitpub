@@ -2,6 +2,7 @@
 
 import { useSession, signIn } from 'next-auth/react';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import {
   Dialog,
   DialogContent,
@@ -421,7 +422,9 @@ export default function BrewerySearch() {
             document.activeElement?.blur();
           }
         }}>
-        <DialogContent className='max-h-[78vh] overflow-hidden bg-white p-0 dark:bg-zinc-950'>
+        <DialogContent
+          onOpenAutoFocus={(e) => e.preventDefault()}
+          className='max-h-[78vh] overflow-hidden bg-white p-0 dark:bg-zinc-950'>
           <DialogHeader className='rounded-t-lg bg-amber-700 px-4 py-3 dark:bg-zinc-800'>
             <DialogTitle>
               <div className='text-center'>
@@ -456,21 +459,33 @@ export default function BrewerySearch() {
             </div>
           )}
 
-          <ScrollArea className='max-h-[62vh]'>
-            <div className='flex flex-col gap-2.5 p-3'>
+          <ScrollArea className='max-h-[60vh]'>
+            <div key={dialogSearch} className='flex flex-col gap-2.5 px-3 pb-6 pt-3'>
               {visibleBreweries.length === 0 && dialogSearch ? (
                 <p className='py-6 text-center text-sm text-muted-foreground'>
                   No breweries match &ldquo;{dialogSearch}&rdquo;
                 </p>
               ) : (
-                visibleBreweries.map((brewery) => (
-                  <BreweryCard
+                visibleBreweries.map((brewery, index) => (
+                  <motion.div
                     key={brewery.id}
-                    brewery={brewery}
-                    session={session}
-                    addingBreweryId={addingBreweryId}
-                    onAdd={handleAddBrewery}
-                  />
+                    initial={{ opacity: 0, y: 24, scale: 0.97 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{
+                      type: 'spring',
+                      stiffness: 300,
+                      damping: 24,
+                      delay: Math.min(index * 0.05, 0.4),
+                    }}
+                  >
+                    <BreweryCard
+                      brewery={brewery}
+                      session={session}
+                      addingBreweryId={addingBreweryId}
+                      onAdd={handleAddBrewery}
+                    />
+                  </motion.div>
                 ))
               )}
             </div>

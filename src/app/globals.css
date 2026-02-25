@@ -11,14 +11,16 @@ html {
     rgba(255, 212, 19, 1) 31%,
     rgba(255, 186, 2, 1) 73%
   );
-
-  scrollbar-width: none;
-  -ms-overflow-style: none;
 }
 
 body {
   margin: 0;
   padding: 0;
+}
+
+body > main {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 html.dark {
@@ -94,6 +96,15 @@ html.dark {
     -1px -1px 0 white,
     1px -1px 0 white,
     -1px 1px 0 white;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 @layer utilities {
