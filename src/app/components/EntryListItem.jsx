@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { HiPencilAlt, HiOutlineTrash } from 'react-icons/hi';
@@ -22,13 +22,15 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuPortal,
 } from '../components/ui/dropdown-menu';
 import { formatPhoneNumber } from '../lib/utils';
+import { useHaptics } from '../lib/haptics';
 
 export default function EntryListItem({ entry, onDelete, onEdit }) {
   const [expanded, setExpanded] = useState(false);
   const router = useRouter();
+  const haptics = useHaptics();
+  const shouldReduceMotion = useReducedMotion();
 
   const hasDetails =
     entry.phoneNumber ||
@@ -36,19 +38,19 @@ export default function EntryListItem({ entry, onDelete, onEdit }) {
     (entry.description && entry.description !== 'Edit entry to add notes');
 
   return (
-    <div className='bg-white/85 dark:bg-neutral-900/85 mb-3 overflow-hidden rounded-xl border border-amber-200/60 shadow-sm backdrop-blur-sm transition-shadow hover:shadow-md dark:border-neutral-700/60'>
+    <div className='mb-3 overflow-hidden rounded-2xl border border-amber-200/40 bg-white/90 shadow-[0_1px_3px_rgba(0,0,0,0.04),0_4px_12px_rgba(0,0,0,0.03)] backdrop-blur-md transition-[shadow,border-color] duration-200 hover:border-amber-300/60 hover:shadow-[0_2px_8px_rgba(0,0,0,0.08),0_8px_24px_rgba(0,0,0,0.04)] dark:border-neutral-700/40 dark:bg-neutral-900/90 dark:shadow-[0_1px_3px_rgba(0,0,0,0.2)] dark:hover:border-neutral-600/60 dark:hover:shadow-[0_2px_8px_rgba(0,0,0,0.3)]'>
       <div className='flex'>
-        <div className='w-1 flex-shrink-0 bg-amber-500' />
+        <div className='w-1 flex-shrink-0 bg-gradient-to-b from-amber-400 to-amber-600' />
 
         <div className='flex-1 px-3 py-2.5'>
           <div className='flex items-start justify-between gap-2'>
             <div className='min-w-0 flex-1'>
               {entry.date && !isNaN(new Date(entry.date).getTime()) && (
-                <span className='mb-1 inline-block rounded-full bg-amber-100 px-2 py-0.5 font-mono text-xs font-semibold text-amber-800 dark:bg-amber-900/30 dark:text-amber-300'>
+                <span className='mb-1 inline-block rounded-md bg-amber-50 px-2 py-0.5 font-mono text-[11px] font-medium tracking-wide text-amber-700/80 dark:bg-amber-900/20 dark:text-amber-400/80'>
                   {format(new Date(entry.date), 'MMM dd, yyyy')}
                 </span>
               )}
-              <h3 className='entryListItem-header text-base font-extrabold leading-snug text-stone-900 dark:text-[#d5cea3]'>
+              <h3 className='entryListItem-header text-[15px] font-bold leading-snug tracking-tight text-stone-900 dark:text-[#d5cea3]'>
                 {entry.title}
               </h3>
               {entry.cityStateAddress && (
@@ -64,35 +66,33 @@ export default function EntryListItem({ entry, onDelete, onEdit }) {
             </div>
 
             <AlertDialog>
-              <DropdownMenu>
+              <DropdownMenu modal={false} onOpenChange={(open) => open && haptics.tap()}>
                 <DropdownMenuTrigger
                   aria-label='Entry actions'
-                  className='mt-0.5 rounded p-0.5 text-stone-400 transition-transform active:scale-[0.90] hover:text-stone-600 dark:text-gray-500 dark:hover:text-gray-300'>
+                  className='mt-0.5 rounded p-1.5 -m-1 text-stone-400 transition-colors duration-100 hover:text-stone-600 data-[state=open]:text-stone-600 dark:text-gray-500 dark:hover:text-gray-300 dark:data-[state=open]:text-gray-300'>
                   <MoreHorizontal size={19} />
                 </DropdownMenuTrigger>
-                <DropdownMenuPortal>
-                  <DropdownMenuContent className='mr-4 mt-1 flex flex-col items-start bg-white shadow-lg dark:bg-neutral-800'>
-                    <DropdownMenuItem
-                      onClick={() =>
-                        onEdit
-                          ? onEdit(entry)
-                          : router.push(`/editEntry/${entry._id}`)
-                      }
-                      className='flex cursor-pointer flex-row items-center gap-2 font-semibold text-stone-700 hover:text-stone-900 dark:text-neutral-300 dark:hover:text-white'>
-                      <HiPencilAlt size={16} />
-                      Edit
+                <DropdownMenuContent className='mr-4 mt-1 flex flex-col items-start bg-white shadow-lg dark:bg-neutral-800'>
+                  <DropdownMenuItem
+                    onClick={() =>
+                      onEdit
+                        ? onEdit(entry)
+                        : router.push(`/editEntry/${entry._id}`)
+                    }
+                    className='flex cursor-pointer flex-row items-center gap-2 font-semibold text-stone-700 hover:text-stone-900 dark:text-neutral-300 dark:hover:text-white'>
+                    <HiPencilAlt size={16} />
+                    Edit
+                  </DropdownMenuItem>
+                  <AlertDialogTrigger asChild>
+                    <DropdownMenuItem className='flex cursor-pointer flex-row items-center gap-2 font-semibold text-red-600 hover:text-red-800 dark:hover:text-red-400'>
+                      <HiOutlineTrash size={16} />
+                      Delete
                     </DropdownMenuItem>
-                    <AlertDialogTrigger asChild>
-                      <DropdownMenuItem className='flex cursor-pointer flex-row items-center gap-2 font-semibold text-red-600 hover:text-red-800 dark:hover:text-red-400'>
-                        <HiOutlineTrash size={16} />
-                        Delete
-                      </DropdownMenuItem>
-                    </AlertDialogTrigger>
-                  </DropdownMenuContent>
-                </DropdownMenuPortal>
+                  </AlertDialogTrigger>
+                </DropdownMenuContent>
               </DropdownMenu>
 
-              <AlertDialogContent>
+              <AlertDialogContent onCloseAutoFocus={(e) => e.preventDefault()}>
                 <AlertDialogHeader>
                   <AlertDialogTitle>Delete this entry?</AlertDialogTitle>
                   <AlertDialogDescription>
@@ -103,7 +103,7 @@ export default function EntryListItem({ entry, onDelete, onEdit }) {
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <AlertDialogAction
-                    onClick={() => onDelete(entry._id)}
+                    onClick={() => { haptics.delete(); onDelete(entry._id); }}
                     className='bg-red-700 text-white hover:bg-red-800 dark:bg-red-700 dark:hover:bg-red-800'>
                     Delete
                   </AlertDialogAction>
@@ -114,11 +114,11 @@ export default function EntryListItem({ entry, onDelete, onEdit }) {
 
           {hasDetails && (
             <button
-              onClick={() => setExpanded((v) => !v)}
-              className='mt-2 flex items-center gap-1 text-xs font-semibold text-amber-700 transition-transform active:scale-[0.95] hover:text-amber-500 dark:text-amber-400 dark:hover:text-amber-300'>
+              onClick={() => { haptics.tap(); setExpanded((v) => !v); }}
+              className='-ml-1.5 mt-2 flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs font-medium text-stone-500 transition-colors duration-150 active:scale-[0.97] hover:bg-stone-100/60 hover:text-stone-700 dark:text-gray-500 dark:hover:bg-neutral-800/60 dark:hover:text-gray-300'>
               <motion.span
                 animate={{ rotate: expanded ? 180 : 0 }}
-                transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}>
+                transition={{ duration: shouldReduceMotion ? 0.01 : 0.2, ease: [0.25, 0.1, 0.25, 1] }}>
                 <ChevronDown size={13} />
               </motion.span>
               {expanded ? 'Hide details' : 'Show details'}
@@ -128,12 +128,12 @@ export default function EntryListItem({ entry, onDelete, onEdit }) {
           <AnimatePresence initial={false}>
             {expanded && (
               <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+                initial={{ height: 0, opacity: 0, y: -4 }}
+                animate={{ height: 'auto', opacity: 1, y: 0 }}
+                exit={{ height: 0, opacity: 0, y: -4 }}
+                transition={{ duration: shouldReduceMotion ? 0.01 : 0.25, ease: [0.25, 0.1, 0.25, 1] }}
                 className='overflow-hidden'>
-                <div className='mt-2.5 flex flex-col gap-2 border-t border-amber-100 pt-2.5 dark:border-neutral-700'>
+                <div className='mt-2.5 flex flex-col gap-2 border-t border-stone-100 pt-2.5 dark:border-neutral-800'>
                   {entry.phoneNumber && (
                     <a
                       href={`tel:${entry.phoneNumber.replace(/\D/g, '')}`}

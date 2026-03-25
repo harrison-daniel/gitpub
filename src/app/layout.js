@@ -72,11 +72,11 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className='flex h-[100dvh] flex-col overflow-hidden'>
+      <body className='flex h-[100svh] flex-col overflow-hidden'>
         <SessionProvider session={session}>
           <ThemeProviders>
             <div>
-              <div className='imgLight fixed top-[2vh] -z-20 mx-auto h-[100dvh] w-[100vw] md:top-[4vh]'>
+              <div className='imgLight fixed top-[2vh] -z-20 mx-auto h-[100svh] w-[100vw] md:top-[4vh]'>
                 <Image
                   src={beerLight}
                   alt='Light Theme Beer'
@@ -85,13 +85,14 @@ export default async function RootLayout({ children }) {
                   quality={75}
                   priority
                   fill
-                  sizes='100% '
+                  sizes='100vw'
                   style={{
-                    objectFit: 'contain ',
+                    objectFit: 'contain',
+                    transform: 'translateZ(0)',
                   }}
                 />
               </div>
-              <div className='imgDark fixed top-[3.5vh] -z-20 h-[100dvh] w-[100vw] md:top-[4.5vh]'>
+              <div className='imgDark fixed top-[3.5vh] -z-20 h-[100svh] w-[100vw] md:top-[4.5vh]'>
                 <Image
                   src={beerDark}
                   alt='Dark Theme Beer'
@@ -99,10 +100,11 @@ export default async function RootLayout({ children }) {
                   className='imgDark'
                   quality={75}
                   priority
-                  sizes='100% '
+                  sizes='100vw'
                   fill
                   style={{
-                    objectFit: 'contain ',
+                    objectFit: 'contain',
+                    transform: 'translateZ(0)',
                   }}
                 />
               </div>
@@ -118,7 +120,7 @@ export default async function RootLayout({ children }) {
               <ModeToggle />
             </div>
             <Navbar />
-            <main className='flex-1 overflow-y-auto'>
+            <main className='flex-1 overflow-y-auto overscroll-none'>
               {children}
             </main>
 

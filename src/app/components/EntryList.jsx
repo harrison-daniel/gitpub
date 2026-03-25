@@ -1,6 +1,6 @@
 'use client';
 import { useOptimistic, startTransition, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import useUserEntries from '../lib/useUserEntries';
 import YearlyEntries from './YearlyEntries';
 import NoDateEntries from './NoDateEntries';
@@ -30,6 +30,7 @@ export default function EntryList({ onEdit }) {
   const { entries, isLoading, isError, mutate } = useUserEntries();
   const [filterText, setFilterText] = useState('');
   const [showFilter, setShowFilter] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
   const [optimisticEntries, removeOptimisticEntry] = useOptimistic(
     entries,
@@ -134,7 +135,7 @@ export default function EntryList({ onEdit }) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: shouldReduceMotion ? 0.01 : 0.2 }}
             className='overflow-hidden'>
             <div className='relative mb-4'>
               <Search className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground' />

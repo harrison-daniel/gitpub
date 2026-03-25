@@ -17,6 +17,7 @@ import { Search, RotateCcw, Link2, Phone, Check, Loader2 } from 'lucide-react';
 import useUserEntries from '../lib/useUserEntries';
 import { toast } from 'sonner';
 import { formatPhoneNumber } from '../lib/utils';
+import { useHaptics } from '../lib/haptics';
 
 const BREWERY_TYPE_META = {
   micro: {
@@ -174,6 +175,7 @@ function BreweryCard({ brewery, session, addingBreweryId, onAdd }) {
 export default function BrewerySearch() {
   const { data: session } = useSession();
   const { mutate } = useUserEntries();
+  const haptics = useHaptics();
   const [state, setState] = useState('');
   const [city, setCity] = useState('');
   const [breweries, setBreweries] = useState([]);
@@ -327,6 +329,7 @@ export default function BrewerySearch() {
           };
         }, false);
 
+        haptics.success();
         toast(`${brewery.name} Added!`, {
           icon: <Check />,
           style: { background: 'green' },
@@ -398,6 +401,7 @@ export default function BrewerySearch() {
                 className='bg-amber-700 text-white hover:bg-amber-600 dark:bg-slate-950 dark:text-yellow-100'
                 onClick={(e) => {
                   e.currentTarget.blur();
+                  haptics.tap();
                   handleCityFilter();
                 }}>
                 <Search className='mr-2 h-4 w-4' />

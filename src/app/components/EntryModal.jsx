@@ -101,7 +101,7 @@ export default function EntryModal({ open, onOpenChange, mode, entry, onSuccess 
     return (
       <>
         <Dialog open={open} onOpenChange={handleOpenChange}>
-          <DialogContent className='max-h-[85dvh] overflow-hidden bg-white p-0 dark:bg-neutral-950 sm:max-w-md'>
+          <DialogContent className='max-h-[85vh] overflow-hidden bg-white p-0 dark:bg-neutral-950 sm:max-w-md'>
             <DialogHeader className='rounded-t-lg bg-amber-700 px-4 py-3 dark:bg-zinc-800'>
               <DialogTitle className='text-center text-lg font-bold text-white'>
                 {title}
@@ -110,7 +110,7 @@ export default function EntryModal({ open, onOpenChange, mode, entry, onSuccess 
                 {mode === 'edit' ? 'Edit your brewery journal entry' : 'Add a new brewery to your journal'}
               </DialogDescription>
             </DialogHeader>
-            <ScrollArea className='max-h-[calc(85dvh-60px)]'>
+            <ScrollArea className='max-h-[calc(85vh-60px)]'>
               <EntryForm
                 key={formKey}
                 mode={mode}
@@ -134,7 +134,7 @@ export default function EntryModal({ open, onOpenChange, mode, entry, onSuccess 
         open={open}
         onOpenChange={handleOpenChange}
         dismissible={false}>
-        <DrawerContent className='max-h-[90dvh] bg-white dark:bg-neutral-950'>
+        <DrawerContent className='max-h-[90svh] bg-white dark:bg-neutral-950'>
           <DrawerHeader className='pb-0'>
             <DrawerTitle className='entryList-header text-center text-xl font-extrabold'>
               {title}

@@ -78,8 +78,8 @@ module.exports = {
         },
       },
       animation: {
-        'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out',
+        'accordion-down': 'accordion-down 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+        'accordion-up': 'accordion-up 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
         'nav-in': 'nav-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both',
         'nav-out': 'nav-out 0.2s cubic-bezier(0.2, 0, 0, 1) both',
       },

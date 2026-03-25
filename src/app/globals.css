@@ -20,11 +20,23 @@ body {
 
 button, a, [role="button"], input, select, textarea {
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
+
+/* Prevent DropdownMenuTrigger from looking "stuck" on mobile.
+   Radix sets data-state="open" while the menu is visible, which keeps
+   :active-like styles lingering. We use a fast scale tap via CSS
+   instead of Tailwind active: so it springs back immediately. */
+[data-radix-dropdown-menu-trigger] {
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
 
 body > main {
   scrollbar-width: none;
   -ms-overflow-style: none;
+  overscroll-behavior: none;
 }
 
 html.dark {
@@ -114,5 +126,16 @@ html.dark {
 @layer utilities {
   .pb-safe {
     padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

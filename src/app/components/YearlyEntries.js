@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import EntryListItem from './EntryListItem';
 import {
   Accordion,
@@ -21,6 +21,7 @@ const itemVariants = {
 export default function YearlyEntries({ year, entries, onDelete, onEdit }) {
   const [sortOption, setSortOption] = useState('date');
   const [sortDirection, setSortDirection] = useState('desc');
+  const shouldReduceMotion = useReducedMotion();
 
   const handleSort = (option) => {
     if (sortOption === option) {
@@ -92,15 +93,19 @@ export default function YearlyEntries({ year, entries, onDelete, onEdit }) {
             </Button>
           </div>
           <AnimatePresence initial={false}>
-            {sortedEntries.map((entry) => (
+            {sortedEntries.map((entry, index) => (
               <motion.div
                 key={entry._id}
-                layout
+                layout={!shouldReduceMotion}
                 variants={itemVariants}
                 initial='initial'
                 animate='animate'
                 exit='exit'
-                transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}>
+                transition={{
+                  duration: shouldReduceMotion ? 0.01 : 0.25,
+                  ease: [0.25, 0.1, 0.25, 1],
+                  delay: shouldReduceMotion ? 0 : Math.min(index * 0.04, 0.3),
+                }}>
                 <EntryListItem entry={entry} onDelete={onDelete} onEdit={onEdit} />
               </motion.div>
             ))}

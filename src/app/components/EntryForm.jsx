@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Textarea } from '../components/ui/textarea';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -16,6 +16,7 @@ import {
   PopoverTrigger,
 } from '../components/ui/popover';
 import { toast } from 'sonner';
+import { useHaptics } from '../lib/haptics';
 
 function Field({ label, htmlFor, children }) {
   return (
@@ -64,6 +65,8 @@ export default function EntryForm({
   const [formShake, setFormShake] = useState(false);
   const [errorField, setErrorField] = useState(null);
   const router = useRouter();
+  const haptics = useHaptics();
+  const shouldReduceMotion = useReducedMotion();
 
   // Refs for field-to-field keyboard navigation
   const titleRef = useRef(null);
@@ -180,6 +183,7 @@ export default function EntryForm({
 
       if (res.ok) {
         const data = await res.json();
+        haptics.success();
         toast(isEdit ? 'Entry updated!' : 'Entry saved!', {
           position: 'bottom-right',
         });
@@ -206,7 +210,7 @@ export default function EntryForm({
     <motion.form
       onSubmit={handleSubmit}
       className='flex flex-col gap-4 p-6'
-      animate={formShake ? { x: [0, -8, 8, -6, 6, -3, 3, 0] } : {}}
+      animate={formShake && !shouldReduceMotion ? { x: [0, -8, 8, -6, 6, -3, 3, 0] } : {}}
       transition={{ duration: 0.4 }}
     >
           {/* Date picker */}
