@@ -2,25 +2,22 @@
 import { useOptimistic, startTransition, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import useUserEntries from '../lib/useUserEntries';
-import YearlyEntries from './YearlyEntries';
-import NoDateEntries from './NoDateEntries';
+import EntryListItem from './EntryListItem';
 import { Skeleton } from './ui/skeleton';
+import { Button } from './ui/button';
 import { toast } from 'sonner';
-import { Search, SlidersHorizontal } from 'lucide-react';
+import { Search } from 'lucide-react';
+import { HiOutlineSelector } from 'react-icons/hi';
 
 function EntryListSkeleton() {
   return (
     <div className='z-50 mx-auto max-w-md px-3 pb-12 md:max-w-xl'>
       <h1 className='entryList-header pb-4 text-center text-4xl font-extrabold'>
-        My Trips:
+        My Trips
       </h1>
-      {[0, 1].map((i) => (
-        <div key={i} className='mb-4'>
-          <Skeleton className='mb-2 h-12 w-full rounded-xl' />
-          {[0, 1, 2].map((j) => (
-            <Skeleton key={j} className='mb-2 h-16 w-full rounded-xl' />
-          ))}
-        </div>
+      <Skeleton className='mb-4 h-10 w-full rounded-xl' />
+      {[0, 1, 2, 3, 4].map((i) => (
+        <Skeleton key={i} className='mb-2 h-20 w-full rounded-xl' />
       ))}
     </div>
   );
@@ -29,7 +26,8 @@ function EntryListSkeleton() {
 export default function EntryList({ onEdit }) {
   const { entries, isLoading, isError, mutate } = useUserEntries();
   const [filterText, setFilterText] = useState('');
-  const [showFilter, setShowFilter] = useState(false);
+  const [sortOption, setSortOption] = useState('date');
+  const [sortDirection, setSortDirection] = useState('desc');
   const shouldReduceMotion = useReducedMotion();
 
   const [optimisticEntries, removeOptimisticEntry] = useOptimistic(
@@ -44,15 +42,21 @@ export default function EntryList({ onEdit }) {
         const res = await fetch(`/api/entries?id=${id}`, { method: 'DELETE' });
         if (!res.ok) throw new Error('Failed to delete');
         await mutate();
-        toast('Entry deleted', { position: 'bottom-right' });
+        toast('Entry deleted');
       } catch {
         await mutate();
-        toast('Failed to delete entry.', {
-          style: { background: 'red' },
-          position: 'bottom-right',
-        });
+        toast('Failed to delete entry.', { style: { background: 'red' } });
       }
     });
+  };
+
+  const handleSort = (option) => {
+    if (sortOption === option) {
+      setSortDirection((prev) => (prev === 'desc' ? 'asc' : 'desc'));
+    } else {
+      setSortOption(option);
+      setSortDirection(option === 'date' ? 'desc' : 'asc');
+    }
   };
 
   if (isLoading) return <EntryListSkeleton />;
@@ -76,101 +80,144 @@ export default function EntryList({ onEdit }) {
     );
   }
 
-  const filteredEntries = filterText
+  // Filter
+  const filtered = filterText
     ? optimisticEntries.filter(
         (e) =>
           e.title?.toLowerCase().includes(filterText.toLowerCase()) ||
-          e.cityStateAddress
-            ?.toLowerCase()
-            .includes(filterText.toLowerCase()) ||
+          e.cityStateAddress?.toLowerCase().includes(filterText.toLowerCase()) ||
           e.streetAddress?.toLowerCase().includes(filterText.toLowerCase()),
       )
     : optimisticEntries;
 
-  const { datedEntries, noDateEntries } = filteredEntries.reduce(
-    (acc, entry) => {
+  // Sort
+  const sorted = [...filtered].sort((a, b) => {
+    if (sortOption === 'date') {
+      const da = a.date ? new Date(a.date).getTime() : 0;
+      const db = b.date ? new Date(b.date).getTime() : 0;
+      return sortDirection === 'desc' ? db - da : da - db;
+    } else if (sortOption === 'title') {
+      const cmp = (a.title ?? '').localeCompare(b.title ?? '');
+      return sortDirection === 'asc' ? cmp : -cmp;
+    } else {
+      const cmp = (a.cityStateAddress ?? '').localeCompare(b.cityStateAddress ?? '');
+      return sortDirection === 'asc' ? cmp : -cmp;
+    }
+  });
+
+  // Group by year for sticky headers (only in date sort mode)
+  const showYearHeaders = sortOption === 'date';
+  const groups = [];
+
+  if (showYearHeaders) {
+    let currentYear = null;
+    for (const entry of sorted) {
       const entryDate = new Date(entry.date);
-      const entryYear =
+      const year =
         entry.date && !isNaN(entryDate.getTime())
           ? entryDate.getFullYear().toString()
           : 'No Date';
-      if (entryYear === 'No Date') {
-        acc.noDateEntries.push(entry);
-      } else {
-        if (!acc.datedEntries[entryYear]) acc.datedEntries[entryYear] = [];
-        acc.datedEntries[entryYear].push(entry);
+      if (year !== currentYear) {
+        groups.push({ type: 'header', year, count: 0 });
+        currentYear = year;
       }
-      return acc;
-    },
-    { datedEntries: {}, noDateEntries: [] },
-  );
-
-  const yearsSortedDescending = Object.keys(datedEntries).sort((a, b) =>
-    b.localeCompare(a),
-  );
+      groups[groups.length - 1].count++;
+      groups.push({ type: 'entry', entry });
+    }
+  } else {
+    for (const entry of sorted) {
+      groups.push({ type: 'entry', entry });
+    }
+  }
 
   return (
     <div className='z-50 mx-auto max-w-md px-3 pb-12 md:max-w-xl'>
-      {/* Header + filter toggle */}
-      <div className='mb-3 flex items-center justify-between'>
-        <h1 className='entryList-header text-4xl font-extrabold'>My Trips:</h1>
-        <button
-          onClick={() => {
-            setShowFilter((v) => !v);
-            if (showFilter) setFilterText('');
-          }}
-          title='Filter entries'
-          className={`rounded-lg p-2 transition-[color,background-color,transform] active:scale-[0.90] ${
-            showFilter
-              ? 'bg-amber-600 text-white'
-              : 'text-stone-500 hover:bg-amber-100 hover:text-amber-700 dark:text-gray-400 dark:hover:bg-neutral-800 dark:hover:text-amber-400'
-          }`}>
-          <SlidersHorizontal size={18} />
-        </button>
+      {/* Header */}
+      <div className='mb-3 flex items-baseline justify-between'>
+        <h1 className='entryList-header text-4xl font-extrabold'>
+          My Trips
+        </h1>
+        <span className='text-sm font-medium text-stone-500 dark:text-gray-400'>
+          {filtered.length} {filtered.length === 1 ? 'trip' : 'trips'}
+        </span>
       </div>
 
-      <AnimatePresence>
-        {showFilter && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: shouldReduceMotion ? 0.01 : 0.2 }}
-            className='overflow-hidden'>
-            <div className='relative mb-4'>
-              <Search className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground' />
-              <input
-                autoFocus
-                type='text'
-                placeholder='Filter by name, city, or address...'
-                value={filterText}
-                onChange={(e) => setFilterText(e.target.value)}
-                className='w-full rounded-xl border border-amber-200 bg-white py-2 pl-9 pr-3 text-sm shadow-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-amber-400 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:ring-amber-600'
-              />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Always-visible search */}
+      <div className='relative mb-3'>
+        <Search className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground' />
+        <input
+          type='text'
+          placeholder='Search trips...'
+          value={filterText}
+          onChange={(e) => setFilterText(e.target.value)}
+          className='w-full rounded-xl border border-amber-200/60 bg-white/80 py-2.5 pl-10 pr-3 text-sm shadow-sm backdrop-blur-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-amber-400 dark:border-neutral-700/60 dark:bg-neutral-900/80 dark:focus:ring-amber-600'
+        />
+      </div>
 
-      {filteredEntries.length === 0 && filterText ? (
+      {/* Sort controls */}
+      <div className='mb-4 flex gap-2'>
+        {[
+          { key: 'date', label: 'Date' },
+          { key: 'title', label: 'Name' },
+          { key: 'address', label: 'Location' },
+        ].map(({ key, label }) => (
+          <Button
+            key={key}
+            onClick={() => handleSort(key)}
+            variant='sort'
+            size='form'
+            className='flex-1'>
+            {label}
+            {sortOption === key && <HiOutlineSelector className='ml-1 h-3.5 w-3.5' />}
+          </Button>
+        ))}
+      </div>
+
+      {/* Entry list */}
+      {filtered.length === 0 && filterText ? (
         <p className='py-8 text-center text-sm text-muted-foreground'>
           No entries match &ldquo;{filterText}&rdquo;
         </p>
       ) : (
-        <>
-          {yearsSortedDescending.map((year) => (
-            <YearlyEntries
-              key={year}
-              year={year}
-              entries={datedEntries[year]}
-              onDelete={handleDelete}
-              onEdit={onEdit}
-            />
-          ))}
-          {noDateEntries.length > 0 && (
-            <NoDateEntries entries={noDateEntries} onDelete={handleDelete} onEdit={onEdit} />
-          )}
-        </>
+        <div>
+          <AnimatePresence initial={false}>
+            {groups.map((item, index) => {
+              if (item.type === 'header') {
+                return (
+                  <div
+                    key={`year-${item.year}`}
+                    className='entryList-header sticky top-0 z-10 -mx-1 mb-2 mt-1 flex items-baseline justify-between rounded-lg bg-amber-50/90 px-3 py-1.5 backdrop-blur-md first:mt-0 dark:bg-neutral-900/90'>
+                    <span className='text-lg font-extrabold'>
+                      {item.year}
+                    </span>
+                    <span className='text-xs font-medium text-stone-500 dark:text-gray-400'>
+                      {item.count} {item.count === 1 ? 'trip' : 'trips'}
+                    </span>
+                  </div>
+                );
+              }
+
+              return (
+                <motion.div
+                  key={item.entry._id}
+                  layout={!shouldReduceMotion}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{
+                    duration: shouldReduceMotion ? 0.01 : 0.2,
+                    ease: [0.25, 0.1, 0.25, 1],
+                  }}>
+                  <EntryListItem
+                    entry={item.entry}
+                    onDelete={handleDelete}
+                    onEdit={onEdit}
+                  />
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+        </div>
       )}
     </div>
   );
