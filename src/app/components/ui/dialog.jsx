@@ -26,11 +26,12 @@ const DialogOverlay = React.forwardRef(({ className, ...props }, ref) => (
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 const DialogContent = React.forwardRef(
-  ({ className, children, ...props }, ref) => (
+  ({ className, children, onCloseAutoFocus, ...props }, ref) => (
     <DialogPortal>
       <DialogOverlay />
       <DialogPrimitive.Content
         ref={ref}
+        onCloseAutoFocus={onCloseAutoFocus ?? ((e) => e.preventDefault())}
         className={cn(
           // 'absolute left-[50%] top-[50%] z-50    w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-2  border border-slate-200   p-0 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] dark:border-slate-800 dark:bg-slate-950 sm:rounded-lg',
           'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg',
@@ -39,7 +40,7 @@ const DialogContent = React.forwardRef(
         )}
         {...props}>
         {children}
-        <DialogPrimitive.Close className='absolute right-3 top-3 rounded-full p-1 text-white/80 transition-colors hover:bg-white/20 hover:text-white focus:outline-none disabled:pointer-events-none'>
+        <DialogPrimitive.Close className='absolute right-1.5 top-1.5 flex h-9 w-9 items-center justify-center rounded-full text-white/80 transition-colors hover:bg-white/20 hover:text-white focus:outline-none active:bg-white/30 disabled:pointer-events-none'>
           <X className='h-5 w-5' />
           <span className='sr-only'>Close</span>
         </DialogPrimitive.Close>

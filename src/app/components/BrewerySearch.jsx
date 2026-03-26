@@ -429,6 +429,7 @@ export default function BrewerySearch() {
         }}>
         <DialogContent
           onOpenAutoFocus={(e) => e.preventDefault()}
+          onCloseAutoFocus={(e) => e.preventDefault()}
           className='max-h-[78vh] overflow-hidden bg-white p-0 dark:bg-zinc-950'>
           <DialogHeader className='rounded-t-lg bg-amber-700 px-4 py-3 dark:bg-zinc-800'>
             <DialogTitle>

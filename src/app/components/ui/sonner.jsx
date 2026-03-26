@@ -9,10 +9,14 @@ const Toaster = ({ ...props }) => {
     <Sonner
       theme={theme}
       className='toaster group'
+      position='bottom-center'
+      visibleToasts={1}
+      duration={2000}
+      gap={8}
       toastOptions={{
         classNames: {
           toast:
-            ' group toast group-[.toaster]:bg-white group-[.toaster]:text-slate-950 group-[.toaster]:border-slate-200 group-[.toaster]:shadow-lg dark:group-[.toaster]:bg-slate-950 dark:group-[.toaster]:text-slate-50 dark:group-[.toaster]:border-slate-800',
+            'group toast group-[.toaster]:bg-white group-[.toaster]:text-slate-950 group-[.toaster]:border-slate-200 group-[.toaster]:shadow-lg dark:group-[.toaster]:bg-slate-950 dark:group-[.toaster]:text-slate-50 dark:group-[.toaster]:border-slate-800',
           description:
             'group-[.toast]:text-slate-500 dark:group-[.toast]:text-slate-400',
           actionButton:

@@ -132,8 +132,7 @@ export default function EntryModal({ open, onOpenChange, mode, entry, onSuccess 
     <>
       <Drawer
         open={open}
-        onOpenChange={handleOpenChange}
-        dismissible={false}>
+        onOpenChange={handleOpenChange}>
         <DrawerContent className='max-h-[90svh] bg-white dark:bg-neutral-950'>
           <DrawerHeader className='pb-0'>
             <DrawerTitle className='entryList-header text-center text-xl font-extrabold'>
