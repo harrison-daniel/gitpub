@@ -16,8 +16,13 @@ function EntryListSkeleton() {
         My Trips
       </h1>
       <Skeleton className='mb-4 h-10 w-full rounded-xl' />
-      {[0, 1, 2, 3, 4].map((i) => (
-        <Skeleton key={i} className='mb-2 h-20 w-full rounded-xl' />
+      {[0, 1].map((i) => (
+        <div key={i} className='mb-3'>
+          <Skeleton className='h-10 w-full rounded-t-xl' />
+          {[0, 1, 2].map((j) => (
+            <Skeleton key={j} className='mt-1 h-18 w-full last:rounded-b-xl' />
+          ))}
+        </div>
       ))}
     </div>
   );
@@ -105,11 +110,9 @@ export default function EntryList({ onEdit }) {
     }
   });
 
-  // Group by year for sticky headers (only in date sort mode)
-  const showYearHeaders = sortOption === 'date';
-  const groups = [];
-
-  if (showYearHeaders) {
+  // Group entries by year (for date sort) or single group (for name/location sort)
+  const yearGroups = [];
+  if (sortOption === 'date') {
     let currentYear = null;
     for (const entry of sorted) {
       const entryDate = new Date(entry.date);
@@ -118,16 +121,13 @@ export default function EntryList({ onEdit }) {
           ? entryDate.getFullYear().toString()
           : 'No Date';
       if (year !== currentYear) {
-        groups.push({ type: 'header', year, count: 0 });
+        yearGroups.push({ year, entries: [] });
         currentYear = year;
       }
-      groups[groups.length - 1].count++;
-      groups.push({ type: 'entry', entry });
+      yearGroups[yearGroups.length - 1].entries.push(entry);
     }
   } else {
-    for (const entry of sorted) {
-      groups.push({ type: 'entry', entry });
-    }
+    yearGroups.push({ year: null, entries: sorted });
   }
 
   return (
@@ -173,51 +173,53 @@ export default function EntryList({ onEdit }) {
         ))}
       </div>
 
-      {/* Entry list */}
+      {/* Entry groups */}
       {filtered.length === 0 && filterText ? (
         <p className='py-8 text-center text-sm text-muted-foreground'>
           No entries match &ldquo;{filterText}&rdquo;
         </p>
       ) : (
-        <div>
-          <AnimatePresence initial={false}>
-            {groups.map((item, index) => {
-              if (item.type === 'header') {
-                return (
-                  <div
-                    key={`year-${item.year}`}
-                    className='entryList-header sticky top-0 z-10 -mx-1 mb-2 mt-1 flex items-baseline justify-between rounded-lg bg-amber-50/90 px-3 py-1.5 backdrop-blur-md first:mt-0 dark:bg-neutral-900/90'>
-                    <span className='text-lg font-extrabold'>
-                      {item.year}
-                    </span>
-                    <span className='text-xs font-medium text-stone-500 dark:text-gray-400'>
-                      {item.count} {item.count === 1 ? 'trip' : 'trips'}
-                    </span>
-                  </div>
-                );
-              }
+        yearGroups.map((group) => (
+          <div
+            key={group.year ?? 'all'}
+            className='mb-3 overflow-hidden rounded-2xl border border-amber-200/40 bg-white/80 shadow-sm backdrop-blur-md dark:border-neutral-700/40 dark:bg-neutral-900/80'>
+            {/* Year header */}
+            {group.year && (
+              <div className='entryList-header flex items-baseline justify-between px-4 py-2.5'>
+                <span className='text-xl font-extrabold'>{group.year}</span>
+                <span className='text-xs font-medium text-stone-500 dark:text-gray-400'>
+                  {group.entries.length}{' '}
+                  {group.entries.length === 1 ? 'trip' : 'trips'}
+                </span>
+              </div>
+            )}
 
-              return (
-                <motion.div
-                  key={item.entry._id}
-                  layout={!shouldReduceMotion}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{
-                    duration: shouldReduceMotion ? 0.01 : 0.2,
-                    ease: [0.25, 0.1, 0.25, 1],
-                  }}>
-                  <EntryListItem
-                    entry={item.entry}
-                    onDelete={handleDelete}
-                    onEdit={onEdit}
-                  />
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-        </div>
+            {/* Entries inside the group */}
+            <div className='px-2.5 pb-2.5'>
+              <AnimatePresence initial={false}>
+                {group.entries.map((entry, index) => (
+                  <motion.div
+                    key={entry._id}
+                    layout={!shouldReduceMotion}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{
+                      duration: shouldReduceMotion ? 0.01 : 0.2,
+                      ease: [0.25, 0.1, 0.25, 1],
+                      delay: shouldReduceMotion ? 0 : Math.min(index * 0.03, 0.25),
+                    }}>
+                    <EntryListItem
+                      entry={entry}
+                      onDelete={handleDelete}
+                      onEdit={onEdit}
+                    />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+          </div>
+        ))
       )}
     </div>
   );

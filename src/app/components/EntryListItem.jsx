@@ -38,7 +38,7 @@ export default function EntryListItem({ entry, onDelete, onEdit }) {
     (entry.description && entry.description !== 'Edit entry to add notes');
 
   return (
-    <div className='mb-3 overflow-hidden rounded-2xl border border-amber-200/40 bg-white/90 shadow-[0_1px_3px_rgba(0,0,0,0.04),0_4px_12px_rgba(0,0,0,0.03)] backdrop-blur-md transition-[shadow,border-color] duration-200 hover:border-amber-300/60 hover:shadow-[0_2px_8px_rgba(0,0,0,0.08),0_8px_24px_rgba(0,0,0,0.04)] dark:border-neutral-700/40 dark:bg-neutral-900/90 dark:shadow-[0_1px_3px_rgba(0,0,0,0.2)] dark:hover:border-neutral-600/60 dark:hover:shadow-[0_2px_8px_rgba(0,0,0,0.3)]'>
+    <div className='mb-2 last:mb-0 overflow-hidden rounded-xl border border-amber-200/30 bg-white/60 shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-[shadow,border-color] duration-200 hover:border-amber-300/50 hover:shadow-[0_2px_6px_rgba(0,0,0,0.06)] dark:border-neutral-700/30 dark:bg-neutral-800/60 dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)] dark:hover:border-neutral-600/50 dark:hover:shadow-[0_2px_6px_rgba(0,0,0,0.25)]'>
       <div className='flex'>
         <div className='w-1 flex-shrink-0 bg-gradient-to-b from-amber-400 to-amber-600' />
 
