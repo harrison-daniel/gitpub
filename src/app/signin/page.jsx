@@ -20,10 +20,7 @@ export default function SignIn() {
 
       <div className='bg-white/85 dark:bg-neutral-900/85 rounded-2xl border border-amber-200/60 p-8 shadow-sm backdrop-blur-sm dark:border-neutral-700/60'>
         <div className='mb-8 text-center'>
-          {/* <p className='font-serif text-5xl font-extrabold tracking-tight'>
-            GitPub
-          </p> */}
-          <p className='mt-2 text-sm text-stone-500 dark:text-stone-400'>
+          <p className='text-sm text-stone-500 dark:text-stone-400'>
             Sign in to save your brewery discoveries
           </p>
         </div>

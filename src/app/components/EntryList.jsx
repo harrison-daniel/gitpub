@@ -6,8 +6,7 @@ import EntryListItem from './EntryListItem';
 import { Skeleton } from './ui/skeleton';
 import { Button } from './ui/button';
 import { toast } from 'sonner';
-import { Search } from 'lucide-react';
-import { HiOutlineSelector } from 'react-icons/hi';
+import { Search, ChevronUp, ChevronDown } from 'lucide-react';
 
 function EntryListSkeleton() {
   return (
@@ -168,7 +167,11 @@ export default function EntryList({ onEdit }) {
             size='form'
             className='flex-1'>
             {label}
-            {sortOption === key && <HiOutlineSelector className='ml-1 h-3.5 w-3.5' />}
+            {sortOption === key && (
+              sortDirection === 'asc'
+                ? <ChevronUp className='ml-1 h-3.5 w-3.5' />
+                : <ChevronDown className='ml-1 h-3.5 w-3.5' />
+            )}
           </Button>
         ))}
       </div>
@@ -180,22 +183,17 @@ export default function EntryList({ onEdit }) {
         </p>
       ) : (
         yearGroups.map((group) => (
-          <div
-            key={group.year ?? 'all'}
-            className='mb-3 overflow-hidden rounded-2xl border border-amber-200/40 bg-white/80 shadow-sm backdrop-blur-md dark:border-neutral-700/40 dark:bg-neutral-900/80'>
-            {/* Year header */}
+          <section key={group.year ?? 'all'}>
             {group.year && (
-              <div className='entryList-header flex items-baseline justify-between px-4 py-2.5'>
-                <span className='text-xl font-extrabold'>{group.year}</span>
+              <div className='entryList-header sticky top-0 z-10 flex items-baseline justify-between border-b border-amber-200/40 bg-amber-50/90 px-1 py-2 shadow-[0_1px_2px_rgba(0,0,0,0.04)] backdrop-blur-md dark:border-neutral-700/40 dark:bg-neutral-950/90 dark:shadow-[0_1px_2px_rgba(0,0,0,0.2)]'>
+                <span className='text-lg font-extrabold'>{group.year}</span>
                 <span className='text-xs font-medium text-stone-500 dark:text-gray-400'>
                   {group.entries.length}{' '}
                   {group.entries.length === 1 ? 'trip' : 'trips'}
                 </span>
               </div>
             )}
-
-            {/* Entries inside the group */}
-            <div className='px-2.5 pb-2.5'>
+            <div className='pb-1 pt-1.5'>
               <AnimatePresence initial={false}>
                 {group.entries.map((entry, index) => (
                   <motion.div
@@ -218,7 +216,7 @@ export default function EntryList({ onEdit }) {
                 ))}
               </AnimatePresence>
             </div>
-          </div>
+          </section>
         ))
       )}
     </div>

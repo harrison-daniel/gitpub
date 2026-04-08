@@ -19,7 +19,7 @@ import {
   AlertDialogTrigger,
 } from './ui/alert-dialog';
 import { Skeleton } from './ui/skeleton';
-import { MapPin, Beer, Calendar, TrendingUp, ChevronLeft } from 'lucide-react';
+import { MapPin, Beer, Building2, TrendingUp, ChevronLeft } from 'lucide-react';
 
 const LEVEL_TIERS = [
   { min: 0, name: 'Newcomer' },
@@ -323,7 +323,7 @@ export default function UserInfo() {
               <StatCard
                 value={uniqueCities}
                 label='Cities Visited'
-                icon={Calendar}
+                icon={Building2}
               />
             </motion.div>
 
