@@ -141,7 +141,7 @@ export default function ComboBox({
                 <ChevronsUpDown className='ml-2 h-3.5 w-3.5 shrink-0 opacity-50' />
               </Button>
             </DrawerTrigger>
-            <DrawerContent className='min-h-[50vh]' style={drawerStyle}>
+            <DrawerContent className='min-h-[50svh]' style={drawerStyle}>
               <div className='mt-2 border-t'>
                 <Command>
                   <CommandInput
@@ -150,7 +150,7 @@ export default function ComboBox({
                       .replace('...', '')}...`}
                     className='h-12 text-base'
                   />
-                  <CommandList className='max-h-[42vh]' style={listStyle}>
+                  <CommandList className='max-h-[42svh]' style={listStyle}>
                     <CommandEmpty className='py-8 text-base'>{`No results found.`}</CommandEmpty>
                     <CommandGroup>
                       {dataList.map((dataItem) => (

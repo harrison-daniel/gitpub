@@ -5,7 +5,7 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { HiPencilAlt, HiOutlineTrash } from 'react-icons/hi';
-import { Link2, MoreHorizontal, Phone, ChevronDown } from 'lucide-react';
+import { Link2, MoreHorizontal, Phone, ChevronDown, Hop } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,17 +25,13 @@ import {
 } from '../components/ui/dropdown-menu';
 import { formatPhoneNumber } from '../lib/utils';
 import { useHaptics } from '../lib/haptics';
+import BeerLog from './BeerLog';
 
 export default function EntryListItem({ entry, onDelete, onEdit }) {
   const [expanded, setExpanded] = useState(false);
   const router = useRouter();
   const haptics = useHaptics();
   const shouldReduceMotion = useReducedMotion();
-
-  const hasDetails =
-    entry.phoneNumber ||
-    entry.websiteUrl ||
-    (entry.description && entry.description !== 'Edit entry to add notes');
 
   return (
     <div className='mb-2 last:mb-0 overflow-hidden rounded-xl border border-amber-200/30 bg-white/60 shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-[shadow,border-color] duration-200 hover:border-amber-300/50 hover:shadow-[0_2px_6px_rgba(0,0,0,0.06)] dark:border-neutral-700/30 dark:bg-neutral-800/60 dark:shadow-[0_1px_2px_rgba(0,0,0,0.15)] dark:hover:border-neutral-600/50 dark:hover:shadow-[0_2px_6px_rgba(0,0,0,0.25)]'>
@@ -48,6 +44,12 @@ export default function EntryListItem({ entry, onDelete, onEdit }) {
               {entry.date && !isNaN(new Date(entry.date).getTime()) && (
                 <span className='mb-1 inline-block rounded-md bg-amber-50 px-2 py-0.5 font-mono text-[11px] font-medium tracking-wide text-amber-700/80 dark:bg-amber-900/20 dark:text-amber-400/80'>
                   {format(new Date(entry.date), 'MMM dd, yyyy')}
+                </span>
+              )}
+              {entry.beers?.length > 0 && (
+                <span className='mb-1 ml-1.5 inline-flex items-center gap-1 rounded-md bg-amber-50 px-1.5 py-0.5 text-[11px] font-medium text-amber-700/80 dark:bg-amber-900/20 dark:text-amber-400/80'>
+                  <Hop size={10} className='fill-amber-500/80 text-amber-500/80' />
+                  {entry.beers.length}
                 </span>
               )}
               <h3 className='entryListItem-header text-[15px] font-bold leading-snug tracking-tight text-stone-900 dark:text-[#d5cea3]'>
@@ -112,18 +114,16 @@ export default function EntryListItem({ entry, onDelete, onEdit }) {
             </AlertDialog>
           </div>
 
-          {hasDetails && (
-            <button
-              onClick={() => { haptics.tap(); setExpanded((v) => !v); }}
-              className='-ml-1.5 mt-2 flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs font-medium text-stone-500 transition-colors duration-150 active:scale-[0.97] hover:bg-stone-100/60 hover:text-stone-700 dark:text-gray-500 dark:hover:bg-neutral-800/60 dark:hover:text-gray-300'>
-              <motion.span
-                animate={{ rotate: expanded ? 180 : 0 }}
-                transition={{ duration: shouldReduceMotion ? 0.01 : 0.2, ease: [0.25, 0.1, 0.25, 1] }}>
-                <ChevronDown size={13} />
-              </motion.span>
-              {expanded ? 'Hide details' : 'Show details'}
-            </button>
-          )}
+          <button
+            onClick={() => { haptics.tap(); setExpanded((v) => !v); }}
+            className='-ml-1.5 mt-2 flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs font-medium text-stone-500 transition-colors duration-150 active:scale-[0.97] hover:bg-stone-100/60 hover:text-stone-700 dark:text-gray-500 dark:hover:bg-neutral-800/60 dark:hover:text-gray-300'>
+            <motion.span
+              animate={{ rotate: expanded ? 180 : 0 }}
+              transition={{ duration: shouldReduceMotion ? 0.01 : 0.2, ease: [0.25, 0.1, 0.25, 1] }}>
+              <ChevronDown size={13} />
+            </motion.span>
+            {expanded ? 'Less' : 'More'}
+          </button>
 
           <AnimatePresence initial={false}>
             {expanded && (
@@ -133,36 +133,42 @@ export default function EntryListItem({ entry, onDelete, onEdit }) {
                 exit={{ height: 0, opacity: 0, y: -4 }}
                 transition={{ duration: shouldReduceMotion ? 0.01 : 0.25, ease: [0.25, 0.1, 0.25, 1] }}
                 className='overflow-hidden'>
-                <div className='mt-2.5 flex flex-col gap-2 border-t border-stone-100 pt-2.5 dark:border-neutral-800'>
-                  {entry.phoneNumber && (
-                    <a
-                      href={`tel:${entry.phoneNumber.replace(/\D/g, '')}`}
-                      className='flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300'>
-                      <Phone className='h-3.5 w-3.5 flex-shrink-0' />
-                      {formatPhoneNumber(entry.phoneNumber)}
-                    </a>
-                  )}
-                  {entry.websiteUrl && (
-                    <a
-                      href={
-                        entry.websiteUrl.startsWith('http')
-                          ? entry.websiteUrl
-                          : `https://${entry.websiteUrl}`
-                      }
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      className='flex items-center gap-2 text-sm text-blue-600 visited:text-purple-600 hover:text-blue-800'>
-                      <Link2 className='h-3.5 w-3.5 flex-shrink-0' />
-                      Website
-                    </a>
-                  )}
-                  {entry.description &&
-                    entry.description !== 'Edit entry to add notes' && (
-                      <p className='text-sm leading-relaxed text-stone-600 dark:text-gray-400'>
-                        {entry.description}
-                      </p>
+                <BeerLog entryId={entry._id} beers={entry.beers} />
+                {(entry.phoneNumber ||
+                  entry.websiteUrl ||
+                  (entry.description &&
+                    entry.description !== 'Edit entry to add notes')) && (
+                  <div className='mt-2 flex flex-col gap-2 border-t border-stone-100 pt-2 dark:border-neutral-800'>
+                    {entry.phoneNumber && (
+                      <a
+                        href={`tel:${entry.phoneNumber.replace(/\D/g, '')}`}
+                        className='flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300'>
+                        <Phone className='h-3.5 w-3.5 flex-shrink-0' />
+                        {formatPhoneNumber(entry.phoneNumber)}
+                      </a>
                     )}
-                </div>
+                    {entry.websiteUrl && (
+                      <a
+                        href={
+                          entry.websiteUrl.startsWith('http')
+                            ? entry.websiteUrl
+                            : `https://${entry.websiteUrl}`
+                        }
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        className='flex items-center gap-2 text-sm text-blue-600 visited:text-purple-600 hover:text-blue-800'>
+                        <Link2 className='h-3.5 w-3.5 flex-shrink-0' />
+                        Website
+                      </a>
+                    )}
+                    {entry.description &&
+                      entry.description !== 'Edit entry to add notes' && (
+                        <p className='text-sm leading-relaxed text-stone-600 dark:text-gray-400'>
+                          {entry.description}
+                        </p>
+                      )}
+                  </div>
+                )}
               </motion.div>
             )}
           </AnimatePresence>

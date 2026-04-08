@@ -19,7 +19,7 @@ import {
   AlertDialogTrigger,
 } from './ui/alert-dialog';
 import { Skeleton } from './ui/skeleton';
-import { MapPin, Beer, Building2, TrendingUp, ChevronLeft } from 'lucide-react';
+import { MapPin, Beer, Building2, TrendingUp, ChevronLeft, Hop } from 'lucide-react';
 
 const LEVEL_TIERS = [
   { min: 0, name: 'Newcomer' },
@@ -211,6 +211,10 @@ export default function UserInfo() {
   const currentYear = new Date().getFullYear();
 
   const totalTrips = entries.length;
+  const totalBeers = entries.reduce(
+    (sum, e) => sum + (e.beers?.length ?? 0),
+    0,
+  );
 
   const tripsThisYear = entries.filter(
     (e) => e.date && new Date(e.date).getFullYear() === currentYear,
@@ -290,13 +294,45 @@ export default function UserInfo() {
 
         {isLoading ? (
           <>
-            <Skeleton className='h-28 rounded-2xl' />
+            <div className='rounded-2xl border border-amber-200/60 bg-white/80 p-5 shadow-sm backdrop-blur-sm dark:border-neutral-700/60 dark:bg-neutral-900/80'>
+              <div className='flex items-center justify-between'>
+                <div>
+                  <Skeleton className='mb-1.5 h-3 w-20 rounded' />
+                  <Skeleton className='h-5 w-32 rounded' />
+                </div>
+                <Skeleton className='h-10 w-10 rounded-full' />
+              </div>
+              <Skeleton className='mt-3 h-2 w-full rounded-full' />
+              <div className='mt-1.5 flex justify-between'>
+                <Skeleton className='h-3 w-16 rounded' />
+                <Skeleton className='h-3 w-24 rounded' />
+              </div>
+            </div>
             <div className='grid grid-cols-2 gap-3'>
               {[0, 1, 2, 3].map((i) => (
-                <Skeleton key={i} className='h-20 rounded-xl' />
+                <div
+                  key={i}
+                  className='flex items-center gap-3 rounded-xl border border-amber-200/60 bg-white/70 p-4 shadow-sm dark:border-neutral-700/60 dark:bg-neutral-800/70'>
+                  <Skeleton className='h-10 w-10 flex-shrink-0 rounded-full' />
+                  <div>
+                    <Skeleton className='mb-1.5 h-6 w-8 rounded' />
+                    <Skeleton className='h-3 w-16 rounded' />
+                  </div>
+                </div>
               ))}
             </div>
-            <Skeleton className='h-16 rounded-2xl' />
+            <div className='rounded-2xl border border-amber-200/60 bg-white/80 p-5 shadow-sm backdrop-blur-sm dark:border-neutral-700/60 dark:bg-neutral-900/80'>
+              <div className='flex items-center justify-between'>
+                <Skeleton className='h-3 w-24 rounded' />
+                <Skeleton className='h-3 w-20 rounded' />
+              </div>
+              <Skeleton className='mt-2 h-1.5 w-full rounded-full' />
+              <div className='mt-3 flex gap-2'>
+                <Skeleton className='h-5 w-14 rounded-full' />
+                <Skeleton className='h-5 w-14 rounded-full' />
+                <Skeleton className='h-5 w-14 rounded-full' />
+              </div>
+            </div>
           </>
         ) : (
           <>
@@ -325,6 +361,13 @@ export default function UserInfo() {
                 label='Cities Visited'
                 icon={Building2}
               />
+              {totalBeers > 0 && (
+                <StatCard
+                  value={totalBeers}
+                  label='Beers Tried'
+                  icon={Hop}
+                />
+              )}
             </motion.div>
 
             {/* States progress */}

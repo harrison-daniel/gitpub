@@ -139,7 +139,6 @@ export default function EntryForm({
     if (!title.trim()) {
       toast('Brewery or entry name is required.', {
         style: { background: 'red' },
-        position: 'bottom-right',
       });
       setErrorField('title');
       titleRef.current?.focus();
@@ -150,7 +149,6 @@ export default function EntryForm({
     if (!isValidUrl(websiteUrl)) {
       toast('Website doesn\u2019t look like a valid URL (e.g. beer.com).', {
         style: { background: 'red' },
-        position: 'bottom-right',
       });
       setErrorField('website');
       websiteRef.current?.focus();
@@ -184,9 +182,7 @@ export default function EntryForm({
       if (res.ok) {
         const data = await res.json();
         haptics.success();
-        toast(isEdit ? 'Entry updated!' : 'Entry saved!', {
-          position: 'bottom-right',
-        });
+        toast(isEdit ? 'Entry updated!' : 'Entry saved!');
         if (onSuccess) {
           onSuccess(data);
         } else {
@@ -199,7 +195,6 @@ export default function EntryForm({
     } catch {
       toast(`Failed to ${isEdit ? 'update' : 'save'} entry. Please try again.`, {
         style: { background: 'red' },
-        position: 'bottom-right',
       });
     } finally {
       setIsSubmitting(false);

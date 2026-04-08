@@ -255,7 +255,6 @@ export default function BrewerySearch() {
       } catch {
         toast('Failed to load breweries. Please try again.', {
           style: { background: 'red' },
-          position: 'bottom-right',
         });
       } finally {
         setIsLoadingBreweries(false);
@@ -333,7 +332,6 @@ export default function BrewerySearch() {
         toast(`${brewery.name} Added!`, {
           icon: <Check />,
           style: { background: 'green' },
-          position: 'bottom-right',
         });
       } else {
         throw new Error('Failed to create entry');
@@ -341,7 +339,6 @@ export default function BrewerySearch() {
     } catch (error) {
       toast('Failed to add brewery. Please try again.', {
         style: { background: 'red' },
-        position: 'bottom-right',
       });
     } finally {
       setAddingBreweryId(null);
@@ -430,7 +427,7 @@ export default function BrewerySearch() {
         <DialogContent
           onOpenAutoFocus={(e) => e.preventDefault()}
           onCloseAutoFocus={(e) => e.preventDefault()}
-          className='max-h-[78vh] overflow-hidden bg-white p-0 dark:bg-zinc-950'>
+          className='max-h-[78svh] overflow-hidden bg-white p-0 dark:bg-zinc-950'>
           <DialogHeader className='rounded-t-lg bg-amber-700 px-4 py-3 dark:bg-zinc-800'>
             <DialogTitle>
               <div className='text-center'>
@@ -465,7 +462,7 @@ export default function BrewerySearch() {
             </div>
           )}
 
-          <ScrollArea className='max-h-[60vh]'>
+          <ScrollArea className='max-h-[60svh]'>
             <div key={dialogSearch} className='flex flex-col gap-2.5 px-3 pb-6 pt-3'>
               {visibleBreweries.length === 0 && dialogSearch ? (
                 <p className='py-6 text-center text-sm text-muted-foreground'>

@@ -76,7 +76,7 @@ export default async function RootLayout({ children }) {
         <SessionProvider session={session}>
           <ThemeProviders>
             <div>
-              <div className='imgLight fixed top-[2vh] -z-20 mx-auto h-[100svh] w-[100vw] md:top-[4vh]'>
+              <div className='imgLight fixed top-[2svh] -z-20 mx-auto h-[100svh] w-[100vw] md:top-[4svh]'>
                 <Image
                   src={beerLight}
                   alt='Light Theme Beer'
@@ -92,7 +92,7 @@ export default async function RootLayout({ children }) {
                   }}
                 />
               </div>
-              <div className='imgDark fixed top-[3.5vh] -z-20 h-[100svh] w-[100vw] md:top-[4.5vh]'>
+              <div className='imgDark fixed top-[3.5svh] -z-20 h-[100svh] w-[100vw] md:top-[4.5svh]'>
                 <Image
                   src={beerDark}
                   alt='Dark Theme Beer'

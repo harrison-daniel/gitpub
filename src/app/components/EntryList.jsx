@@ -8,19 +8,112 @@ import { Button } from './ui/button';
 import { toast } from 'sonner';
 import { Search, ChevronUp, ChevronDown } from 'lucide-react';
 
+function BeerMugAnimation({ reduced }) {
+  const d = reduced ? 0.01 : 1;
+
+  return (
+    <motion.svg
+      width={120}
+      height={130}
+      viewBox='0 0 120 130'
+      className='text-amber-600/80 dark:text-amber-400/60'
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: reduced ? 0.01 : 0.5 }}>
+      <motion.path
+        d='M30 25 L30 95 Q30 108 43 108 L77 108 Q90 108 90 95 L90 25'
+        stroke='currentColor'
+        strokeWidth='3'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        fill='none'
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: d * 1.2, ease: 'easeOut' }}
+      />
+      <motion.path
+        d='M90 45 Q107 45 107 62 Q107 79 90 79'
+        stroke='currentColor'
+        strokeWidth='3'
+        strokeLinecap='round'
+        fill='none'
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: d * 0.8, delay: d * 0.6, ease: 'easeOut' }}
+      />
+      <motion.rect
+        x='33'
+        width='54'
+        rx='4'
+        fill='currentColor'
+        opacity={0.12}
+        initial={{ height: 0, y: 105 }}
+        animate={{ height: 77, y: 28 }}
+        transition={{ duration: d * 1.8, delay: d * 1, ease: [0.33, 1, 0.68, 1] }}
+      />
+      <motion.g
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: d * 2.5, duration: d * 0.4 }}>
+        <circle cx='43' cy='30' r='7' fill='currentColor' opacity={0.08} />
+        <circle cx='60' cy='27' r='9' fill='currentColor' opacity={0.1} />
+        <circle cx='77' cy='30' r='7' fill='currentColor' opacity={0.08} />
+      </motion.g>
+      {[0, 1, 2].map((i) => (
+        <motion.circle
+          key={i}
+          cx={43 + i * 14}
+          r={2}
+          fill='currentColor'
+          initial={{ cy: 95, opacity: 0 }}
+          animate={{ cy: [95, 50], opacity: [0, 0.12, 0] }}
+          transition={{
+            duration: reduced ? 0.01 : 2.5,
+            delay: reduced ? 0 : 2.8 + i * 0.6,
+            repeat: Infinity,
+            repeatDelay: 1.5,
+          }}
+        />
+      ))}
+    </motion.svg>
+  );
+}
+
 function EntryListSkeleton() {
   return (
     <div className='z-50 mx-auto max-w-md px-3 pb-12 md:max-w-xl'>
-      <h1 className='entryList-header pb-4 text-center text-4xl font-extrabold'>
-        My Trips
-      </h1>
-      <Skeleton className='mb-4 h-10 w-full rounded-xl' />
-      {[0, 1].map((i) => (
-        <div key={i} className='mb-3'>
-          <Skeleton className='h-10 w-full rounded-t-xl' />
-          {[0, 1, 2].map((j) => (
-            <Skeleton key={j} className='mt-1 h-18 w-full last:rounded-b-xl' />
-          ))}
+      <div className='mb-3 flex items-baseline justify-between'>
+        <Skeleton className='h-9 w-32 rounded-lg' />
+        <Skeleton className='h-4 w-14 rounded' />
+      </div>
+      <Skeleton className='mb-3 h-10 w-full rounded-xl' />
+      <div className='mb-4 flex gap-2'>
+        <Skeleton className='h-8 flex-1 rounded-md' />
+        <Skeleton className='h-8 flex-1 rounded-md' />
+        <Skeleton className='h-8 flex-1 rounded-md' />
+      </div>
+      {[0, 1].map((g) => (
+        <div key={g}>
+          <div className='flex items-baseline justify-between px-1 py-2'>
+            <Skeleton className='h-5 w-14 rounded' />
+            <Skeleton className='h-3 w-12 rounded' />
+          </div>
+          <div className='pb-1 pt-1.5'>
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                className='mb-2 overflow-hidden rounded-xl border border-amber-200/20 bg-white/40 dark:border-neutral-700/20 dark:bg-neutral-800/40'>
+                <div className='flex'>
+                  <div className='w-1 flex-shrink-0 bg-amber-200/60 dark:bg-neutral-700/60' />
+                  <div className='flex-1 px-3 py-2.5'>
+                    <Skeleton className='mb-1.5 h-3.5 w-24 rounded' />
+                    <Skeleton className='mb-1 h-4 w-44 rounded' />
+                    <Skeleton className='h-3 w-28 rounded' />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       ))}
     </div>
@@ -75,10 +168,11 @@ export default function EntryList({ onEdit }) {
 
   if (!Array.isArray(entries) || entries.length === 0) {
     return (
-      <div className='mx-auto mt-16 flex max-w-xs flex-col items-center gap-3 px-6 text-center'>
-        <p className='text-2xl font-bold'>No trips logged yet</p>
-        <p className='text-sm text-muted-foreground'>
-          Search for a brewery above and add it to start building your journal.
+      <div className='mx-auto mt-12 flex max-w-xs flex-col items-center px-6 text-center'>
+        <BeerMugAnimation reduced={shouldReduceMotion} />
+        <p className='mt-6 text-2xl font-bold'>Start your journey</p>
+        <p className='mt-1.5 text-sm text-muted-foreground'>
+          Search for a brewery above and add your first visit.
         </p>
       </div>
     );

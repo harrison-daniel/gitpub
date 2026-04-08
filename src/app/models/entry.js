@@ -13,6 +13,13 @@ const entrySchema = new Schema(
     websiteUrl: String,
     phoneNumber: String,
 
+    beers: [
+      {
+        name: { type: String, required: true, trim: true },
+        rating: { type: Number, required: true, min: 1, max: 5 },
+      },
+    ],
+
     userId: {
       type: String,
       required: true,
