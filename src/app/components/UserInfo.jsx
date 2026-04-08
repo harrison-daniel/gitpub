@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from 'react';
 import { format } from 'date-fns';
 import { motion, useReducedMotion } from 'framer-motion';
 import useUserEntries from '../lib/useUserEntries';
+import { toast } from 'sonner';
 import { Button } from './ui/button';
 import {
   AlertDialog,
@@ -232,6 +233,9 @@ export default function UserInfo() {
       await signOut({ callbackUrl: '/' });
     } catch {
       setIsDeleting(false);
+      toast('Failed to delete account. Please try again.', {
+        style: { background: 'red' },
+      });
     }
   };
 
