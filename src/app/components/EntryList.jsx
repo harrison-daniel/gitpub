@@ -79,42 +79,47 @@ function BeerMugAnimation({ reduced }) {
   );
 }
 
+function EntryCardSkeleton() {
+  return (
+    <div className='mb-2 last:mb-0 overflow-hidden rounded-xl border border-amber-200/30 bg-white/60 shadow-[0_1px_2px_rgba(0,0,0,0.03)] dark:border-neutral-700/30 dark:bg-neutral-800/60'>
+      <div className='flex'>
+        <div className='w-1 flex-shrink-0 bg-gradient-to-b from-amber-400 to-amber-600' />
+        <div className='flex-1 px-3 py-2.5'>
+          <Skeleton className='mb-1 h-[14px] w-24 rounded-md' />
+          <Skeleton className='mb-1 h-[15px] w-44 rounded' />
+          <Skeleton className='mb-2.5 h-3.5 w-32 rounded' />
+          <Skeleton className='h-3 w-12 rounded' />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function EntryListSkeleton() {
   return (
     <div className='z-50 mx-auto max-w-md px-3 pb-12 md:max-w-xl'>
       <div className='mb-3 flex items-baseline justify-between'>
-        <Skeleton className='h-9 w-32 rounded-lg' />
-        <Skeleton className='h-4 w-14 rounded' />
+        <h1 className='entryList-header text-4xl font-extrabold'>My Trips</h1>
+        <Skeleton className='h-5 w-14 rounded' />
       </div>
       <Skeleton className='mb-3 h-10 w-full rounded-xl' />
       <div className='mb-4 flex gap-2'>
-        <Skeleton className='h-8 flex-1 rounded-md' />
-        <Skeleton className='h-8 flex-1 rounded-md' />
-        <Skeleton className='h-8 flex-1 rounded-md' />
+        <Skeleton className='h-9 flex-1 rounded-md' />
+        <Skeleton className='h-9 flex-1 rounded-md' />
+        <Skeleton className='h-9 flex-1 rounded-md' />
       </div>
-      {[0, 1].map((g) => (
-        <div key={g}>
-          <div className='flex items-baseline justify-between px-1 py-2'>
-            <Skeleton className='h-5 w-14 rounded' />
-            <Skeleton className='h-3 w-12 rounded' />
+      {[3, 2].map((count, g) => (
+        <section key={g}>
+          <div className='entryList-header flex items-baseline justify-between border-b border-amber-200/40 bg-amber-50/90 px-1 py-2 backdrop-blur-md dark:border-neutral-700/40 dark:bg-neutral-950/90'>
+            <Skeleton className='h-7 w-12 rounded' />
+            <Skeleton className='h-4 w-10 rounded' />
           </div>
           <div className='pb-1 pt-1.5'>
-            {[0, 1, 2].map((i) => (
-              <div
-                key={i}
-                className='mb-2 overflow-hidden rounded-xl border border-amber-200/20 bg-white/40 dark:border-neutral-700/20 dark:bg-neutral-800/40'>
-                <div className='flex'>
-                  <div className='w-1 flex-shrink-0 bg-amber-200/60 dark:bg-neutral-700/60' />
-                  <div className='flex-1 px-3 py-2.5'>
-                    <Skeleton className='mb-1.5 h-3.5 w-24 rounded' />
-                    <Skeleton className='mb-1 h-4 w-44 rounded' />
-                    <Skeleton className='h-3 w-28 rounded' />
-                  </div>
-                </div>
-              </div>
+            {Array.from({ length: count }).map((_, i) => (
+              <EntryCardSkeleton key={i} />
             ))}
           </div>
-        </div>
+        </section>
       ))}
     </div>
   );
@@ -259,7 +264,7 @@ export default function EntryList({ onEdit }) {
             onClick={() => handleSort(key)}
             variant='sort'
             size='form'
-            className='flex-1'>
+            className={`flex-1 ${sortOption !== key ? 'opacity-70' : ''}`}>
             {label}
             {sortOption === key && (
               sortDirection === 'asc'

@@ -10,7 +10,7 @@ const Toaster = ({ ...props }) => {
       theme={theme}
       className='toaster group'
       position='bottom-center'
-      visibleToasts={1}
+      visibleToasts={3}
       duration={2000}
       gap={8}
       toastOptions={{

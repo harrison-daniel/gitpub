@@ -2,9 +2,9 @@
 
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { format } from 'date-fns';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import useUserEntries from '../lib/useUserEntries';
 import { Button } from './ui/button';
 import {
@@ -66,6 +66,33 @@ const statsStagger = {
   show: { transition: { staggerChildren: 0.07 } },
 };
 
+function AnimatedNumber({ value }) {
+  const nodeRef = useRef(null);
+  const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    const node = nodeRef.current;
+    if (!node) return;
+    if (shouldReduceMotion) {
+      node.textContent = value;
+      return;
+    }
+    const duration = 600;
+    const start = performance.now();
+    let raf;
+    function tick(now) {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      node.textContent = Math.round(eased * value);
+      if (t < 1) raf = requestAnimationFrame(tick);
+    }
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [value, shouldReduceMotion]);
+
+  return <span ref={nodeRef}>{value}</span>;
+}
+
 function StatCard({ value, label, icon: Icon }) {
   return (
     <motion.div variants={fadeInUp}>
@@ -75,7 +102,7 @@ function StatCard({ value, label, icon: Icon }) {
         </div>
         <div>
           <div className='text-2xl font-extrabold leading-none text-stone-900 dark:text-[#d5cea3]'>
-            {value}
+            <AnimatedNumber value={value} />
           </div>
           <div className='mt-0.5 text-xs font-medium text-stone-500 dark:text-gray-400'>
             {label}
@@ -297,15 +324,15 @@ export default function UserInfo() {
             <div className='rounded-2xl border border-amber-200/60 bg-white/80 p-5 shadow-sm backdrop-blur-sm dark:border-neutral-700/60 dark:bg-neutral-900/80'>
               <div className='flex items-center justify-between'>
                 <div>
-                  <Skeleton className='mb-1.5 h-3 w-20 rounded' />
-                  <Skeleton className='h-5 w-32 rounded' />
+                  <Skeleton className='mb-1.5 h-4 w-20 rounded' />
+                  <Skeleton className='h-6 w-32 rounded' />
                 </div>
                 <Skeleton className='h-10 w-10 rounded-full' />
               </div>
               <Skeleton className='mt-3 h-2 w-full rounded-full' />
               <div className='mt-1.5 flex justify-between'>
-                <Skeleton className='h-3 w-16 rounded' />
-                <Skeleton className='h-3 w-24 rounded' />
+                <Skeleton className='h-4 w-14 rounded' />
+                <Skeleton className='h-4 w-24 rounded' />
               </div>
             </div>
             <div className='grid grid-cols-2 gap-3'>
@@ -315,7 +342,7 @@ export default function UserInfo() {
                   className='flex items-center gap-3 rounded-xl border border-amber-200/60 bg-white/70 p-4 shadow-sm dark:border-neutral-700/60 dark:bg-neutral-800/70'>
                   <Skeleton className='h-10 w-10 flex-shrink-0 rounded-full' />
                   <div>
-                    <Skeleton className='mb-1.5 h-6 w-8 rounded' />
+                    <Skeleton className='mb-1 h-7 w-8 rounded' />
                     <Skeleton className='h-3 w-16 rounded' />
                   </div>
                 </div>
@@ -323,14 +350,14 @@ export default function UserInfo() {
             </div>
             <div className='rounded-2xl border border-amber-200/60 bg-white/80 p-5 shadow-sm backdrop-blur-sm dark:border-neutral-700/60 dark:bg-neutral-900/80'>
               <div className='flex items-center justify-between'>
-                <Skeleton className='h-3 w-24 rounded' />
-                <Skeleton className='h-3 w-20 rounded' />
+                <Skeleton className='h-4 w-24 rounded' />
+                <Skeleton className='h-4 w-20 rounded' />
               </div>
               <Skeleton className='mt-2 h-1.5 w-full rounded-full' />
               <div className='mt-3 flex gap-2'>
-                <Skeleton className='h-5 w-14 rounded-full' />
-                <Skeleton className='h-5 w-14 rounded-full' />
-                <Skeleton className='h-5 w-14 rounded-full' />
+                <Skeleton className='h-6 w-16 rounded-full' />
+                <Skeleton className='h-6 w-16 rounded-full' />
+                <Skeleton className='h-6 w-16 rounded-full' />
               </div>
             </div>
           </>
